@@ -21,7 +21,9 @@ A chloropleth map built using Leaflet.
 4. This file is then used by the webpage for displaying the chloropleth map using [Leaflet.js](https://leafletjs.com/examples/choropleth/)
 
 ## Issues
-The colors of the features on the GeoJSON layer do not change simultaneously with dragging the time-slider. It changes to the correct color on hovering above the feature. I am currently trying to fix this. 
+1. The colors of the features on the GeoJSON layer do not change simultaneously with dragging the time-slider. It changes to the correct color on hovering above the feature. I am currently trying to fix this.   
+
+2. I have used state and union territory codes instead of names(KL instead of Kerala), I'll change it to names soon. 
 
 
 ## References

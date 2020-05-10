@@ -95,21 +95,60 @@ def statename(statecode):
 
 
 # Read CovidPopulation_May2_run3.csv
-state_wise_daily = pd.read_csv("CovidPopulation_May2_run3.csv")
+predicted_state_wise = pd.read_csv("CovidPopulation_May2_run3.csv")
 
 # List of day numbers
-day_list = state_wise_daily["Day"]
+day_list = predicted_state_wise["Day"]
 
 # Set column Day as index
-state_wise_daily.set_index("Day", inplace = True) 
+predicted_state_wise.set_index("Day", inplace = True) 
 
 # States for which data doesn't exist in predictions
-state_wise_daily["DD"] = np.nan
-state_wise_daily["ML"] = np.nan
-state_wise_daily["MZ"] = np.nan
-state_wise_daily["NL"] = np.nan
+predicted_state_wise["DD"] = np.nan
+predicted_state_wise["ML"] = np.nan
+predicted_state_wise["MZ"] = np.nan
+predicted_state_wise["NL"] = np.nan
 
 # Rename all columns with actual state names
+for column in predicted_state_wise:
+    predicted_state_wise.rename(columns={column : statename(column)}, inplace=True)
+
+
+# Sort columns based on column name
+predicted_state_wise.sort_index(axis=1, inplace= True)
+
+
+# Read state_wise_daily.csv 
+state_wise_daily = pd.read_csv('state_wise_daily.csv')
+
+# Combine the columns Status and Date to form a column named Daily_Status
+state_wise_daily['Daily_Status'] = state_wise_daily["Status"] + "-" + state_wise_daily["Date"]
+
+# Delete the columns Status and Date
+del state_wise_daily['Date']
+del state_wise_daily['Status']
+
+# Replace all hyphens to underscores in the column Daily_Status
+for i in range(len(state_wise_daily['Daily_Status'])):
+    state_wise_daily['Daily_Status'][i] = state_wise_daily['Daily_Status'][i].replace('-', '_')
+
+# A list of elements from Daily_Status
+date_status_list = state_wise_daily["Daily_Status"]
+
+# Set the column Daily_Status as the index of the DataFrame 
+state_wise_daily.set_index("Daily_Status", inplace = True) 
+
+
+# Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
+state_wise_daily["DD"] = state_wise_daily["DD"] + state_wise_daily["DN"]
+
+# Delete DN(Dadra and Nagar Haveli)
+del state_wise_daily["DN"]
+
+# Rename column TT as Total
+state_wise_daily.rename(columns={"TT" : "Total"}, inplace=True)
+
+# Rename all columns with actual state names in state_wise_daily
 for column in state_wise_daily:
     state_wise_daily.rename(columns={column : statename(column)}, inplace=True)
 
@@ -118,24 +157,32 @@ for column in state_wise_daily:
 state_wise_daily.sort_index(axis=1, inplace= True)
 
 
-# Save the total data of all states(TT) in another dictionary,
+
+# Save the total data of all states(Total) in another dictionary,
 # since it will not be combined with GeoJSON data
 total_properties_list = [{"name":"Total"}]
 for day_number in day_list:
-    total_properties_list[0][str(day_number)] = str(state_wise_daily.loc[day_number, "Total"])
+    total_properties_list[0][str(day_number)] = str(predicted_state_wise.loc[day_number, "Total"])
+for date_status in date_status_list:
+    total_properties_list[0][date_status] = str(state_wise_daily.loc[date_status, "Total"])
+
+# Delete the column corresponding to total data of all states(TT) 
+del state_wise_daily["Total"]
 
 # Delete the column corresponding to total data of all states 
-del state_wise_daily["Total"]
+del predicted_state_wise["Total"]
 
 # List of empty dicts which will be filled with the data from CSV file 
 # and combined with the GeoJSON data
 state_wise_properties_list = [{} for i in range(36)]
 
 # Fill the list of dicts with data read from the CSV file
-for i, column in enumerate(state_wise_daily):
+for i, column in enumerate(predicted_state_wise):
     state_wise_properties_list[i]["name"] = column 
     for day_number in day_list:
-        state_wise_properties_list[i][str(day_number)] = str(state_wise_daily.loc[day_number, column])
+        state_wise_properties_list[i][str(day_number)] = str(predicted_state_wise.loc[day_number, column])
+    for date_status in date_status_list:
+        state_wise_properties_list[i][date_status] = str(state_wise_daily.loc[date_status, column])
 
 
 # Open GeoJSON file

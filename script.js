@@ -1,7 +1,8 @@
 // For geoJson layers
+var geojsonPredicted;
 var geojsonConfirmed;
-// var geojsonRecovered;
-// var geojsonDeceased;
+var geojsonRecovered;
+var geojsonDeceased;
 
 // Start and end date parameters
 var startDate = new Date("03/23/2020"); 
@@ -26,6 +27,8 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
+
+
 // Function to decide colors based on data
 function getColor(value) {
     return value > 1000 ? '#990000' :
@@ -35,7 +38,7 @@ function getColor(value) {
            value > 50   ? '#fdd49e' :
            value > 20   ? '#ffffe5' :
            value > 10   ? '#d9f0a3' :
-           value > 0    ? '#78c679' :
+           value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }
 
@@ -51,27 +54,38 @@ function style(feature) {
     };
 }
 
-// function styleRecovered(feature) {
-//     return {
-//         fillColor: getColor(feature.properties['Recovered_' + calculatedDate(slider.value)]),
-//         weight: 2,
-//         opacity: 1,
-//         color: 'white',
-//         dashArray: '',
-//         fillOpacity: 0.7
-//     };
-// }
+function styleConfirmed(feature) {
+    return {
+        fillColor: getColor(feature.properties['Confirmed_' + calculatedDate(slider.value)]),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
 
-// function styleDeceased(feature) {
-//     return {
-//         fillColor: getColor(feature.properties['Deceased_' + calculatedDate(slider.value)]),
-//         weight: 2,
-//         opacity: 1,
-//         color: 'white',
-//         dashArray: '',
-//         fillOpacity: 0.7
-//     };
-// }
+function styleRecovered(feature) {
+    return {
+        fillColor: getColor(feature.properties['Recovered_' + calculatedDate(slider.value)]),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
+function styleDeceased(feature) {
+    return {
+        fillColor: getColor(feature.properties['Deceased_' + calculatedDate(slider.value)]),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
 
 // Event listener function to highlight a feature when mouse hovers on it
 function highlightFeature(e) {
@@ -92,19 +106,24 @@ function highlightFeature(e) {
 
 // Event listener function to reset highlight when mouse moves out of a feature
 function resetHighlight(e) {
+    geojsonPredicted.resetStyle(e.target);
+    info.update();
+}
+
+function resetHighlightConfirmed(e) {
     geojsonConfirmed.resetStyle(e.target);
     info.update();
 }
 
-// function resetHighlightRecovered(e) {
-//     geojsonRecovered.resetStyle(e.target);
-//     info.update();
-// }
+function resetHighlightRecovered(e) {
+    geojsonRecovered.resetStyle(e.target);
+    info.update();
+}
 
-// function resetHighlightDeceased(e) {
-//     geojsonDeceased.resetStyle(e.target);
-//     info.update();
-// }
+function resetHighlightDeceased(e) {
+    geojsonDeceased.resetStyle(e.target);
+    info.update();
+}
 
 // Event listener function to zoom to a feature when clicked on it
 function zoomToFeature(e) {
@@ -121,21 +140,29 @@ function onEachFeature(feature, layer) {
     });
 }
 
-// function onEachFeatureRecovered(feature, layer) {
-//     layer.on({
-//         mouseover: highlightFeature,
-//         mouseout: resetHighlightRecovered,
-//         click: zoomToFeature
-//     });
-// }
+function onEachFeatureConfirmed(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlightConfirmed,
+        click: zoomToFeature
+    });
+}
 
-// function onEachFeatureDeceased(feature, layer) {
-//     layer.on({
-//         mouseover: highlightFeature,
-//         mouseout: resetHighlightDeceased,
-//         click: zoomToFeature
-//     });
-// }
+function onEachFeatureRecovered(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlightRecovered,
+        click: zoomToFeature
+    });
+}
+
+function onEachFeatureDeceased(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlightDeceased,
+        click: zoomToFeature
+    });
+}
 
 // Set location and zoom 
 var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
@@ -151,25 +178,31 @@ var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={
 
 
 // GeoJson Layer
-geojsonConfirmed = L.geoJson(statesData, {
+geojsonPredicted = L.geoJson(statesData, {
     style: style,
     onEachFeature: onEachFeature
 }).addTo(mymap);
 
-// geojsonRecovered = L.geoJson(statesData, {
-//     style: styleRecovered,
-//     onEachFeature: onEachFeatureRecovered
-// });
+geojsonConfirmed = L.geoJson(statesData, {
+    style: styleConfirmed,
+    onEachFeature: onEachFeatureConfirmed
+});
 
-// geojsonDeceased = L.geoJson(statesData, {
-//     style: styleDeceased,
-//     onEachFeature: onEachFeatureDeceased
-// });
+geojsonRecovered = L.geoJson(statesData, {
+    style: styleRecovered,
+    onEachFeature: onEachFeatureRecovered
+});
+
+geojsonDeceased = L.geoJson(statesData, {
+    style: styleDeceased,
+    onEachFeature: onEachFeatureDeceased
+});
 
 var baseMaps = {
+    "Predicted": geojsonPredicted,
     "Confirmed": geojsonConfirmed,
-    // "Recovered": geojsonRecovered,
-    // "Deceased" : geojsonDeceased
+    "Recovered": geojsonRecovered,
+    "Deceased" : geojsonDeceased
 };
 
 // Title info control
@@ -182,8 +215,14 @@ title.onAdd = function (map) {
 };
 
 title.update = function () {
-    this._div.innerHTML = '<h4>COVID-19 cases in India</h4>' + 
-                            "Total number of cases: " + totalData[0][slider.value.toString()];
+    this._div.innerHTML = '<h4>COVID-19 cases in India</h4>' 
+                            + "Total predicted cases: " + totalData[0][slider.value.toString()]
+                            + "<br> Total confirmed cases: " 
+                            + totalData[0]["Confirmed_" + calculatedDate(slider.value)]
+                            + "<br> Total recovered cases: " 
+                            + totalData[0]["Recovered_" + calculatedDate(slider.value)]
+                            + "<br> Total deceased cases: " 
+                            + totalData[0]["Deceased_" + calculatedDate(slider.value)];
 };
 
 title.setPosition('topleft');
@@ -202,9 +241,11 @@ info.onAdd = function (map) {
 // Method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h4>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h4>' +  (props ?
-        '<b>' + props.name + '</b><br />' + 'Confirmed Cases: ' + props[(slider.value).toString()]
-        // +'<br />' + 'Recovered: ' + props[slider.value.toString()] 
-        // +'<br />' + 'Deceased: ' + props[slider.value.toString()] 
+        '<b>' + props.name +'</b>'
+        +'<br />' + 'Predicted Cases: ' + props['49']
+        +'<br />' + 'Confirmed Cases: ' + props["Confirmed_" + calculatedDate(slider.value)]
+        +'<br />' + 'Recovered Cases: ' + props["Recovered_" + calculatedDate(slider.value)] 
+        +'<br />' + 'Deceased Cases: ' + props["Deceased_" + calculatedDate(slider.value)] 
         : 'Hover over a state');
 };
 
@@ -282,9 +323,10 @@ function calculatedDate(value){
 slider.oninput = function() {
   info.update();
   title.update();
+  geojsonPredicted.resetStyle();
   geojsonConfirmed.resetStyle();
-//   geojsonRecovered.resetStyle(); 
-//   geojsonDeceased.resetStyle();
+  geojsonRecovered.resetStyle(); 
+  geojsonDeceased.resetStyle();
 }
 
 // Custom zoom control bar with a Zoom to Home button

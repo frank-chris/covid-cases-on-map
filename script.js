@@ -85,11 +85,14 @@ function onEachFeature(feature, layer) {
 // Set location and zoom 
 var mymap = L.map('mapid').setView([22.146, 79.088], 4);
 
-// Tile Layer
-L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(mymap);
 
+// Google Traffic Tile Layer
+var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        minZoom: 2,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+        attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>'
+    }).addTo(mymap);
 
 // GeoJson Layer
 geojson = L.geoJson(statesData, {

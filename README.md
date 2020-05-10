@@ -14,9 +14,9 @@ A chloropleth map built using Leaflet.
 1. GeoJSON data for the states and union terroritories of India was downloaded from [here](https://github.com/datameet/maps)
    (Downloaded the files and used [mapshaper](https://mapshaper.org/) to convert to GeoJSON)
 
-2. CovidPopulation_May2_run3.data was converted to CSV using MS Excel. 
+2. CovidPopulation_May2_run3.data was converted to CSV using MS Excel. CSV data for state-wise daily Covid-19 cases in India was downloaded from [here](https://api.covid19india.org/csv/latest/state_wise_daily.csv)
 
-3. The python script named pyscript.py was used to combine the GeoJSON data(States_GeoJSON.json) and CSV data(CovidPopulation_May2_run3.csv) and save it in a JavaScript file(predicted_data.js)
+3. The python script named pyscript.py was used to combine the GeoJSON data(States_GeoJSON.json) and CSV data(CovidPopulation_May2_run3.csv and state_wise_daily.csv) and save it in a JavaScript file(predicted_data.js)
 
 4. This file is then used by the webpage for displaying the chloropleth map using [Leaflet.js](https://leafletjs.com/examples/choropleth/)
 
@@ -51,7 +51,7 @@ A chloropleth map built using Leaflet.
 
 5. Colorbar formatting and choice of colors. **Changed to a scheme from green to orange to red. Formatting of color bar is fine on my browsers(Firefox and Edge).** 
 
-6. Add radio buttons to choose among confirmed, recovered and deceased. **Added, however, currently disabled since the model data had one kind of data**
+6. Add radio buttons to choose among predicted, confirmed, recovered and deceased. **Added**
 
 7. Start date is March 23 **Done**
 

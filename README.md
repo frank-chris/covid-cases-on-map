@@ -9,7 +9,21 @@ A chloropleth map built using Leaflet.
 
 #### 2. Open the index.html file using a browser
 
-## Implementation Details   
+## Implementation Details - Attempt 2   
+
+1. GeoJSON data for the states and union terroritories of India was downloaded from [here](https://github.com/datameet/maps)
+   (Downloaded the files and used [mapshaper](https://mapshaper.org/) to convert to GeoJSON)
+
+2. CovidPopulation_May2_run3.data was converted to CSV using MS Excel. 
+
+3. The python script named pyscript.py was used to combine the GeoJSON data(States_GeoJSON.json) and CSV data(CovidPopulation_May2_run3.csv) and save it in a JavaScript file(predicted_data.js)
+
+4. This file is then used by the webpage for displaying the chloropleth map using [Leaflet.js](https://leafletjs.com/examples/choropleth/)
+
+5. The JavaScript code written is in script.js and custom CSS is in style.css
+
+
+## Implementation Details - Attempt 1   
 
 1. GeoJSON data for the states and union terroritories of India was downloaded from [here](https://github.com/datameet/maps)
    (Downloaded the files and used [mapshaper](https://mapshaper.org/) to convert to GeoJSON)
@@ -21,12 +35,31 @@ A chloropleth map built using Leaflet.
 4. This file is then used by the webpage for displaying the chloropleth map using [Leaflet.js](https://leafletjs.com/examples/choropleth/)
 
 ## Issues
-1. The colors of the features on the GeoJSON layer do not change simultaneously with dragging the time-slider. It changes to the correct color on hovering above the feature. I am currently trying to fix this.   
 
-2. I have used state and union territory codes instead of names(KL instead of Kerala), I'll change it to names soon. 
+### Currently working on
+
+1. The color axis needs to change with underlying data. Currently March 14 is all yellow, the difference among states is not visible.
+
+### Fixed   
+1. The colors of the features on the GeoJSON layer do not change simultaneously with dragging the time-slider. It changes to the correct color on hovering above the feature. I am currently trying to fix this. **Was fixed by using Leaflet 1.6.0 instead of Leaflet 0.7.x** 
+
+2. I have used state and union territory codes instead of names(KL instead of Kerala), I'll change it to names soon. **Fixed**
+
+3. Use Google Maps **Done**
+
+4. Changed layout and zoom. 
+
+5. Colorbar formatting and choice of colors. **Changed to a scheme from green to orange to red. Formatting of color bar is fine on my browsers(Firefox and Edge).** 
+
+6. Add radio buttons to choose among confirmed, recovered and deceased. **Added, however, currently disabled since the model data had one kind of data**
+
+7. Start date is March 23 **Done**
+
+8. Use preliminary model results **Done**
 
 
 ## References
 
 1. [Interactive Choropleth Map using Leaflet.js](https://leafletjs.com/examples/choropleth/)
+2. ['Home' button Leaflet map](https://gis.stackexchange.com/questions/127286/home-button-leaflet-map)
 

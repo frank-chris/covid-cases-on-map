@@ -2,8 +2,9 @@
 # with CSV data of Covid cases and save as a JavaScript file, 
 # which will be used in by the webpage
 
-import json
 import pandas as pd
+import numpy as np
+import json
 
 def get_ST_NM(state):
     '''
@@ -13,40 +14,118 @@ def get_ST_NM(state):
     '''
     return state["properties"]["ST_NM"]
 
-# Read state_wise_daily.csv 
-state_wise_daily = pd.read_csv('state_wise_daily.csv')
+def statename(statecode):
+    '''
+    Returns state name from state code   
+    '''
+    if statecode == "AP":
+        return "Andhra Pradesh"
+    elif statecode == "AN":
+        return "Andaman and Nicobar Islands"
+    elif statecode == "AR":
+        return "Arunachal Pradesh"
+    elif statecode == "AS":
+        return "Assam"
+    elif statecode == "BR":
+        return "Bihar"
+    elif statecode == "CH":
+        return "Chandigarh"
+    elif statecode == "CT":
+        return "Chhattisgarh"
+    elif statecode == "DD":
+        return "Dadra and Nagar Haveli and Daman and Diu"
+    elif statecode == "DL":
+        return "Delhi"
+    elif statecode == "GA":
+        return "Goa"
+    elif statecode == "GJ":
+        return "Gujarat"
+    elif statecode == "HR":
+        return "Haryana"
+    elif statecode == "HP":
+        return "Himachal Pradesh"
+    elif statecode == "JH":
+        return "Jharkhand"
+    elif statecode == "JK":
+        return "Jammu and Kashmir"
+    elif statecode == "KA":
+        return "Karnataka"
+    elif statecode == "KL":
+        return "Kerala"
+    elif statecode == "LA":
+        return "Ladakh"
+    elif statecode == "LD":
+        return "Lakshadweep"
+    elif statecode == "MP":
+        return "Madhya Pradesh"
+    elif statecode == "MH":
+        return "Maharashtra"
+    elif statecode == "MN":
+        return "Manipur"
+    elif statecode == "ML":
+        return "Meghalaya"
+    elif statecode == "MZ":
+        return "Mizoram"
+    elif statecode == "NL":
+        return "Nagaland"
+    elif statecode == "OR":
+        return "Odisha"
+    elif statecode == "PB":
+        return "Punjab"
+    elif statecode == "PY":
+        return "Puducherry"
+    elif statecode == "RJ":
+        return "Rajasthan"
+    elif statecode == "SK":
+        return "Sikkim"
+    elif statecode == "TN":
+        return "Tamil Nadu"
+    elif statecode == "TG":
+        return "Telengana"
+    elif statecode == "TR":
+        return "Tripura"
+    elif statecode == "UP":
+        return "Uttar Pradesh"
+    elif statecode == "UT":
+        return "Uttarakhand"
+    elif statecode == "WB":
+        return "West Bengal"
+    else:
+        return statecode
 
-# Combine the columns Status and Date to form a column named Daily_Status
-state_wise_daily['Daily_Status'] = state_wise_daily["Status"] + "-" + state_wise_daily["Date"]
 
-# Delete the columns Status and Date
-del state_wise_daily['Date']
-del state_wise_daily['Status']
+# Read CovidPopulation_May2_run3.csv
+state_wise_daily = pd.read_csv("CovidPopulation_May2_run3.csv")
 
-# Replace all hyphens to underscores in the column Daily_Status
-for i in range(len(state_wise_daily['Daily_Status'])):
-    state_wise_daily['Daily_Status'][i] = state_wise_daily['Daily_Status'][i].replace('-', '_')
+# List of day numbers
+day_list = state_wise_daily["Day"]
 
-# Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
-state_wise_daily["DD"] = state_wise_daily["DD"] + state_wise_daily["DN"]
+# Set column Day as index
+state_wise_daily.set_index("Day", inplace = True) 
 
-# Delete DN(Dadra and Nagar Haveli)
-del state_wise_daily["DN"]
+# States for which data doesn't exist in predictions
+state_wise_daily["DD"] = np.nan
+state_wise_daily["ML"] = np.nan
+state_wise_daily["MZ"] = np.nan
+state_wise_daily["NL"] = np.nan
 
-# A list of elements from Daily_Status
-date_status_list = state_wise_daily["Daily_Status"]
+# Rename all columns with actual state names
+for column in state_wise_daily:
+    state_wise_daily.rename(columns={column : statename(column)}, inplace=True)
 
-# Set the column Daily_Status as the index of the DataFrame 
-state_wise_daily.set_index("Daily_Status", inplace = True) 
+
+# Sort columns based on column name
+state_wise_daily.sort_index(axis=1, inplace= True)
+
 
 # Save the total data of all states(TT) in another dictionary,
 # since it will not be combined with GeoJSON data
-total_properties_list = [{"name":"TT"}]
-for date_status in date_status_list:
-    total_properties_list[0][date_status] = str(state_wise_daily.loc[date_status, "TT"])
+total_properties_list = [{"name":"Total"}]
+for day_number in day_list:
+    total_properties_list[0][str(day_number)] = str(state_wise_daily.loc[day_number, "Total"])
 
-# Delete the column corresponding to total data of all states(TT) 
-del state_wise_daily["TT"]
+# Delete the column corresponding to total data of all states 
+del state_wise_daily["Total"]
 
 # List of empty dicts which will be filled with the data from CSV file 
 # and combined with the GeoJSON data
@@ -55,8 +134,9 @@ state_wise_properties_list = [{} for i in range(36)]
 # Fill the list of dicts with data read from the CSV file
 for i, column in enumerate(state_wise_daily):
     state_wise_properties_list[i]["name"] = column 
-    for date_status in date_status_list:
-        state_wise_properties_list[i][date_status] = str(state_wise_daily.loc[date_status, column])
+    for day_number in day_list:
+        state_wise_properties_list[i][str(day_number)] = str(state_wise_daily.loc[day_number, column])
+
 
 # Open GeoJSON file
 f = open('States_GeoJSON.json') 
@@ -75,10 +155,10 @@ for state_number in range(36):
 states_data = str(loaded_json) 
 
 # Save the data in a JavaScript file
-with open("data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";")
+with open("predicted_data.js", 'w') as file:
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";")
 
-print("\nData written into file named data.js")
+print("\nData written into file named predicted_data.js")
 
 f.close()
 

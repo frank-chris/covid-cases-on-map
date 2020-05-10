@@ -344,19 +344,23 @@ var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (map) {
 
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = legendGrades(),
+    this._div = L.DomUtil.create('div', 'info legend');
+    this.update();
+    return this._div;
+};
+
+legend.update = function (){
+    var grades = legendGrades(),
         labels = [];
 
-    
+    this._div.innerHTML = "";
     for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
+        this._div.innerHTML +=
             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
     }
+}
 
-    return div;
-};
 
 // Add legend to map
 legend.addTo(mymap);
@@ -420,6 +424,7 @@ slider.oninput = function() {
   geojsonConfirmed.resetStyle();
   geojsonRecovered.resetStyle(); 
   geojsonDeceased.resetStyle();
+  legend.update();
 }
 
 // Custom zoom control bar with a Zoom to Home button

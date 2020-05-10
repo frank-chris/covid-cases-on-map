@@ -31,13 +31,89 @@ slider.max = noOfDays;
 
 // Function to decide colors based on data
 function getColor(value) {
-    return value > 1000 ? '#990000' :
-           value > 500  ? '#d7301f' :
-           value > 200  ? '#ef6548' :
-           value > 100  ? '#fc8d59' :
-           value > 50   ? '#fdd49e' :
-           value > 20   ? '#ffffe5' :
-           value > 10   ? '#d9f0a3' :
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"][(slider.value).toString()]) > max){
+            max = Number(state["properties"][(slider.value).toString()]);
+        }
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffffe5' :
+           value > max/100   ? '#d9f0a3' :
+           value >= 0   ? '#78c679' :
+                      '#fdfdfd';
+}
+
+function getColorConfirmed(value) {
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]);
+        }
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffffe5' :
+           value > max/100   ? '#d9f0a3' :
+           value >= 0   ? '#78c679' :
+                      '#fdfdfd';
+}
+
+function getColorRecovered(value) {
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]);
+        }
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffffe5' :
+           value > max/100   ? '#d9f0a3' :
+           value >= 0   ? '#78c679' :
+                      '#fdfdfd';
+}
+
+function getColorDeceased(value) {
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]);
+        }
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffffe5' :
+           value > max/100   ? '#d9f0a3' :
            value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }
@@ -56,7 +132,7 @@ function style(feature) {
 
 function styleConfirmed(feature) {
     return {
-        fillColor: getColor(feature.properties['Confirmed_' + calculatedDate(slider.value)]),
+        fillColor: getColorConfirmed(feature.properties['Confirmed_' + calculatedDate(slider.value)]),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -67,7 +143,7 @@ function styleConfirmed(feature) {
 
 function styleRecovered(feature) {
     return {
-        fillColor: getColor(feature.properties['Recovered_' + calculatedDate(slider.value)]),
+        fillColor: getColorRecovered(feature.properties['Recovered_' + calculatedDate(slider.value)]),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -78,13 +154,28 @@ function styleRecovered(feature) {
 
 function styleDeceased(feature) {
     return {
-        fillColor: getColor(feature.properties['Deceased_' + calculatedDate(slider.value)]),
+        fillColor: getColorDeceased(feature.properties['Deceased_' + calculatedDate(slider.value)]),
         weight: 2,
         opacity: 1,
         color: 'white',
         dashArray: '',
         fillOpacity: 0.7
     };
+}
+
+
+function legendGrades(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"][(slider.value).toString()]) > max){
+            max = Number(state["properties"][(slider.value).toString()]);
+        }
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
 }
 
 // Event listener function to highlight a feature when mouse hovers on it
@@ -198,12 +289,6 @@ geojsonDeceased = L.geoJson(statesData, {
     onEachFeature: onEachFeatureDeceased
 });
 
-var baseMaps = {
-    "Predicted": geojsonPredicted,
-    "Confirmed": geojsonConfirmed,
-    "Recovered": geojsonRecovered,
-    "Deceased" : geojsonDeceased
-};
 
 // Title info control
 var title = L.control();
@@ -242,7 +327,7 @@ info.onAdd = function (map) {
 info.update = function (props) {
     this._div.innerHTML = '<h4>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h4>' +  (props ?
         '<b>' + props.name +'</b>'
-        +'<br />' + 'Predicted Cases: ' + props['49']
+        +'<br />' + 'Predicted Cases: ' + props[slider.value.toString()]
         +'<br />' + 'Confirmed Cases: ' + props["Confirmed_" + calculatedDate(slider.value)]
         +'<br />' + 'Recovered Cases: ' + props["Recovered_" + calculatedDate(slider.value)] 
         +'<br />' + 'Deceased Cases: ' + props["Deceased_" + calculatedDate(slider.value)] 
@@ -253,7 +338,6 @@ info.update = function (props) {
 info.addTo(mymap);
 
 
-L.control.layers(baseMaps).addTo(mymap);
 
 // Legend Control
 var legend = L.control({position: 'bottomright'});
@@ -261,7 +345,7 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
+        grades = legendGrades(),
         labels = [];
 
     
@@ -278,6 +362,15 @@ legend.onAdd = function (map) {
 legend.addTo(mymap);
 
 
+
+var baseMaps = {
+    "Predicted": geojsonPredicted,
+    "Confirmed": geojsonConfirmed,
+    "Recovered": geojsonRecovered,
+    "Deceased" : geojsonDeceased
+};
+
+L.control.layers(baseMaps).addTo(mymap);
 
 // Function to return shortened month name
 // Output of the JavaScript date function 'getMonth()' is passed as argument

@@ -38,7 +38,7 @@ A chloropleth map built using Leaflet.
 
 ### Currently working on
 
-1. JavaScript code in **predicted_data.js** needs refactoring. 
+1. JavaScript code in **script.js** needs refactoring. 
 
 ### Fixed   
 1. The colors of the features on the GeoJSON layer do not change simultaneously with dragging the time-slider. It changes to the correct color on hovering above the feature. I am currently trying to fix this. **Was fixed by using Leaflet 1.6.0 instead of Leaflet 0.7.x** 

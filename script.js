@@ -4,6 +4,8 @@ var geojsonConfirmed;
 var geojsonRecovered;
 var geojsonDeceased;
 
+var currentBaseLayer;
+
 // Start and end date parameters
 var startDate = new Date("03/23/2020"); 
 var endDate= new Date("05/07/2020"); 
@@ -38,7 +40,9 @@ function getColor(value) {
             max = Number(state["properties"][(slider.value).toString()]);
         }
     }
-
+    if(max == 0){
+        max = 100;
+    }
     max = Math.ceil(max/100)*100;
 
     return value > max ? '#990000' :
@@ -59,6 +63,10 @@ function getColorConfirmed(value) {
         if (Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]) > max){
             max = Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]);
         }
+    }
+    
+    if(max == 0){
+        max = 100;
     }
 
     max = Math.ceil(max/100)*100;
@@ -83,6 +91,9 @@ function getColorRecovered(value) {
         }
     }
 
+    if(max == 0){
+        max = 100;
+    }
     max = Math.ceil(max/100)*100;
 
     return value > max ? '#990000' :
@@ -105,6 +116,9 @@ function getColorDeceased(value) {
         }
     }
 
+    if(max == 0){
+        max = 100;
+    }
     max = Math.ceil(max/100)*100;
 
     return value > max ? '#990000' :
@@ -172,11 +186,62 @@ function legendGrades(){
             max = Number(state["properties"][(slider.value).toString()]);
         }
     }
-
+    if(max == 0){
+        max = 100;
+    }
     max = Math.ceil(max/100)*100;
 
     return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
 }
+
+function legendGradesConfirmed(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
+}
+
+function legendGradesRecovered(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
+}
+
+function legendGradesDeceased(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]) > max){
+            max = Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
+}
+
 
 // Event listener function to highlight a feature when mouse hovers on it
 function highlightFeature(e) {
@@ -349,16 +414,70 @@ legend.onAdd = function (map) {
     return this._div;
 };
 
-legend.update = function (){
-    var grades = legendGrades(),
+legend.update = function (currentBaseLayer){
+    var grades;
+    var labels;
+
+    if (currentBaseLayer == "Predicted"){
+        grades = legendGrades();
         labels = [];
 
-    this._div.innerHTML = "";
-    for (var i = 0; i < grades.length; i++) {
-        this._div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
     }
+
+    else if(currentBaseLayer == "Confirmed"){
+        grades = legendGradesConfirmed();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColorConfirmed(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else if(currentBaseLayer == "Recovered"){
+        grades = legendGradesRecovered();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColorRecovered(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else if(currentBaseLayer == "Deceased"){
+        grades = legendGradesDeceased();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColorDeceased(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else{
+        grades = legendGrades();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+    
 }
 
 
@@ -424,8 +543,14 @@ slider.oninput = function() {
   geojsonConfirmed.resetStyle();
   geojsonRecovered.resetStyle(); 
   geojsonDeceased.resetStyle();
-  legend.update();
+  legend.update(currentBaseLayer);
 }
+
+mymap.on("baselayerchange", function(e){
+    currentBaseLayer = e.name;
+    legend.update(currentBaseLayer);
+ })
+
 
 // Custom zoom control bar with a Zoom to Home button
 L.Control.zoomHome = L.Control.extend({

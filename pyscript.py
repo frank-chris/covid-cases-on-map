@@ -94,8 +94,11 @@ def statename(statecode):
         return statecode
 
 
-# Read CovidPopulation_May2_run3.csv
-predicted_state_wise = pd.read_csv("CovidPopulation_May2_run3.csv")
+# Read CovidPopulation_May2_run3.data
+predicted_state_wise = pd.read_csv("CovidPopulation_May2_run3.data", delimiter=" ", header=1)
+
+
+predicted_state_wise["Day"] = predicted_state_wise["Day"].round(0).astype(int)
 
 # List of day numbers
 day_list = predicted_state_wise["Day"]

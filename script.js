@@ -50,8 +50,8 @@ function getColor(value) {
            value > max/5  ? '#ef6548' :
            value > max/10  ? '#fc8d59' :
            value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffffe5' :
-           value > max/100   ? '#d9f0a3' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
            value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }
@@ -76,8 +76,8 @@ function getColorConfirmed(value) {
            value > max/5  ? '#ef6548' :
            value > max/10  ? '#fc8d59' :
            value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffffe5' :
-           value > max/100   ? '#d9f0a3' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
            value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }
@@ -101,8 +101,8 @@ function getColorRecovered(value) {
            value > max/5  ? '#ef6548' :
            value > max/10  ? '#fc8d59' :
            value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffffe5' :
-           value > max/100   ? '#d9f0a3' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
            value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }
@@ -126,8 +126,8 @@ function getColorDeceased(value) {
            value > max/5  ? '#ef6548' :
            value > max/10  ? '#fc8d59' :
            value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffffe5' :
-           value > max/100   ? '#d9f0a3' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
            value >= 0   ? '#78c679' :
                       '#fdfdfd';
 }

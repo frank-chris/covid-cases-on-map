@@ -31,21 +31,6 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
-function detectMob() {
-    const toMatch = [
-        /Android/i,
-        /webOS/i,
-        /iPhone/i,
-        /iPad/i,
-        /iPod/i,
-        /BlackBerry/i,
-        /Windows Phone/i
-    ];
-
-    return toMatch.some((toMatchItem) => {
-        return navigator.userAgent.match(toMatchItem);
-    });
-}
 
 // Function to decide colors based on data
 function getColor(value) {

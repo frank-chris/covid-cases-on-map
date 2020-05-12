@@ -2,6 +2,10 @@
 
 A chloropleth map built using Leaflet. 
 
+## Demo  
+
+See a demo [here](https://frank-chris.github.io/covid-cases-on-map/)  
+
 ## Instructions 
 
 #### 1. Clone this repository    

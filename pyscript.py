@@ -6,6 +6,12 @@ import pandas as pd
 import numpy as np
 import json
 
+def modify(value):
+    return "May12" + str(value)
+
+def modify_two(value):
+    return "Nucleation" + str(value)
+
 def get_ST_NM(state):
     '''
     Returns ST_NM (state name) of the argument(which is a feature)
@@ -97,8 +103,23 @@ def statename(statecode):
 # Read CovidPopulation_May2_run3.data
 predicted_state_wise = pd.read_csv("CovidPopulation_May2_run3.data", delimiter=" ", header=1)
 
+may12_run1 = pd.read_csv("CovidPopulation_May12_run1.data", delimiter=" ", header=1)
+
+nucleation = pd.read_csv("CovidNucleation.data", delimiter=" ", header=1)
 
 predicted_state_wise["Day"] = predicted_state_wise["Day"].round(0).astype(int)
+
+may12_run1["Day"] = may12_run1["Day"].round(0).astype(int)
+
+nucleation["Day"] = nucleation["Day"].round(0).astype(int)
+
+may12_run1["Day"] = may12_run1["Day"].apply(modify)
+
+nucleation["Day"] = nucleation["Day"].apply(modify_two)
+
+frames = [predicted_state_wise, may12_run1, nucleation]
+
+predicted_state_wise = pd.concat(frames)
 
 # List of day numbers
 day_list = predicted_state_wise["Day"]

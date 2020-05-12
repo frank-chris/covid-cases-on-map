@@ -3,6 +3,8 @@ var geojsonPredicted;
 var geojsonConfirmed;
 var geojsonRecovered;
 var geojsonDeceased;
+var geojsonNucleation;
+var geojsonMay12Run1;
 
 var currentBaseLayer;
 
@@ -43,6 +45,58 @@ function getColor(value) {
     if(max == 0){
         max = 100;
     }
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
+           value >= 0   ? '#78c679' :
+                      '#fdfdfd';
+}
+
+function getColorMay12Run1(value) {
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]["May12" + (slider.value).toString()]) > max){
+            max = Number(state["properties"]["May12" + (slider.value).toString()]);
+        }
+    }
+    
+    if(max == 0){
+        max = 100;
+    }
+
+    max = Math.ceil(max/100)*100;
+
+    return value > max ? '#990000' :
+           value > max/2  ? '#d7301f' :
+           value > max/5  ? '#ef6548' :
+           value > max/10  ? '#fc8d59' :
+           value > max/20   ? '#fdd49e' :
+           value > max/50   ? '#ffff29' :
+           value > max/100   ? '#d6ff75' :
+           value >= 0   ? '#78c679' :
+                      '#fdfdfd';
+}
+
+function getColorNucleation(value) {
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]["Nucleation" + (slider.value).toString()]) > max){
+            max = Number(state["properties"]["Nucleation" + (slider.value).toString()]);
+        }
+    }
+    
+    if(max == 0){
+        max = 100;
+    }
+
     max = Math.ceil(max/100)*100;
 
     return value > max ? '#990000' :
@@ -144,6 +198,28 @@ function style(feature) {
     };
 }
 
+function styleMay12Run1(feature) {
+    return {
+        fillColor: getColorMay12Run1(feature.properties["May12" + (slider.value).toString()]),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
+function styleNucleation(feature) {
+    return {
+        fillColor: getColorNucleation(feature.properties["Nucleation" + (slider.value).toString()]),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
 function styleConfirmed(feature) {
     return {
         fillColor: getColorConfirmed(feature.properties['Confirmed_' + calculatedDate(slider.value)]),
@@ -184,6 +260,38 @@ function legendGrades(){
     for (state of statesData["features"]){
         if (Number(state["properties"][(slider.value).toString()]) > max){
             max = Number(state["properties"][(slider.value).toString()]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
+}
+
+function legendGradesMay12Run1(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]["May12" + (slider.value).toString()]) > max){
+            max = Number(state["properties"]["May12" + (slider.value).toString()]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
+}
+
+function legendGradesNucleation(){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"]["Nucleation" + (slider.value).toString()]) > max){
+            max = Number(state["properties"]["Nucleation" + (slider.value).toString()]);
         }
     }
     if(max == 0){
@@ -266,6 +374,16 @@ function resetHighlight(e) {
     info.update();
 }
 
+function resetHighlightMay12Run1(e) {
+    geojsonMay12Run1.resetStyle(e.target);
+    info.update();
+}
+
+function resetHighlightNucleation(e) {
+    geojsonNucleation.resetStyle(e.target);
+    info.update();
+}
+
 function resetHighlightConfirmed(e) {
     geojsonConfirmed.resetStyle(e.target);
     info.update();
@@ -292,6 +410,22 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight,
+        click: zoomToFeature
+    });
+}
+
+function onEachFeatureMay12Run1(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlightMay12Run1,
+        click: zoomToFeature
+    });
+}
+
+function onEachFeatureNucleation(feature, layer) {
+    layer.on({
+        mouseover: highlightFeature,
+        mouseout: resetHighlightNucleation,
         click: zoomToFeature
     });
 }
@@ -339,6 +473,16 @@ geojsonPredicted = L.geoJson(statesData, {
     onEachFeature: onEachFeature
 }).addTo(mymap);
 
+geojsonMay12Run1 = L.geoJson(statesData, {
+    style: styleMay12Run1,
+    onEachFeature: onEachFeatureMay12Run1
+});
+
+geojsonNucleation = L.geoJson(statesData, {
+    style: styleNucleation,
+    onEachFeature: onEachFeatureNucleation
+});
+
 geojsonConfirmed = L.geoJson(statesData, {
     style: styleConfirmed,
     onEachFeature: onEachFeatureConfirmed
@@ -366,7 +510,9 @@ title.onAdd = function (map) {
 
 title.update = function () {
     this._div.innerHTML = '<h4>COVID-19 cases in India</h4>' 
-                            + "Total predicted cases: " + totalData[0][slider.value.toString()]
+                            + "Total(May12_run1) cases: " + totalData[0]["May12" + slider.value.toString()]
+                            + "<br> Total(May2_run3) cases: " + totalData[0][slider.value.toString()]
+                            + "<br> Total(Nucleation) cases: " + totalData[0]["Nucleation" + slider.value.toString()]
                             + "<br> Total confirmed cases: " 
                             + totalData[0]["Confirmed_" + calculatedDate(slider.value)]
                             + "<br> Total recovered cases: " 
@@ -392,7 +538,9 @@ info.onAdd = function (map) {
 info.update = function (props) {
     this._div.innerHTML = '<h4>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h4>' +  (props ?
         '<b>' + props.name +'</b>'
-        +'<br />' + 'Predicted Cases: ' + props[slider.value.toString()]
+        +'<br />' + 'Pred(May2_run3) Cases: ' + props[slider.value.toString()]
+        +'<br />' + 'Pred(May12_run1) Cases: ' + props["May12" + slider.value.toString()]
+        +'<br />' + 'Nucleation Cases: ' + props["Nucleation" + slider.value.toString()]
         +'<br />' + 'Confirmed Cases: ' + props["Confirmed_" + calculatedDate(slider.value)]
         +'<br />' + 'Recovered Cases: ' + props["Recovered_" + calculatedDate(slider.value)] 
         +'<br />' + 'Deceased Cases: ' + props["Deceased_" + calculatedDate(slider.value)] 
@@ -418,7 +566,7 @@ legend.update = function (currentBaseLayer){
     var grades;
     var labels;
 
-    if (currentBaseLayer == "Predicted"){
+    if (currentBaseLayer == "May2_run3"){
         grades = legendGrades();
         labels = [];
 
@@ -426,6 +574,30 @@ legend.update = function (currentBaseLayer){
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
                 '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else if(currentBaseLayer == "May12_run1"){
+        grades = legendGradesMay12Run1();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColorMay12Run1(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else if(currentBaseLayer == "Nucleation"){
+        grades = legendGradesNucleation();
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColorNucleation(grades[i] + 1) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
@@ -487,7 +659,9 @@ legend.addTo(mymap);
 
 
 var baseMaps = {
-    "Predicted": geojsonPredicted,
+    "May2_run3": geojsonPredicted,
+    "May12_run1": geojsonMay12Run1,
+    "Nucleation": geojsonNucleation,
     "Confirmed": geojsonConfirmed,
     "Recovered": geojsonRecovered,
     "Deceased" : geojsonDeceased
@@ -543,6 +717,8 @@ slider.oninput = function() {
   geojsonConfirmed.resetStyle();
   geojsonRecovered.resetStyle(); 
   geojsonDeceased.resetStyle();
+  geojsonNucleation.resetStyle();
+  geojsonMay12Run1.resetStyle();
   legend.update(currentBaseLayer);
 }
 

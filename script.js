@@ -438,43 +438,88 @@ function onEachFeature(feature, layer) {
 }
 
 function onEachFeatureMay12Run1(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlightMay12Run1,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlightMay12Run1,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightMay12Run1,
+            click: zoomToFeature
+        });
+    }
 }
 
 function onEachFeatureNucleation(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlightNucleation,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlightNucleation,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightNucleation,
+            click: zoomToFeature
+        });
+    }
 }
 
 function onEachFeatureConfirmed(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlightConfirmed,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlightConfirmed,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightConfirmed,
+            click: zoomToFeature
+        });
+    }
 }
 
 function onEachFeatureRecovered(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlightRecovered,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlightRecovered,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightRecovered,
+            click: zoomToFeature
+        });
+    }
 }
 
 function onEachFeatureDeceased(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlightDeceased,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlightDeceased,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlightDeceased,
+            click: zoomToFeature
+        });
+    }
 }
 
 // Set location and zoom 

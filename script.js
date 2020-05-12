@@ -31,7 +31,21 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
+function detectMob() {
+    const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ];
 
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+}
 
 // Function to decide colors based on data
 function getColor(value) {
@@ -407,11 +421,20 @@ function zoomToFeature(e) {
 // Function to add the event listeners to each of the
 // features using onEachFeature of geoJson layer
 function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
+    if(L.Browser.mobile){
+        layer.on({
+            mousedown: highlightFeature,
+            mouseup: resetHighlight,
+            dblclick: zoomToFeature
+        });
+    }
+    else{
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
 }
 
 function onEachFeatureMay12Run1(feature, layer) {

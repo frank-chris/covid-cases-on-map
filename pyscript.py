@@ -7,9 +7,6 @@ import numpy as np
 import json
 
 def modify(value):
-    return "May12" + str(value)
-
-def modify_two(value):
     return "Nucleation" + str(value)
 
 def get_ST_NM(state):
@@ -99,25 +96,23 @@ def statename(statecode):
     else:
         return statecode
 
+run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
 
-# Read CovidPopulation_May2_run3.data
-predicted_state_wise = pd.read_csv("CovidPopulation_May2_run3.data", delimiter=" ", header=1)
+file_name = input("\nEnter .data file name(eg: CovidPopulation_May12_run1.data): ")
 
-may12_run1 = pd.read_csv("CovidPopulation_May12_run1.data", delimiter=" ", header=1)
+# Read run data 
+predicted_state_wise = pd.read_csv(run_id + "/" + file_name, delimiter=" ", header=1)
 
+# Read nucleation data
 nucleation = pd.read_csv("CovidNucleation.data", delimiter=" ", header=1)
 
 predicted_state_wise["Day"] = predicted_state_wise["Day"].round(0).astype(int)
 
-may12_run1["Day"] = may12_run1["Day"].round(0).astype(int)
-
 nucleation["Day"] = nucleation["Day"].round(0).astype(int)
 
-may12_run1["Day"] = may12_run1["Day"].apply(modify)
+nucleation["Day"] = nucleation["Day"].apply(modify)
 
-nucleation["Day"] = nucleation["Day"].apply(modify_two)
-
-frames = [predicted_state_wise, may12_run1, nucleation]
+frames = [predicted_state_wise, nucleation]
 
 predicted_state_wise = pd.concat(frames)
 
@@ -162,6 +157,8 @@ date_status_list = state_wise_daily["Daily_Status"]
 # Set the column Daily_Status as the index of the DataFrame 
 state_wise_daily.set_index("Daily_Status", inplace = True) 
 
+# Make state_wise_daily data cumulative
+
 
 # Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
 state_wise_daily["DD"] = state_wise_daily["DD"] + state_wise_daily["DN"]
@@ -179,7 +176,6 @@ for column in state_wise_daily:
 
 # Sort columns based on column name
 state_wise_daily.sort_index(axis=1, inplace= True)
-
 
 
 # Save the total data of all states(Total) in another dictionary,
@@ -226,10 +222,10 @@ for state_number in range(36):
 states_data = str(loaded_json) 
 
 # Save the data in a JavaScript file
-with open("predicted_data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";")
+with open(run_id + "/data.js", 'w') as file:
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';")
 
-print("\nData written into file named predicted_data.js")
+print("\nData written into " + run_id + "/data.js")
 
 f.close()
 

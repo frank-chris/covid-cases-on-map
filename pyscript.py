@@ -140,6 +140,9 @@ predicted_state_wise.sort_index(axis=1, inplace= True)
 # Read state_wise_daily.csv 
 state_wise_daily = pd.read_csv('state_wise_daily.csv')
 
+# List of dates in actual data
+dates_actual = [date.replace('-', '_') for date in state_wise_daily["Date"].unique()]
+
 # Combine the columns Status and Date to form a column named Daily_Status
 state_wise_daily['Daily_Status'] = state_wise_daily["Status"] + "-" + state_wise_daily["Date"]
 
@@ -157,8 +160,6 @@ date_status_list = state_wise_daily["Daily_Status"]
 # Set the column Daily_Status as the index of the DataFrame 
 state_wise_daily.set_index("Daily_Status", inplace = True) 
 
-# Make state_wise_daily data cumulative
-
 
 # Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
 state_wise_daily["DD"] = state_wise_daily["DD"] + state_wise_daily["DN"]
@@ -168,6 +169,21 @@ del state_wise_daily["DN"]
 
 # Rename column TT as Total
 state_wise_daily.rename(columns={"TT" : "Total"}, inplace=True)
+
+
+# Make state_wise_daily data cumulative
+for column in state_wise_daily:
+    for i in range(1,len(dates_actual)):
+        state_wise_daily.loc["Confirmed_"+dates_actual[i], column] += state_wise_daily.loc["Confirmed_"+dates_actual[i-1], column]
+
+for column in state_wise_daily:
+    for i in range(1,len(dates_actual)):
+        state_wise_daily.loc["Recovered_"+dates_actual[i], column] += state_wise_daily.loc["Recovered_"+dates_actual[i-1], column]
+
+for column in state_wise_daily:
+    for i in range(1,len(dates_actual)):
+        state_wise_daily.loc["Deceased_"+dates_actual[i], column] += state_wise_daily.loc["Deceased_"+dates_actual[i-1], column]
+
 
 # Rename all columns with actual state names in state_wise_daily
 for column in state_wise_daily:

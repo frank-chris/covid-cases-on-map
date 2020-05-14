@@ -1,11 +1,7 @@
 // For geoJson layers
-var geojsonPredicted;
-var geojsonConfirmed;
-var geojsonRecovered;
-var geojsonDeceased;
-var geojsonNucleation;
+var geojson = {}
 
-var currentBaseLayer;
+var currentBaseLayer = "Predicted";
 
 // Start and end date parameters
 var startDate = new Date("03/23/2020"); 
@@ -30,47 +26,27 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
+function getMax(prop){
+    var state;
+    var max = 0;
+    for (state of statesData["features"]){
+        if (Number(state["properties"][prop]) > max){
+            max = Number(state["properties"][prop]);
+        }
+    }
+    if(max == 0){
+        max = 100;
+    }
+    max = Math.ceil(max/100)*100;
+
+    return max;
+}
+
 
 // Function to decide colors based on data
-function getColor(value) {
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"][(slider.value).toString()]) > max){
-            max = Number(state["properties"][(slider.value).toString()]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return value > max ? '#990000' :
-           value > max/2  ? '#d7301f' :
-           value > max/5  ? '#ef6548' :
-           value > max/10  ? '#fc8d59' :
-           value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffff29' :
-           value > max/100   ? '#d6ff75' :
-           value >= 0   ? '#78c679' :
-                      '#fdfdfd';
-}
-
-
-function getColorNucleation(value) {
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]["Nucleation" + (slider.value).toString()]) > max){
-            max = Number(state["properties"]["Nucleation" + (slider.value).toString()]);
-        }
-    }
+function getColor(value, prop) {
     
-    if(max == 0){
-        max = 100;
-    }
-
-    max = Math.ceil(max/100)*100;
+    var max = getMax(prop);
 
     return value > max ? '#990000' :
            value > max/2  ? '#d7301f' :
@@ -83,86 +59,12 @@ function getColorNucleation(value) {
                       '#fdfdfd';
 }
 
-function getColorConfirmed(value) {
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]);
-        }
-    }
-    
-    if(max == 0){
-        max = 100;
-    }
 
-    max = Math.ceil(max/100)*100;
-
-    return value > max ? '#990000' :
-           value > max/2  ? '#d7301f' :
-           value > max/5  ? '#ef6548' :
-           value > max/10  ? '#fc8d59' :
-           value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffff29' :
-           value > max/100   ? '#d6ff75' :
-           value >= 0   ? '#78c679' :
-                      '#fdfdfd';
-}
-
-function getColorRecovered(value) {
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]);
-        }
-    }
-
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return value > max ? '#990000' :
-           value > max/2  ? '#d7301f' :
-           value > max/5  ? '#ef6548' :
-           value > max/10  ? '#fc8d59' :
-           value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffff29' :
-           value > max/100   ? '#d6ff75' :
-           value >= 0   ? '#78c679' :
-                      '#fdfdfd';
-}
-
-function getColorDeceased(value) {
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]);
-        }
-    }
-
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return value > max ? '#990000' :
-           value > max/2  ? '#d7301f' :
-           value > max/5  ? '#ef6548' :
-           value > max/10  ? '#fc8d59' :
-           value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffff29' :
-           value > max/100   ? '#d6ff75' :
-           value >= 0   ? '#78c679' :
-                      '#fdfdfd';
-}
 
 // Function to set style for geoJson layer
 function style(feature) {
     return {
-        fillColor: getColor(feature.properties[(slider.value).toString()]),
+        fillColor: getColor(feature.properties[(slider.value).toString()], (slider.value).toString()),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -174,7 +76,7 @@ function style(feature) {
 
 function styleNucleation(feature) {
     return {
-        fillColor: getColorNucleation(feature.properties["Nucleation" + (slider.value).toString()]),
+        fillColor: getColor(feature.properties["Nucleation" + (slider.value).toString()], "Nucleation" + (slider.value).toString()),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -185,7 +87,7 @@ function styleNucleation(feature) {
 
 function styleConfirmed(feature) {
     return {
-        fillColor: getColorConfirmed(feature.properties['Confirmed_' + calculatedDate(slider.value)]),
+        fillColor: getColor(feature.properties['Confirmed_' + calculatedDate(slider.value)], 'Confirmed_' + calculatedDate(slider.value)),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -196,7 +98,7 @@ function styleConfirmed(feature) {
 
 function styleRecovered(feature) {
     return {
-        fillColor: getColorRecovered(feature.properties['Recovered_' + calculatedDate(slider.value)]),
+        fillColor: getColor(feature.properties['Recovered_' + calculatedDate(slider.value)], 'Recovered_' + calculatedDate(slider.value)),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -207,7 +109,7 @@ function styleRecovered(feature) {
 
 function styleDeceased(feature) {
     return {
-        fillColor: getColorDeceased(feature.properties['Deceased_' + calculatedDate(slider.value)]),
+        fillColor: getColor(feature.properties['Deceased_' + calculatedDate(slider.value)], 'Deceased_' + calculatedDate(slider.value)),
         weight: 2,
         opacity: 1,
         color: 'white',
@@ -217,87 +119,13 @@ function styleDeceased(feature) {
 }
 
 
-function legendGrades(){
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"][(slider.value).toString()]) > max){
-            max = Number(state["properties"][(slider.value).toString()]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
+function legendGrades(prop){
+    
+    var max = getMax(prop);
 
     return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
 }
 
-
-
-function legendGradesNucleation(){
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]["Nucleation" + (slider.value).toString()]) > max){
-            max = Number(state["properties"]["Nucleation" + (slider.value).toString()]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
-}
-
-function legendGradesConfirmed(){
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Confirmed_' + calculatedDate(slider.value)]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
-}
-
-function legendGradesRecovered(){
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Recovered_' + calculatedDate(slider.value)]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
-}
-
-function legendGradesDeceased(){
-    var state;
-    var max = 0;
-    for (state of statesData["features"]){
-        if (Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]) > max){
-            max = Number(state["properties"]['Deceased_' + calculatedDate(slider.value)]);
-        }
-    }
-    if(max == 0){
-        max = 100;
-    }
-    max = Math.ceil(max/100)*100;
-
-    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
-}
 
 
 // Event listener function to highlight a feature when mouse hovers on it
@@ -319,30 +147,10 @@ function highlightFeature(e) {
 
 // Event listener function to reset highlight when mouse moves out of a feature
 function resetHighlight(e) {
-    geojsonPredicted.resetStyle(e.target);
+    geojson[currentBaseLayer].resetStyle(e.target);
     info.update();
 }
 
-
-function resetHighlightNucleation(e) {
-    geojsonNucleation.resetStyle(e.target);
-    info.update();
-}
-
-function resetHighlightConfirmed(e) {
-    geojsonConfirmed.resetStyle(e.target);
-    info.update();
-}
-
-function resetHighlightRecovered(e) {
-    geojsonRecovered.resetStyle(e.target);
-    info.update();
-}
-
-function resetHighlightDeceased(e) {
-    geojsonDeceased.resetStyle(e.target);
-    info.update();
-}
 
 // Event listener function to zoom to a feature when clicked on it
 function zoomToFeature(e) {
@@ -369,73 +177,6 @@ function onEachFeature(feature, layer) {
 }
 
 
-function onEachFeatureNucleation(feature, layer) {
-    if(L.Browser.mobile){
-        layer.on({
-            mousedown: highlightFeature,
-            mouseup: resetHighlightNucleation,
-            dblclick: zoomToFeature
-        });
-    }
-    else{
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlightNucleation,
-            click: zoomToFeature
-        });
-    }
-}
-
-function onEachFeatureConfirmed(feature, layer) {
-    if(L.Browser.mobile){
-        layer.on({
-            mousedown: highlightFeature,
-            mouseup: resetHighlightConfirmed,
-            dblclick: zoomToFeature
-        });
-    }
-    else{
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlightConfirmed,
-            click: zoomToFeature
-        });
-    }
-}
-
-function onEachFeatureRecovered(feature, layer) {
-    if(L.Browser.mobile){
-        layer.on({
-            mousedown: highlightFeature,
-            mouseup: resetHighlightRecovered,
-            dblclick: zoomToFeature
-        });
-    }
-    else{
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlightRecovered,
-            click: zoomToFeature
-        });
-    }
-}
-
-function onEachFeatureDeceased(feature, layer) {
-    if(L.Browser.mobile){
-        layer.on({
-            mousedown: highlightFeature,
-            mouseup: resetHighlightDeceased,
-            dblclick: zoomToFeature
-        });
-    }
-    else{
-        layer.on({
-            mouseover: highlightFeature,
-            mouseout: resetHighlightDeceased,
-            click: zoomToFeature
-        });
-    }
-}
 
 // Set location and zoom 
 var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
@@ -451,29 +192,29 @@ var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={
 
 
 // GeoJson Layer
-geojsonPredicted = L.geoJson(statesData, {
+geojson["Predicted"] = L.geoJson(statesData, {
     style: style,
     onEachFeature: onEachFeature
 }).addTo(mymap);
 
-geojsonNucleation = L.geoJson(statesData, {
+geojson["Nucleation"] = L.geoJson(statesData, {
     style: styleNucleation,
-    onEachFeature: onEachFeatureNucleation
+    onEachFeature: onEachFeature
 });
 
-geojsonConfirmed = L.geoJson(statesData, {
+geojson["Confirmed"] = L.geoJson(statesData, {
     style: styleConfirmed,
-    onEachFeature: onEachFeatureConfirmed
+    onEachFeature: onEachFeature
 });
 
-geojsonRecovered = L.geoJson(statesData, {
+geojson["Recovered"] = L.geoJson(statesData, {
     style: styleRecovered,
-    onEachFeature: onEachFeatureRecovered
+    onEachFeature: onEachFeature
 });
 
-geojsonDeceased = L.geoJson(statesData, {
+geojson["Deceased"] = L.geoJson(statesData, {
     style: styleDeceased,
-    onEachFeature: onEachFeatureDeceased
+    onEachFeature: onEachFeature
 });
 
 
@@ -542,74 +283,74 @@ legend.update = function (currentBaseLayer){
     var labels;
 
     if (currentBaseLayer == "Predicted"){
-        grades = legendGrades();
+        grades = legendGrades((slider.value).toString());
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, (slider.value).toString()) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
 
     else if(currentBaseLayer == "Nucleation"){
-        grades = legendGradesNucleation();
+        grades = legendGrades("Nucleation" + (slider.value).toString());
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorNucleation(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, "Nucleation" + (slider.value).toString()) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
     else if(currentBaseLayer == "Confirmed"){
-        grades = legendGradesConfirmed();
+        grades = legendGrades("Confirmed_" + calculatedDate(slider.value));
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorConfirmed(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, "Confirmed_" + calculatedDate(slider.value)) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
     else if(currentBaseLayer == "Recovered"){
-        grades = legendGradesRecovered();
+        grades = legendGrades("Recovered_" + calculatedDate(slider.value));
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorRecovered(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, "Recovered_" + calculatedDate(slider.value)) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
     else if(currentBaseLayer == "Deceased"){
-        grades = legendGradesDeceased();
+        grades = legendGrades("Deceased_" + calculatedDate(slider.value));
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorDeceased(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, "Deceased_" + calculatedDate(slider.value)) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
     else{
-        grades = legendGrades();
+        grades = legendGrades((slider.value).toString());
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                '<i style="background:' + getColor(grades[i] + 1, (slider.value).toString()) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
@@ -623,11 +364,11 @@ legend.addTo(mymap);
 
 
 var baseMaps = {
-    "Predicted": geojsonPredicted,
-    "Nucleation": geojsonNucleation,
-    "Confirmed": geojsonConfirmed,
-    "Recovered": geojsonRecovered,
-    "Deceased" : geojsonDeceased
+    "Predicted": geojson["Predicted"],
+    "Nucleation": geojson["Nucleation"],
+    "Confirmed": geojson["Confirmed"],
+    "Recovered": geojson["Recovered"],
+    "Deceased" : geojson["Deceased"]
 };
 
 L.control.layers(baseMaps).addTo(mymap);
@@ -676,11 +417,11 @@ function calculatedDate(value){
 slider.oninput = function() {
   info.update();
   title.update();
-  geojsonPredicted.resetStyle();
-  geojsonConfirmed.resetStyle();
-  geojsonRecovered.resetStyle(); 
-  geojsonDeceased.resetStyle();
-  geojsonNucleation.resetStyle();
+  geojson["Predicted"].resetStyle();
+  geojson["Confirmed"].resetStyle();
+  geojson["Recovered"].resetStyle(); 
+  geojson["Deceased"].resetStyle();
+  geojson["Nucleation"].resetStyle();
   legend.update(currentBaseLayer);
 }
 

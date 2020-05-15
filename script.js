@@ -3,6 +3,8 @@ var geojson = {}
 
 var currentBaseLayer = "Predicted";
 
+var currentState = "Total";
+
 // Start and end date parameters
 var startDate = new Date("03/23/2020"); 
 var endDate= new Date("05/07/2020"); 
@@ -155,6 +157,7 @@ function resetHighlight(e) {
 // Event listener function to zoom to a feature when clicked on it
 function zoomToFeature(e) {
     mymap.fitBounds(e.target.getBounds());
+    loadChart(e.target.feature.properties.name);
 }
 
 // Function to add the event listeners to each of the
@@ -431,6 +434,17 @@ slider.oninput = function() {
   legend.update(currentBaseLayer);
 }
 
+// Side Nav
+function openNav() {
+    document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
+    document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
+  }
+  
+function closeNav() {
+document.getElementById("mySide").style.width = "0";
+document.getElementById("main").style.marginLeft = "0";
+}
+
 mymap.on("baselayerchange", function(e){
     currentBaseLayer = e.name;
     legend.update(currentBaseLayer);
@@ -516,3 +530,140 @@ L.Control.zoomHome = L.Control.extend({
 // add zoom control bar to the map
 var zoomBar = new L.Control.zoomHome();
 zoomBar.addTo(mymap);
+
+
+
+
+// Function to return shortened month name
+// Output of the JavaScript date function 'getMonth()' is passed as argument
+function monthName(month){
+  return month == 0  ? 'Jan' :
+         month == 1  ? 'Feb' :
+         month == 2  ? 'Mar' :
+         month == 3  ? 'Apr' :
+         month == 4  ? 'May' :
+         month == 5  ? 'Jun' :
+         month == 6  ? 'Jul' :
+         month == 7  ? 'Aug' :
+         month == 8  ? 'Sep' :
+         month == 9  ? 'Oct' :
+         month == 10 ? 'Nov' :
+         month == 11 ? 'Dec' :
+                    'Error: Invalid Argument';
+}
+
+// Function to pad a zero on the left for single digit dates
+// Output of the JavaScript date function 'getDate()' is passed as argument
+function paddedDate(date){
+  if (date >= 10){
+      return date.toString();
+  }
+  else{
+      return "0" + date.toString();
+  }
+}
+
+// Function to calculate date
+function chartDate(value){
+  var reqDate = new Date(startDate.getTime() + value * (1000 * 3600 * 24));
+
+  return (paddedDate(reqDate.getDate()) + "-"
+          + monthName(reqDate.getMonth()) + "-"
+          + reqDate.getFullYear().toString().substring(2)).toString();
+
+}
+
+
+
+let data = {}
+
+var i;
+data["Total"] = [];
+for(i=0;i<=75;i++){
+  data["Total"].push([chartDate(i), "Predicted", totalData[0][i.toString()]]);
+  data["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
+  data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
+}
+
+var state;
+for (state of statesData["features"]){
+  data[state.properties["name"]] = [];
+  for(i=0;i<=75;i++){
+    data[state.properties["name"]].push([chartDate(i), "Predicted", state.properties[i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
+  }
+
+}
+
+
+let schema = [{
+    "name": "Time",
+    "type": "date",
+    "format": "%d-%b-%y"
+  }, {
+    "name": "Type",
+    "type": "string"
+  }, {
+    "name": "Cases",
+    "type": "number"
+  }]
+  
+  
+ var dataStore = new FusionCharts.DataStore();
+ var dataSource = {
+    chart: {palettecolors: "5EA4F3,5d62b5,f2726f,44FFD1,B3001B",
+            exportEnabled: "1"
+  },
+    caption: {
+      text: currentState
+    },
+    // subcaption: {
+    //   text: currentState
+    // },
+    series: "Type",
+    yaxis: [
+      {
+        plot: "Cases",
+        title: "Cases",
+        // format: {
+        //   prefix: "$"
+        // }
+      }
+    ]
+  };
+
+  dataSource.data = dataStore.createDataTable(data[currentState], schema);
+  
+  new FusionCharts({
+    type: "timeseries",
+    renderAt: "chart-container",
+    width: "90%",
+    height: (window.innerHeight - 60).toString(),
+    dataSource: dataSource
+  }).render();
+  
+function loadChart(state){
+  if(state){
+      state = state;
+  }
+  else{
+      state = "Total";
+  }
+  dataSource.caption.text = state;
+  dataSource.data = dataStore.createDataTable(data[state], schema);
+  
+  new FusionCharts({
+    type: "timeseries",
+    renderAt: "chart-container",
+    width: "90%",
+    height: (window.innerHeight - 60).toString(),
+    dataSource: dataSource
+  }).render();
+
+}
+  

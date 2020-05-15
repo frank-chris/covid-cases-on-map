@@ -6,6 +6,72 @@ html, body {
   z-index: 0;
 }
 
+.sidenav {
+  height: 100%; 
+  width: 0; 
+  position: fixed; 
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  overflow-x: hidden; 
+  padding-top: 30px; 
+  transition: 0.5s; 
+  background: white;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  color: #5EA4F3;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+#time-series:hover {
+  opacity: 1; 
+}
+
+#time-series{
+  position: absolute;
+  bottom: 12%;
+  left: 2%;
+  border-radius: 5px;  
+  background: #cccccc;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255,255,255,0.6);
+  opacity: 0.8;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
 #slider1 {
   position: absolute;
   bottom: 3%;
@@ -131,6 +197,6 @@ html, body {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    background: #800026;
+    background: #FEFEFE;
     cursor: pointer;
   }

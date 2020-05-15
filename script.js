@@ -28,6 +28,43 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
+
+if(L.Browser.mobile){
+    document.getElementById("main").style.transition = 'margin-top .5s';
+    document.getElementById("mySide").style.height = "0";
+    document.getElementById("mySide").style.width = (window.innerWidth).toString()+"px";
+}
+
+
+
+// Side Nav
+function openNav() {
+    if(L.Browser.mobile){
+        document.getElementById("mySide").style.height = (window.innerHeight/2).toString()+"px";
+        document.getElementById("main").style.marginTop = (window.innerHeight/2).toString()+"px";
+        document.getElementById("main").style.height = (window.innerHeight/2).toString()+"px";
+        document.getElementById("mapid").style.height = (window.innerHeight/2).toString()+"px";
+
+    }
+    else{
+        document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
+        document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
+    }
+  }
+  
+function closeNav() {
+    if(L.Browser.mobile){
+        document.getElementById("mySide").style.height = "0";
+        document.getElementById("main").style.marginTop = "0";
+        document.getElementById("main").style.height = "100%";
+        document.getElementById("mapid").style.height = "100%";
+    }
+    else{
+        document.getElementById("mySide").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+}
+
 function getMax(prop){
     var state;
     var max = 0;
@@ -434,36 +471,7 @@ slider.oninput = function() {
   legend.update(currentBaseLayer);
 }
 
-if(L.Browser.mobile){
-    document.getElementById("mySide").removeProperty('top'); 
-    document.getElementById("main").style.transition = 'margin-bottom .5s';
-    document.getElementById("mySide").style.height = "0";
-    document.getElementById("mySide").style.width = (window.innerWidth).toString()+"px";
-    document.getElementById("mySide").style.bottom = "0";
-}
 
-// Side Nav
-function openNav() {
-    if(L.Browser.mobile){
-        document.getElementById("mySide").style.height = (window.innerHeight/2).toString()+"px";
-        document.getElementById("main").style.marginBottom = (window.innerHeight/2).toString()+"px";
-    }
-    else{
-        document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
-        document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
-    }
-  }
-  
-function closeNav() {
-    if(L.Browser.mobile){
-        document.getElementById("mySide").style.height = "0";
-        document.getElementById("main").style.marginBottom = "0";
-    }
-    else{
-        document.getElementById("mySide").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-    }
-}
 
 mymap.on("baselayerchange", function(e){
     currentBaseLayer = e.name;
@@ -663,7 +671,7 @@ let schema = [{
     type: "timeseries",
     renderAt: "chart-container",
     width: "90%",
-    height: (window.innerHeight - 60).toString(),
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
     dataSource: dataSource
   }).render();
   
@@ -681,7 +689,7 @@ function loadChart(state){
     type: "timeseries",
     renderAt: "chart-container",
     width: "90%",
-    height: (window.innerHeight - 60).toString(),
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
     dataSource: dataSource
   }).render();
 

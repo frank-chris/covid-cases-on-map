@@ -22,7 +22,7 @@ html, body {
 }
 
 .sidenav a {
-  padding: 8px 8px 8px 32px;
+  padding: 0;
   text-decoration: none;
   font-size: 25px;
   color: #818181;
@@ -37,9 +37,9 @@ html, body {
 .sidenav .closebtn {
   position: absolute;
   top: 0;
-  right: 25px;
+  right: 10px;
   font-size: 36px;
-  margin-left: 50px;
+  margin-left: 25px;
 }
 
 #main {

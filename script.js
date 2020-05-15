@@ -436,6 +436,7 @@ slider.oninput = function() {
 
 if(L.Browser.mobile){
     document.getElementById("mySide").removeProperty('top'); 
+    document.getElementById("main").style.transition = 'margin-bottom .5s';
     document.getElementById("mySide").style.height = "0";
     document.getElementById("mySide").style.width = (window.innerWidth).toString()+"px";
     document.getElementById("mySide").style.bottom = "0";

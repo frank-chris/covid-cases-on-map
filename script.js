@@ -299,7 +299,7 @@ legend.update = function (currentBaseLayer){
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
                 '<i style="background:' + getColor(grades[i] + 1, (slider.value).toString()) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                grades[i].toString() + (grades[i + 1].toString() ? '&ndash;' + grades[i + 1].toString() + '<br>' : '+');
         }
     }
 

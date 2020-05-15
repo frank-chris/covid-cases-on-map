@@ -434,15 +434,34 @@ slider.oninput = function() {
   legend.update(currentBaseLayer);
 }
 
+if(L.Browser.mobile){
+    document.getElementById("mySide").removeProperty('top'); 
+    document.getElementById("mySide").style.height = "0";
+    document.getElementById("mySide").style.width = (window.innerWidth).toString()+"px";
+    document.getElementById("mySide").style.bottom = "0";
+}
+
 // Side Nav
 function openNav() {
-    document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
-    document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
+    if(L.Browser.mobile){
+        document.getElementById("mySide").style.height = (window.innerHeight/2).toString()+"px";
+        document.getElementById("main").style.marginBottom = (window.innerHeight/2).toString()+"px";
+    }
+    else{
+        document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
+        document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
+    }
   }
   
 function closeNav() {
-document.getElementById("mySide").style.width = "0";
-document.getElementById("main").style.marginLeft = "0";
+    if(L.Browser.mobile){
+        document.getElementById("mySide").style.height = "0";
+        document.getElementById("main").style.marginBottom = "0";
+    }
+    else{
+        document.getElementById("mySide").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+    }
 }
 
 mymap.on("baselayerchange", function(e){

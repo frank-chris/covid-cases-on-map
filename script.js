@@ -263,14 +263,14 @@ info.onAdd = function (map) {
 
 // Method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h4>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h4>' +  (props ?
+    this._div.innerHTML = '<h3>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h3>' +  (props ?
         '<b>' + props.name +'</b>'
-        +'<br />' + 'Predicted Cases: ' + props[slider.value.toString()]
-        +'<br />' + 'Nucleation Cases: ' + props["Nucleation" + slider.value.toString()]
-        +'<br />' + 'Confirmed Cases: ' + props["Confirmed_" + calculatedDate(slider.value)]
-        +'<br />' + 'Recovered Cases: ' + props["Recovered_" + calculatedDate(slider.value)] 
-        +'<br />' + 'Deceased Cases: ' + props["Deceased_" + calculatedDate(slider.value)] 
-        : 'Hover over a state');
+        +'<br />' + 'Predicted<br />Cases: ' + '<b>' + props[slider.value.toString()] +'</b>'
+        +'<br />' + 'Nucleation<br />Cases: ' + '<b>' + props["Nucleation" + slider.value.toString()] +'</b>'
+        +'<br />' + 'Confirmed<br />Cases: ' + '<b>' + props["Confirmed_" + calculatedDate(slider.value)] +'</b>'
+        +'<br />' + 'Recovered<br />Cases: ' + '<b>' + props["Recovered_" + calculatedDate(slider.value)] +'</b>'
+        +'<br />' + 'Deceased<br />Cases: ' + '<b>' + props["Deceased_" + calculatedDate(slider.value)] +'</b>'
+        : 'Hover over<br />a state');
 };
 
 // Add to info control to the map

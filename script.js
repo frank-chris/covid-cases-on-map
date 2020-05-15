@@ -181,13 +181,19 @@ function onEachFeature(feature, layer) {
 // Set location and zoom 
 var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
 
+// Map Filter(grayscale)
+let myFilter = [
+    'grayscale:50%',
+];
 
-// Google Streets Tile Layer
-var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+
+// Google Streets Tile Layer with grayscale filter
+var googleStreets = L.tileLayer.colorFilter('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         minZoom: 2,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-        attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>'
+        attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>',
+        filter: myFilter
     }).addTo(mymap);
 
 

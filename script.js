@@ -590,6 +590,9 @@ for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);  
+  data["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);  
+  data["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
 }
 
 var stateDropDown = document.getElementById("myselect");
@@ -603,7 +606,10 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
-  }
+    data[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    data[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    data[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
 }
 
@@ -629,7 +635,7 @@ let schema = [{
   
  var dataStore = new FusionCharts.DataStore();
  var dataSource = {
-    chart: {palettecolors: "5EA4F3,5d62b5,f2726f,44FFD1,B3001B",
+    chart: {palettecolors: "5EA4F3,5d62b5,f2726f,44FFD1,B3001B,DC6ACF,72B01D,DBD053",
             exportEnabled: "1"
   },
     caption: {
@@ -656,7 +662,7 @@ let schema = [{
     type: "timeseries",
     renderAt: "chart-container",
     width: "100%",
-    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
     dataSource: dataSource
   }).render();
   
@@ -674,7 +680,7 @@ function loadChart(state){
     type: "timeseries",
     renderAt: "chart-container",
     width: "100%",
-    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
     dataSource: dataSource
   }).render();
 

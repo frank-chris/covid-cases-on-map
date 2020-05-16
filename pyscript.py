@@ -9,6 +9,9 @@ import json
 def modify(value):
     return "Nucleation" + str(value)
 
+def modify_ratios(value):
+    return "Ratios" + str(value)
+
 def get_ST_NM(state):
     '''
     Returns ST_NM (state name) of the argument(which is a feature)
@@ -154,11 +157,6 @@ del state_wise_daily['Status']
 for i in range(len(state_wise_daily['Daily_Status'])):
     state_wise_daily['Daily_Status'][i] = state_wise_daily['Daily_Status'][i].replace('-', '_')
 
-# A list of elements from Daily_Status
-date_status_list = state_wise_daily["Daily_Status"]
-
-# Set the column Daily_Status as the index of the DataFrame 
-state_wise_daily.set_index("Daily_Status", inplace = True) 
 
 
 # Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
@@ -170,6 +168,19 @@ del state_wise_daily["DN"]
 # Rename column TT as Total
 state_wise_daily.rename(columns={"TT" : "Total"}, inplace=True)
 
+# Non-cumulative state-wise daily data
+non_cumulative = state_wise_daily.copy()
+
+non_cumulative["Daily_Status"] = non_cumulative["Daily_Status"].apply(modify_ratios)
+
+# A list of elements from Daily_Status
+date_status_list = list(state_wise_daily["Daily_Status"]) + list(non_cumulative["Daily_Status"])
+
+
+# Set the column Daily_Status as the index of the DataFrame 
+state_wise_daily.set_index("Daily_Status", inplace = True) 
+
+non_cumulative.set_index("Daily_Status", inplace = True) 
 
 # Make state_wise_daily data cumulative
 for column in state_wise_daily:
@@ -185,6 +196,8 @@ for column in state_wise_daily:
         state_wise_daily.loc["Deceased_"+dates_actual[i], column] += state_wise_daily.loc["Deceased_"+dates_actual[i-1], column]
 
 
+state_wise_daily = pd.concat([state_wise_daily, non_cumulative])
+
 # Rename all columns with actual state names in state_wise_daily
 for column in state_wise_daily:
     state_wise_daily.rename(columns={column : statename(column)}, inplace=True)
@@ -192,7 +205,6 @@ for column in state_wise_daily:
 
 # Sort columns based on column name
 state_wise_daily.sort_index(axis=1, inplace= True)
-
 
 # Save the total data of all states(Total) in another dictionary,
 # since it will not be combined with GeoJSON data

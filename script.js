@@ -22,6 +22,15 @@ var endDateLabel = document.getElementById("end-date");
 startDateLabel.innerHTML = calculatedDate(0).replace(/_/g, ' ');
 endDateLabel.innerHTML = calculatedDate(noOfDays).replace(/_/g, ' ');
 
+// Set current stats
+var deaths = document.getElementById("deaths");
+var cases = document.getElementById("cases");
+var recoveries = document.getElementById("recoveries");
+
+cases.innerHTML = totalData[0]["Confirmed_" + calculatedDate(daysTillToday-1)];
+recoveries.innerHTML = totalData[0]["Recovered_" + calculatedDate(daysTillToday-1)];
+deaths.innerHTML = totalData[0]["Deceased_" + calculatedDate(daysTillToday-1)];
+
 // Slider accessed by Id and values set
 var slider = document.getElementById("myRange");
 slider.value = daysTillToday;
@@ -29,41 +38,10 @@ slider.min = 0;
 slider.max = noOfDays;
 
 
-if(L.Browser.mobile){
-    document.getElementById("main").style.transition = 'margin-top .5s';
-    document.getElementById("mySide").style.height = "0";
-    document.getElementById("mySide").style.width = (window.innerWidth).toString()+"px";
-}
 
 
 
-// Side Nav
-function openNav() {
-    if(L.Browser.mobile){
-        document.getElementById("mySide").style.height = (window.innerHeight/2).toString()+"px";
-        document.getElementById("main").style.marginTop = (window.innerHeight/2).toString()+"px";
-        document.getElementById("main").style.height = (window.innerHeight/2).toString()+"px";
-        document.getElementById("mapid").style.height = (window.innerHeight/2).toString()+"px";
 
-    }
-    else{
-        document.getElementById("mySide").style.width = (window.innerWidth/2).toString()+"px";
-        document.getElementById("main").style.marginLeft = (window.innerWidth/2).toString()+"px";
-    }
-  }
-  
-function closeNav() {
-    if(L.Browser.mobile){
-        document.getElementById("mySide").style.height = "0";
-        document.getElementById("main").style.marginTop = "0";
-        document.getElementById("main").style.height = "100%";
-        document.getElementById("mapid").style.height = "100%";
-    }
-    else{
-        document.getElementById("mySide").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
-    }
-}
 
 function getMax(prop){
     var state;
@@ -417,7 +395,7 @@ var baseMaps = {
     "Deceased" : geojson["Deceased"]
 };
 
-L.control.layers(baseMaps).addTo(mymap);
+var layerControl = L.control.layers(baseMaps).addTo(mymap);
 
 // Function to return shortened month name
 // Output of the JavaScript date function 'getMonth()' is passed as argument
@@ -561,7 +539,6 @@ zoomBar.addTo(mymap);
 
 
 
-
 // Function to return shortened month name
 // Output of the JavaScript date function 'getMonth()' is passed as argument
 function monthName(month){
@@ -615,6 +592,8 @@ for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
 }
 
+var stateDropDown = document.getElementById("myselect");
+
 var state;
 for (state of statesData["features"]){
   data[state.properties["name"]] = [];
@@ -625,7 +604,13 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
   }
+  stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+}
 
+function getSelected()
+{
+var selectedSource = document.getElementById("myselect").value;
+loadChart(selectedSource);
 }
 
 
@@ -670,7 +655,7 @@ let schema = [{
   new FusionCharts({
     type: "timeseries",
     renderAt: "chart-container",
-    width: "90%",
+    width: "100%",
     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
     dataSource: dataSource
   }).render();
@@ -688,7 +673,7 @@ function loadChart(state){
   new FusionCharts({
     type: "timeseries",
     renderAt: "chart-container",
-    width: "90%",
+    width: "100%",
     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 20).toString() ,
     dataSource: dataSource
   }).render();

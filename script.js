@@ -590,8 +590,8 @@ for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
-  data["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);  
-  data["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);  
+  data["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  data["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   data["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
 }
 
@@ -606,8 +606,8 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
-    data[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
-    data[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    data[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    data[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     data[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
     }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";

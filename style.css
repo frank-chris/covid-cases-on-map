@@ -4,6 +4,9 @@ html, body {
 }
 #mapid {
   height: 500px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
   z-index: 0;
 }
 
@@ -15,7 +18,7 @@ html, body {
 #slider1 {
   position: absolute;
   bottom: 3%;
-  left: 2%;
+  left: 17%;
 }
 
 #start-date{
@@ -97,7 +100,7 @@ html, body {
 }
 
 .slidecontainer {
-    width: 50%; 
+    width: 40%; 
     
   }
   

@@ -195,16 +195,30 @@ for column in state_wise_daily:
     for i in range(1,len(dates_actual)):
         state_wise_daily.loc["Deceased_"+dates_actual[i], column] += state_wise_daily.loc["Deceased_"+dates_actual[i-1], column]
 
+doubling_rate = state_wise_daily.copy()
+doubling_rate = doubling_rate[ pd.Series([x.startswith("Confirmed") for x in doubling_rate.index ], index=list(doubling_rate.index)) ]
 
 state_wise_daily = pd.concat([state_wise_daily, non_cumulative])
 
 # Rename all columns with actual state names in state_wise_daily
 for column in state_wise_daily:
     state_wise_daily.rename(columns={column : statename(column)}, inplace=True)
-
+    doubling_rate.rename(columns={column : statename(column)}, inplace=True)
 
 # Sort columns based on column name
 state_wise_daily.sort_index(axis=1, inplace= True)
+doubling_rate.sort_index(axis=1, inplace= True)
+
+rates = pd.DataFrame(index=doubling_rate.index, columns = doubling_rate.columns)
+rates.fillna(0, inplace=True)
+
+for column in rates.columns:
+    for index in rates.index:
+        delta = []
+        for i in doubling_rate[column][:index]:
+            delta.append(abs(doubling_rate.loc[index, column]/2 - i))
+        minimum = min(delta)
+        rates.loc[index, column] = len(delta) - 1 - delta.index(minimum)
 
 # Save the total data of all states(Total) in another dictionary,
 # since it will not be combined with GeoJSON data
@@ -213,9 +227,13 @@ for day_number in day_list:
     total_properties_list[0][str(day_number)] = str(predicted_state_wise.loc[day_number, "Total"])
 for date_status in date_status_list:
     total_properties_list[0][date_status] = str(state_wise_daily.loc[date_status, "Total"])
+for index in rates.index:
+    total_properties_list[0]["DR" + index] = str(rates.loc[index, "Total"])
 
 # Delete the column corresponding to total data of all states(TT) 
 del state_wise_daily["Total"]
+
+del rates["Total"]
 
 # Delete the column corresponding to total data of all states 
 del predicted_state_wise["Total"]
@@ -231,7 +249,8 @@ for i, column in enumerate(predicted_state_wise):
         state_wise_properties_list[i][str(day_number)] = str(predicted_state_wise.loc[day_number, column])
     for date_status in date_status_list:
         state_wise_properties_list[i][date_status] = str(state_wise_daily.loc[date_status, column])
-
+    for index in rates.index:
+        state_wise_properties_list[i]["DR" + index] = str(rates.loc[index, column])
 
 # Open GeoJSON file
 f = open('States_GeoJSON.json') 

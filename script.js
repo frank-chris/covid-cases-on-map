@@ -38,11 +38,6 @@ slider.min = 0;
 slider.max = noOfDays;
 
 
-
-
-
-
-
 function getMax(prop){
     var state;
     var max = 0;
@@ -593,6 +588,7 @@ for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   data["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   data["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
+  data["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
 }
 
 var stateDropDown = document.getElementById("myselect");
@@ -609,6 +605,7 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     data[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     data[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    data[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
     }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
 }

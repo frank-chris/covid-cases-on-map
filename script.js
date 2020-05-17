@@ -201,7 +201,7 @@ let myFilter = [
 
 
 // Google Streets Tile Layer with grayscale filter
-var googleStreets = L.tileLayer.colorFilter('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+var googleStreets = L.tileLayer.colorFilter('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
         maxZoom: 20,
         minZoom: 2,
         subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],

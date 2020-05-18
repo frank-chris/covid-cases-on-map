@@ -101,13 +101,11 @@ def statename(statecode):
 
 run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
 
-file_name = input("\nEnter .data file name(eg: CovidPopulation_May12_run1.data): ")
-
-# Read run data 
-predicted_state_wise = pd.read_csv(run_id + "/" + file_name, delimiter=" ", header=1)
+# Read population data 
+predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
 
 # Read nucleation data
-nucleation = pd.read_csv("CovidNucleation.data", delimiter=" ", header=1)
+nucleation = pd.read_csv(run_id + "/" + "CovidNucleation.data", delimiter=" ", header=1)
 
 predicted_state_wise["Day"] = predicted_state_wise["Day"].round(0).astype(int)
 

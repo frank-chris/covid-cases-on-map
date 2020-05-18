@@ -26,7 +26,6 @@ endDateLabel.innerHTML = calculatedDate(noOfDays).replace(/_/g, ' ');
 var deaths = document.getElementById("deaths");
 var cases = document.getElementById("cases");
 var recoveries = document.getElementById("recoveries");
-
 cases.innerHTML = totalData[0]["Confirmed_" + calculatedDate(daysTillToday-2)];
 recoveries.innerHTML = totalData[0]["Recovered_" + calculatedDate(daysTillToday-2)];
 deaths.innerHTML = totalData[0]["Deceased_" + calculatedDate(daysTillToday-2)];
@@ -647,7 +646,7 @@ let schema = [{
         plot: "Cases",
         title: "Cases",
         // format: {
-        //   prefix: "$"
+        //   prefix: ""
         // }
       }
     ]

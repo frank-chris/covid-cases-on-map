@@ -36,6 +36,12 @@ slider.value = daysTillToday;
 slider.min = 0;
 slider.max = noOfDays;
 
+if(L.Browser.mobile){
+    var mapdiv = document.getElementById("mapid");
+    mapdiv.style.width = "100%";
+    var slidercontainer = document.getElementById("slider1");
+    slidercontainer.style.left = "2%";
+}
 
 function getMax(prop){
     var state;

@@ -16,8 +16,24 @@ def modify_ratios(value):
 def modify_recovered(value):
     return "Recovered" + str(value)
 
+def modify_daily(value):
+    return "DN" + str(value)
+
 def replace_hyphen(value):
     return str(value).replace('-','_')
+
+def cumulative(df):
+    for column in df.columns:
+        df[column] = df[column].cumsum()
+
+    return df
+
+def daily(df):
+    for column in df.columns:
+        temp = df[column].sub(df[column].shift())
+        temp.iloc[0] = df[column].iloc[0]
+        df[column] = temp
+    return df
 
 def get_ST_NM(state):
     '''
@@ -129,22 +145,35 @@ nucleation["Day"] = nucleation["Day"].round(0).astype(int)
 
 nucleation["Day"] = nucleation["Day"].apply(modify)
 
-frames = [predicted_state_wise, nucleation]
+daily_predicted = predicted_state_wise.copy()
+daily_predicted["Day"] = daily_predicted["Day"].apply(modify_daily)
+daily_predicted.set_index("Day", inplace = True) 
+daily_predicted = daily(daily_predicted)
+
+nucleation.set_index("Day", inplace = True) 
+predicted_state_wise.set_index("Day", inplace = True) 
+frames = [predicted_state_wise, daily_predicted, nucleation]
 
 if covid_recovered_availability == 'y' or covid_recovered_availability == 'Y':
     # Read CovidRecovered.data
     recovered = pd.read_csv(run_id + "/" + "CovidRecovered.data", delimiter=" ", header=1)
     recovered["Day"] = recovered["Day"].round(0).astype(int)
     recovered["Day"] = recovered["Day"].apply(modify_recovered)
+    daily_recovered = recovered.copy()
+    daily_recovered["Day"] = daily_recovered["Day"].apply(modify_daily)
+    daily_recovered.set_index("Day", inplace = True) 
+    recovered.set_index("Day", inplace = True) 
+    recovered = cumulative(recovered)
+    frames.append(daily_recovered)
     frames.append(recovered)
 
 predicted_state_wise = pd.concat(frames)
 
 # List of day numbers
-day_list = predicted_state_wise["Day"]
+day_list = list(predicted_state_wise.index)
 
 # Set column Day as index
-predicted_state_wise.set_index("Day", inplace = True) 
+
 
 # States for which data doesn't exist in predictions
 predicted_state_wise["DD"] = np.nan

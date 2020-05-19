@@ -648,8 +648,7 @@ data["Total"] = [];
 diagnosticsData["Total"] = []
 dailyData["Total"] = []
 for(i=0;i<=75;i++){
-  data["Total"].push([chartDate(i), "Predicted", totalData[0][i.toString()]]);
-  data["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
+  data["Total"].push([chartDate(i), "Active(Pred)", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
   data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
@@ -660,6 +659,11 @@ for(i=0;i<=75;i++){
   diagnosticsData["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   diagnosticsData["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
   diagnosticsData["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-3", Number(totalData[0]["RatiosDeceased_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-4", Number(totalData[0]["RatiosRecovered_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
+  dailyData["Total"].push([chartDate(i), "Active(Pred)", totalData[0]["DN"+i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["DNRecovered" + i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
   dailyData["Total"].push([chartDate(i), "Confirmed", totalData[0]["RatiosConfirmed_" + calculatedDate(i)]]);  
   dailyData["Total"].push([chartDate(i), "Active", totalData[0]["RatiosConfirmed_" + calculatedDate(i)] - totalData[0]["RatiosRecovered_" + calculatedDate(i)] - totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
   dailyData["Total"].push([chartDate(i), "Recovered", totalData[0]["RatiosRecovered_" + calculatedDate(i)]]);  
@@ -676,8 +680,7 @@ for (state of statesData["features"]){
   diagnosticsData[state.properties["name"]] = [];
   dailyData[state.properties["name"]] = [];
   for(i=0;i<=75;i++){
-    data[state.properties["name"]].push([chartDate(i), "Predicted", state.properties[i.toString()]]);
-    data[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
@@ -688,6 +691,11 @@ for (state of statesData["features"]){
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-3", Number(state.properties["RatiosDeceased_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-4", Number(state.properties["RatiosRecovered_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties["DN"+i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["DNRecovered" + i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["RatiosConfirmed_" + calculatedDate(i)]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RatiosConfirmed_" + calculatedDate(i)] - state.properties["RatiosRecovered_" + calculatedDate(i)] - state.properties["RatiosDeceased_" + calculatedDate(i)]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["RatiosRecovered_" + calculatedDate(i)]]);
@@ -766,7 +774,7 @@ let schema = [{
 
   var dataStore2 = new FusionCharts.DataStore();
   var dataSource2 = {
-     chart: {palettecolors: "DC6ACF,72B01D,DBD053,21A179",
+     chart: {palettecolors: "5EA4F3,5d62b5,2EC0F9,f2726f,B3001B,44FFD1,111111,DC6ACF",
              exportEnabled: "1",
              style: {
                 "background": {
@@ -809,7 +817,7 @@ let schema = [{
    
   var dataStore3 = new FusionCharts.DataStore();
   var dataSource3 = {
-     chart: {palettecolors: "DC6ACF,72B01D,DBD053,21A179",
+     chart: {palettecolors: "5EA4F3,5d62b5,2EC0F9,f2726f,B3001B,44FFD1,111111,DC6ACF",
              exportEnabled: "1",
              
    },

@@ -5,6 +5,7 @@
 import pandas as pd
 import numpy as np
 import json
+import os
 
 def modify(value):
     return "Nucleation" + str(value)
@@ -14,6 +15,9 @@ def modify_ratios(value):
 
 def modify_recovered(value):
     return "Recovered" + str(value)
+
+def replace_hyphen(value):
+    return str(value).replace('-','_')
 
 def get_ST_NM(state):
     '''
@@ -104,7 +108,14 @@ def statename(statecode):
 
 run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
 
-covid_recovered_availability = input("\nIs CovidRecovered.data available?(y/n): ")
+files = os.listdir(run_id+'/')
+
+if 'CovidRecovered.data' in files:
+    covid_recovered_availability = 'y'
+    print("\nCovidRecovered.data found.\n")
+else:
+    covid_recovered_availability = 'n'
+    print("\nCovidRecovered.data not found, and hence will not be used.\n")
 
 # Read population data 
 predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
@@ -164,8 +175,7 @@ del state_wise_daily['Date']
 del state_wise_daily['Status']
 
 # Replace all hyphens to underscores in the column Daily_Status
-for i in range(len(state_wise_daily['Daily_Status'])):
-    state_wise_daily['Daily_Status'][i] = state_wise_daily['Daily_Status'][i].replace('-', '_')
+state_wise_daily['Daily_Status'] = state_wise_daily['Daily_Status'].apply(replace_hyphen)
 
 
 # Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD

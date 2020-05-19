@@ -684,7 +684,7 @@ for (state of statesData["features"]){
   for(i=0;i<=75;i++){
     data[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
-    data[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", state.properties[i.toString()]+state.properties["Recovered" + i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
     data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);

@@ -12,6 +12,9 @@ def modify(value):
 def modify_ratios(value):
     return "Ratios" + str(value)
 
+def modify_recovered(value):
+    return "Recovered" + str(value)
+
 def get_ST_NM(state):
     '''
     Returns ST_NM (state name) of the argument(which is a feature)
@@ -101,6 +104,8 @@ def statename(statecode):
 
 run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
 
+covid_recovered_availability = input("\nIs CovidRecovered.data available?(y/n): ")
+
 # Read population data 
 predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
 
@@ -114,6 +119,13 @@ nucleation["Day"] = nucleation["Day"].round(0).astype(int)
 nucleation["Day"] = nucleation["Day"].apply(modify)
 
 frames = [predicted_state_wise, nucleation]
+
+if covid_recovered_availability == 'y' or covid_recovered_availability == 'Y':
+    # Read CovidRecovered.data
+    recovered = pd.read_csv(run_id + "/" + "CovidRecovered.data", delimiter=" ", header=1)
+    recovered["Day"] = recovered["Day"].round(0).astype(int)
+    recovered["Day"] = recovered["Day"].apply(modify_recovered)
+    frames.append(recovered)
 
 predicted_state_wise = pd.concat(frames)
 
@@ -154,7 +166,6 @@ del state_wise_daily['Status']
 # Replace all hyphens to underscores in the column Daily_Status
 for i in range(len(state_wise_daily['Daily_Status'])):
     state_wise_daily['Daily_Status'][i] = state_wise_daily['Daily_Status'][i].replace('-', '_')
-
 
 
 # Combine 'Dadra and Nagar Haveli(DN)' and 'Daman and Diu(DD)' to form a single column DD
@@ -268,7 +279,7 @@ states_data = str(loaded_json)
 
 # Save the data in a JavaScript file
 with open(run_id + "/data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';")
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';")
 
 print("\nData written into " + run_id + "/data.js")
 

@@ -84,6 +84,16 @@ function style(feature) {
     };
 }
 
+function stylePredictedRecovered(feature) {
+    return {
+        fillColor: getColor(feature.properties["Recovered" + (slider.value).toString()], "Recovered" + (slider.value).toString()),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
 
 function styleNucleation(feature) {
     return {
@@ -234,6 +244,13 @@ geojson["Nucleation"] = L.geoJson(statesData, {
     onEachFeature: onEachFeature
 });
 
+
+geojson["PredictedRecovered"] = L.geoJson(statesData, {
+    style: stylePredictedRecovered,
+    onEachFeature: onEachFeature
+});
+
+
 geojson["Confirmed"] = L.geoJson(statesData, {
     style: styleConfirmed,
     onEachFeature: onEachFeature
@@ -268,6 +285,7 @@ title.update = function () {
     this._div.innerHTML = '<h3>'+ runID + '</h3>' 
                             + "Total predicted<br> cases: <b>" + totalData[0][slider.value.toString()]
                             + "</b><br> Total(Nucleation)<br> cases: <b>" + totalData[0]["Nucleation" + slider.value.toString()]
+                            + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?"</b><br> Recovered(Pred)<br> cases: <b>" + totalData[0]["Recovered" + slider.value.toString()]:'')
                             + "</b><br> Total confirmed<br> cases: <b>" 
                             + totalData[0]["Confirmed_" + calculatedDate(slider.value)]
                             + "</b><br> Total active<br> cases: <b>" 
@@ -299,6 +317,7 @@ info.update = function (props) {
         '<b>' + props.name +'</b>'
         +'<br />' + 'Predicted<br />Cases: ' + '<b>' + props[slider.value.toString()] +'</b>'
         +'<br />' + 'Nucleation<br />Cases: ' + '<b>' + props["Nucleation" + slider.value.toString()] +'</b>'
+        + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?'<br />' + 'Recovered(Pred)<br />Cases: ' + '<b>' + props["Recovered" + slider.value.toString()] +'</b>':'')
         +'<br />' + 'Confirmed<br />Cases: ' + '<b>' + props["Confirmed_" + calculatedDate(slider.value)] +'</b>'
         +'<br />' + 'Active<br />Cases: ' + '<b>' + (props["Confirmed_" + calculatedDate(slider.value)] 
                                                   - props["Recovered_" + calculatedDate(slider.value)] 
@@ -334,7 +353,7 @@ legend.update = function (currentBaseLayer){
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
                 '<i style="background:' + getColor(grades[i] + 1, (slider.value).toString()) + '"></i> ' +
-                grades[i].toString() + (grades[i + 1].toString() ? '&ndash;' + grades[i + 1].toString() + '<br>' : '+');
+                grades[i].toString() + (grades[i + 1] ? '&ndash;' + grades[i + 1].toString() + '<br>' : '+');
         }
     }
 
@@ -347,6 +366,18 @@ legend.update = function (currentBaseLayer){
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
                 '<i style="background:' + getColor(grades[i] + 1, "Nucleation" + (slider.value).toString()) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else if(currentBaseLayer == "Recovered(Pred)"){
+        grades = legendGrades("Recovered" + (slider.value).toString());
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1, "Recovered" + (slider.value).toString()) + '"></i> ' +
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
@@ -411,11 +442,14 @@ legend.addTo(mymap);
 var baseMaps = {
     "Predicted": geojson["Predicted"],
     "Nucleation": geojson["Nucleation"],
+    "Recovered(Pred)":geojson["PredictedRecovered"],
     "Confirmed": geojson["Confirmed"],
     "Active": geojson["Active"],
     "Recovered": geojson["Recovered"],
     "Deceased" : geojson["Deceased"]
 };
+
+
 
 var layerControl = L.control.layers(baseMaps).addTo(mymap);
 
@@ -465,6 +499,7 @@ slider.oninput = function() {
   title.update();
   geojson["Predicted"].resetStyle();
   geojson["Confirmed"].resetStyle();
+  geojson["PredictedRecovered"].resetStyle();
   geojson["Active"].resetStyle();
   geojson["Recovered"].resetStyle(); 
   geojson["Deceased"].resetStyle();
@@ -476,6 +511,7 @@ slider.oninput = function() {
 
 mymap.on("baselayerchange", function(e){
     currentBaseLayer = e.name;
+    console.log(e.name);
     legend.update(currentBaseLayer);
  })
 
@@ -610,6 +646,7 @@ data["Total"] = [];
 for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Predicted", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
+  data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
   data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
@@ -628,6 +665,7 @@ for (state of statesData["features"]){
   for(i=0;i<=75;i++){
     data[state.properties["name"]].push([chartDate(i), "Predicted", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
@@ -662,7 +700,7 @@ let schema = [{
   
  var dataStore = new FusionCharts.DataStore();
  var dataSource = {
-    chart: {palettecolors: "5EA4F3,5d62b5,f2726f,B3001B,44FFD1,111111,DC6ACF,72B01D,DBD053",
+    chart: {palettecolors: "5EA4F3,5d62b5,2EC0F9,f2726f,B3001B,44FFD1,111111,DC6ACF,72B01D,DBD053,21A179",
             exportEnabled: "1"
   },
     caption: {

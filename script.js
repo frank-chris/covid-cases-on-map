@@ -107,6 +107,20 @@ function styleConfirmed(feature) {
     };
 }
 
+function styleActive(feature) {
+    return {
+        fillColor: getColor(  feature.properties['Confirmed_' + calculatedDate(slider.value)] 
+                            - feature.properties['Recovered_' + calculatedDate(slider.value)]
+                            - feature.properties['Deceased_' + calculatedDate(slider.value)] ,
+                             'Confirmed_' + calculatedDate(slider.value)),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
 function styleRecovered(feature) {
     return {
         fillColor: getColor(feature.properties['Recovered_' + calculatedDate(slider.value)], 'Recovered_' + calculatedDate(slider.value)),
@@ -225,6 +239,11 @@ geojson["Confirmed"] = L.geoJson(statesData, {
     onEachFeature: onEachFeature
 });
 
+geojson["Active"] = L.geoJson(statesData, {
+    style: styleActive,
+    onEachFeature: onEachFeature
+});
+
 geojson["Recovered"] = L.geoJson(statesData, {
     style: styleRecovered,
     onEachFeature: onEachFeature
@@ -251,6 +270,10 @@ title.update = function () {
                             + "</b><br> Total(Nucleation)<br> cases: <b>" + totalData[0]["Nucleation" + slider.value.toString()]
                             + "</b><br> Total confirmed<br> cases: <b>" 
                             + totalData[0]["Confirmed_" + calculatedDate(slider.value)]
+                            + "</b><br> Total active<br> cases: <b>" 
+                            + (totalData[0]["Confirmed_" + calculatedDate(slider.value)] 
+                                    - totalData[0]["Recovered_" + calculatedDate(slider.value)] 
+                                    - totalData[0]["Deceased_" + calculatedDate(slider.value)] ).toString()
                             + "</b><br> Total recovered<br> cases: <b>" 
                             + totalData[0]["Recovered_" + calculatedDate(slider.value)]
                             + "</b><br> Total deceased<br> cases: <b>" 
@@ -277,6 +300,9 @@ info.update = function (props) {
         +'<br />' + 'Predicted<br />Cases: ' + '<b>' + props[slider.value.toString()] +'</b>'
         +'<br />' + 'Nucleation<br />Cases: ' + '<b>' + props["Nucleation" + slider.value.toString()] +'</b>'
         +'<br />' + 'Confirmed<br />Cases: ' + '<b>' + props["Confirmed_" + calculatedDate(slider.value)] +'</b>'
+        +'<br />' + 'Active<br />Cases: ' + '<b>' + (props["Confirmed_" + calculatedDate(slider.value)] 
+                                                  - props["Recovered_" + calculatedDate(slider.value)] 
+                                                  - props["Deceased_" + calculatedDate(slider.value)]).toString() +'</b>'
         +'<br />' + 'Recovered<br />Cases: ' + '<b>' + props["Recovered_" + calculatedDate(slider.value)] +'</b>'
         +'<br />' + 'Deceased<br />Cases: ' + '<b>' + props["Deceased_" + calculatedDate(slider.value)] +'</b>'
         : 'Hover over<br />a state');
@@ -325,7 +351,7 @@ legend.update = function (currentBaseLayer){
         }
     }
 
-    else if(currentBaseLayer == "Confirmed"){
+    else if(currentBaseLayer == "Confirmed" || currentBaseLayer == "Active" ){
         grades = legendGrades("Confirmed_" + calculatedDate(slider.value));
         labels = [];
 
@@ -336,6 +362,7 @@ legend.update = function (currentBaseLayer){
                 grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
+
 
     else if(currentBaseLayer == "Recovered"){
         grades = legendGrades("Recovered_" + calculatedDate(slider.value));
@@ -385,6 +412,7 @@ var baseMaps = {
     "Predicted": geojson["Predicted"],
     "Nucleation": geojson["Nucleation"],
     "Confirmed": geojson["Confirmed"],
+    "Active": geojson["Active"],
     "Recovered": geojson["Recovered"],
     "Deceased" : geojson["Deceased"]
 };
@@ -437,6 +465,7 @@ slider.oninput = function() {
   title.update();
   geojson["Predicted"].resetStyle();
   geojson["Confirmed"].resetStyle();
+  geojson["Active"].resetStyle();
   geojson["Recovered"].resetStyle(); 
   geojson["Deceased"].resetStyle();
   geojson["Nucleation"].resetStyle();

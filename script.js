@@ -641,11 +641,12 @@ function chartDate(value){
 
 let data = {}
 let diagnosticsData = {}
+let dailyData = {}
 
 var i;
 data["Total"] = [];
 diagnosticsData["Total"] = []
-
+dailyData["Total"] = []
 for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Predicted", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
@@ -659,15 +660,21 @@ for(i=0;i<=75;i++){
   diagnosticsData["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   diagnosticsData["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
   diagnosticsData["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Confirmed", totalData[0]["RatiosConfirmed_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Active", totalData[0]["RatiosConfirmed_" + calculatedDate(i)] - totalData[0]["RatiosRecovered_" + calculatedDate(i)] - totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Recovered", totalData[0]["RatiosRecovered_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Deceased", totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
 }
 
 var stateDropDown = document.getElementById("myselect");
 var stateDropDown2 = document.getElementById("myselect2");
+var stateDropDown3 = document.getElementById("myselect3");
 
 var state;
 for (state of statesData["features"]){
   data[state.properties["name"]] = [];
   diagnosticsData[state.properties["name"]] = [];
+  dailyData[state.properties["name"]] = [];
   for(i=0;i<=75;i++){
     data[state.properties["name"]].push([chartDate(i), "Predicted", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
@@ -681,9 +688,14 @@ for (state of statesData["features"]){
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["RatiosConfirmed_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RatiosConfirmed_" + calculatedDate(i)] - state.properties["RatiosRecovered_" + calculatedDate(i)] - state.properties["RatiosDeceased_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["RatiosRecovered_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["RatiosDeceased_" + calculatedDate(i)]]);
     }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
   stateDropDown2.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+  stateDropDown3.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
 }
 
 function getSelected()
@@ -696,6 +708,12 @@ function getSelected2()
 {
 var selectedSource = document.getElementById("myselect2").value;
 loadChart2(selectedSource);
+}
+
+function getSelected3()
+{
+var selectedSource = document.getElementById("myselect3").value;
+loadChart3(selectedSource);
 }
 
 
@@ -786,6 +804,42 @@ let schema = [{
      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
      dataSource: dataSource2
    }).render();
+
+
+   
+  var dataStore3 = new FusionCharts.DataStore();
+  var dataSource3 = {
+     chart: {palettecolors: "DC6ACF,72B01D,DBD053,21A179",
+             exportEnabled: "1",
+             
+   },
+     caption: {
+       text: currentState
+     },
+     // subcaption: {
+     //   text: currentState
+     // },
+     series: "Type",
+     yaxis: [
+       {
+         plot: "",
+         title: "",
+         // format: {
+         //   prefix: ""
+         // }
+       }
+     ]
+   };
+ 
+   dataSource3.data = dataStore3.createDataTable(dailyData[currentState], schema);
+   
+   new FusionCharts({
+     type: "timeseries",
+     renderAt: "daily-numbers",
+     width: "100%",
+     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+     dataSource: dataSource3
+   }).render();
   
 function loadChart(state){
   if(state){
@@ -826,4 +880,26 @@ function loadChart2(state){
     }).render();
   
   }
+  
+  
+function loadChart3(state){
+    if(state){
+        state = state;
+    }
+    else{
+        state = "Total";
+    }
+    dataSource3.caption.text = state;
+    dataSource3.data = dataStore3.createDataTable(dailyData[state], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "daily-numbers",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource3
+    }).render();
+  
+  }
+  
   

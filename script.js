@@ -650,7 +650,7 @@ dailyData["Total"] = []
 for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Active(Pred)", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
-  data["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", totalData[0][i.toString()] + totalData[0]["Recovered" + i.toString()]]);
+  data["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()])]);
   data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
@@ -664,7 +664,7 @@ for(i=0;i<=75;i++){
   diagnosticsData["Total"].push([chartDate(i), "Ratio-4", Number(totalData[0]["RatiosRecovered_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
   dailyData["Total"].push([chartDate(i), "Active(Pred)", totalData[0]["DN"+i.toString()]]);
   dailyData["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["DNRecovered" + i.toString()]]);
-  dailyData["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", totalData[0]["DN"+i.toString()]+totalData[0]["DNRecovered" + i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(totalData[0]["DN"+i.toString()])+Number(totalData[0]["DNRecovered" + i.toString()])]);
   dailyData["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
   dailyData["Total"].push([chartDate(i), "Confirmed", totalData[0]["RatiosConfirmed_" + calculatedDate(i)]]);  
   dailyData["Total"].push([chartDate(i), "Active", totalData[0]["RatiosConfirmed_" + calculatedDate(i)] - totalData[0]["RatiosRecovered_" + calculatedDate(i)] - totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
@@ -698,7 +698,7 @@ for (state of statesData["features"]){
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-4", Number(state.properties["RatiosRecovered_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties["DN"+i.toString()]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["DNRecovered" + i.toString()]]);
-    dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", state.properties["DN"+i.toString()] + state.properties["DNRecovered" + i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(state.properties["DN"+i.toString()]) + Number(state.properties["DNRecovered" + i.toString()])]);
     dailyData[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["RatiosConfirmed_" + calculatedDate(i)]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RatiosConfirmed_" + calculatedDate(i)] - state.properties["RatiosRecovered_" + calculatedDate(i)] - state.properties["RatiosDeceased_" + calculatedDate(i)]]);

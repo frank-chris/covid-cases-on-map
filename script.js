@@ -640,9 +640,12 @@ function chartDate(value){
 
 
 let data = {}
+let diagnosticsData = {}
 
 var i;
 data["Total"] = [];
+diagnosticsData["Total"] = []
+
 for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Predicted", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
@@ -651,17 +654,20 @@ for(i=0;i<=75;i++){
   data["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
-  data["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
-  data["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
-  data["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
-  data["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
+  data["Total"].push([chartDate(i), "Recovered+Deceased", Number(totalData[0]["Recovered_" + calculatedDate(i)]) + Number(totalData[0]["Deceased_" + calculatedDate(i)])]);
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  diagnosticsData["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
+  diagnosticsData["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
 }
 
 var stateDropDown = document.getElementById("myselect");
+var stateDropDown2 = document.getElementById("myselect2");
 
 var state;
 for (state of statesData["features"]){
   data[state.properties["name"]] = [];
+  diagnosticsData[state.properties["name"]] = [];
   for(i=0;i<=75;i++){
     data[state.properties["name"]].push([chartDate(i), "Predicted", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
@@ -670,18 +676,26 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
-    data[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
-    data[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
-    data[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
-    data[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered+Deceased", Number(state.properties["Recovered_" + calculatedDate(i)])+Number(state.properties["Deceased_" + calculatedDate(i)])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
     }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+  stateDropDown2.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
 }
 
 function getSelected()
 {
 var selectedSource = document.getElementById("myselect").value;
 loadChart(selectedSource);
+}
+
+function getSelected2()
+{
+var selectedSource = document.getElementById("myselect2").value;
+loadChart2(selectedSource);
 }
 
 
@@ -693,15 +707,16 @@ let schema = [{
     "name": "Type",
     "type": "string"
   }, {
-    "name": "Cases",
+    "name": "Value",
     "type": "number"
   }]
   
   
  var dataStore = new FusionCharts.DataStore();
  var dataSource = {
-    chart: {palettecolors: "5EA4F3,5d62b5,2EC0F9,f2726f,B3001B,44FFD1,111111,DC6ACF,72B01D,DBD053,21A179",
-            exportEnabled: "1"
+    chart: {palettecolors: "5EA4F3,5d62b5,2EC0F9,f2726f,B3001B,44FFD1,111111,DC6ACF",
+            exportEnabled: "1",
+            
   },
     caption: {
       text: currentState
@@ -730,6 +745,47 @@ let schema = [{
     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
     dataSource: dataSource
   }).render();
+
+  var dataStore2 = new FusionCharts.DataStore();
+  var dataSource2 = {
+     chart: {palettecolors: "DC6ACF,72B01D,DBD053,21A179",
+             exportEnabled: "1",
+             style: {
+                "background": {
+                    "fill": "#f6f6f6",
+                },
+                "canvas": {
+                    "fill": "#f6f6f6",
+                }
+            }
+   },
+     caption: {
+       text: currentState
+     },
+     // subcaption: {
+     //   text: currentState
+     // },
+     series: "Type",
+     yaxis: [
+       {
+         plot: "",
+         title: "",
+         // format: {
+         //   prefix: ""
+         // }
+       }
+     ]
+   };
+ 
+   dataSource2.data = dataStore2.createDataTable(diagnosticsData[currentState], schema);
+   
+   new FusionCharts({
+     type: "timeseries",
+     renderAt: "diagnostics",
+     width: "100%",
+     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+     dataSource: dataSource2
+   }).render();
   
 function loadChart(state){
   if(state){
@@ -750,4 +806,24 @@ function loadChart(state){
   }).render();
 
 }
+
+function loadChart2(state){
+    if(state){
+        state = state;
+    }
+    else{
+        state = "Total";
+    }
+    dataSource2.caption.text = state;
+    dataSource2.data = dataStore2.createDataTable(diagnosticsData[state], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "diagnostics",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource2
+    }).render();
+  
+  }
   

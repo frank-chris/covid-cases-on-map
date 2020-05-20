@@ -3,8 +3,8 @@ html, body {
   overflow-x: hidden;
 }
 #mapid {
-  height: 500px;
-  width: 70%;
+  height: 770px;
+  width: 60%;
   margin-left: auto;
   margin-right: auto;
   z-index: 0;
@@ -18,7 +18,7 @@ html, body {
 #slider1 {
   position: absolute;
   bottom: 3%;
-  left: 17%;
+  left: 22%;
 }
 
 #start-date{
@@ -100,8 +100,7 @@ html, body {
 }
 
 .slidecontainer {
-    width: 40%; 
-    
+    width: 45%; 
   }
   
 

@@ -5,12 +5,9 @@ var currentBaseLayer = "Total(Predicted)";
 
 var currentState = "Delhi";
 
-// Start and end date parameters
-var startDate = new Date("03/23/2020"); 
-var endDate= new Date("05/07/2020"); 
+// Start date parameters
+var startDate = new Date(SD); 
 
-// Total number of days for the slider
-var noOfDays = 75;
 
 var todaysDate = new Date();
 var daysTillToday = (todaysDate.getTime()-startDate.getTime())/(1000 * 3600 * 24);
@@ -79,7 +76,7 @@ function getColor(value, prop) {
 function getColorTotal(value, prop1, prop2) {
     
     var max = getMax(prop1) + getMax(prop2);
-    console.log(value);
+    
     return value > max ? '#990000' :
            value > max/2  ? '#d7301f' :
            value > max/5  ? '#ef6548' :
@@ -279,7 +276,7 @@ function monthName(month){
   
   var i;
   overallData["Total"] = [];
-  for(i=0;i<=75;i++){
+  for(i=0;i<=noOfDays;i++){
     overallData["Total"].push([chartDate(i), "Active(Predicted)", totalData[0][i.toString()]]);
     overallData["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
     overallData["Total"].push([chartDate(i), "Recovered(Predicted)", totalData[0]["Recovered" + i.toString()]]);
@@ -295,7 +292,7 @@ function monthName(month){
   for (state of statesData["features"]){
     stateData[state.properties["name"]] = [];
   
-    for(i=0;i<=75;i++){
+    for(i=0;i<=noOfDays;i++){
       stateData[state.properties["name"]].push([chartDate(i), "Active(Predicted)[if national average followed]", state.properties[i.toString()]]);
       stateData[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
       // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);

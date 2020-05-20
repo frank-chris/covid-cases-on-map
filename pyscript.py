@@ -124,6 +124,8 @@ def statename(statecode):
 
 run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
 
+start_date = input("\n\nEnter start date of the data(Format: MM/DD/YYYY): ")
+
 files = os.listdir(run_id+'/')
 
 if 'CovidRecovered.data' in files:
@@ -135,6 +137,8 @@ else:
 
 # Read population data 
 predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
+
+no_of_days = len(predicted_state_wise.index)-1
 
 # Read nucleation data
 nucleation = pd.read_csv(run_id + "/" + "CovidNucleation.data", delimiter=" ", header=1)
@@ -172,7 +176,6 @@ predicted_state_wise = pd.concat(frames)
 # List of day numbers
 day_list = list(predicted_state_wise.index)
 
-# Set column Day as index
 
 
 # States for which data doesn't exist in predictions
@@ -318,7 +321,7 @@ states_data = str(loaded_json)
 
 # Save the data in a JavaScript file
 with open(run_id + "/data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';")
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';")
 
 print("\nData written into " + run_id + "/data.js")
 

@@ -206,7 +206,7 @@ state_wise_daily['Daily_Status'] = state_wise_daily["Status"] + "-" + state_wise
 # Delete the columns Status and Date
 del state_wise_daily['Date']
 del state_wise_daily['Status']
-
+del state_wise_daily['UN']
 # Replace all hyphens to underscores in the column Daily_Status
 state_wise_daily['Daily_Status'] = state_wise_daily['Daily_Status'].apply(replace_hyphen)
 

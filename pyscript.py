@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import sys
 
 def modify(value):
     return "Nucleation" + str(value)
@@ -122,9 +123,9 @@ def statename(statecode):
     else:
         return statecode
 
-run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
+run_id = str(sys.argv[1])
 
-start_date = input("\n\nEnter start date of the data(Format: MM/DD/YYYY): ")
+start_date = str(sys.argv[2])
 
 files = os.listdir(run_id+'/')
 

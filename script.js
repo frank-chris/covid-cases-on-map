@@ -223,18 +223,20 @@ function onEachFeature(feature, layer) {
 // Set location and zoom 
 var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
 
-// Map Filter(grayscale)
+// Map Filter
 let myFilter = [
-    'grayscale:50%',
+    'saturation:140%',
+    'brightness:95%'
 ];
 
-
+// http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}
 // Google Streets Tile Layer with grayscale filter
-var googleStreets = L.tileLayer.colorFilter('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        minZoom: 2,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-        attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>',
+var googleStreets = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        // minZoom: 2,
+        subdomains: 'abcd',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        // attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>',
         filter: myFilter
     }).addTo(mymap);
 

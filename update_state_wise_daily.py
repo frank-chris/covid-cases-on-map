@@ -1,5 +1,11 @@
 from git import Repo
+import requests
 
+
+url = 'https://api.covid19india.org/csv/latest/state_wise_daily.csv'
+r = requests.get(url, allow_redirects=True)
+
+open('state_wise_daily.csv', 'wb').write(r.content)
 
 def git_push():
     try:

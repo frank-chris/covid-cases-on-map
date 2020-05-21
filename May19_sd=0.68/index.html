@@ -37,7 +37,7 @@
             <div class="collapse navbar-collapse"
                 id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="../index.html">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="index.html">Home</a></li>
                 </ul>
             </div>
         </div>
@@ -46,37 +46,27 @@
         <section class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
             <div class="container">
                 <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">DATA-DRIVEN PDE-BASED MODELLING OF COVID-19 INFECTIONS</h3>
+                    <h3 class="text-left text-info" style="margin-right: 70px;margin-left: 70px;">Data-driven PDE-based modelling of COVID-19 infections</h3>
                     <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px;"></p>
                 </div>
             </div>
         </section>
-        
-        <section class="clean-block features" style="padding-bottom: 50px;background-color: #f6f6f6;">
-            <div class="container" >
-                <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">Prediction for India</h3>
-                    
-                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
-                        <div id="overall" style = "width: 100%; height: 100%;">Chart here</div>
-                    </div>
-                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
-                </div>
-            </div>
-        </section>
-        <section class="clean-block features" style="padding-bottom: 1px;background-color: #fff;">
+        <section class="clean-block features" style="padding-bottom: 1px;background-color: #f6f6f6;">
             <div class="container">
                 <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">Prediction for States if National Average is Followed</h3>
+                    <h3 class="text-left text-info" style="margin-right: 70px;margin-left: 70px;">Map visualizations</h3>
                     <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px;"></p>
-                    
-                    <h5 class="text-center text-info" style="margin-right: 70px;margin-left: 70px; margin-top: 10px;">Overall numbers so far</h5>
+                    <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
+                        <div class="col">
+                            <ul class="list-group"></ul>
+                        </div>
+                    </div>
                     <div class="row align-items-center" style="margin-right: 130px;margin-left: 130px;padding-bottom: 15px;">
                         <div class="col" style="padding-left: 15px;padding-top: 5px;">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Total cases</h4>
-                                    <h6 id="cases" class="text-muted card-subtitle mb-2"></h6>
+                                    <h6 id="cases" class="text-muted card-subtitle mb-2">Subtitle</h6>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +74,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Total recoveries</h4>
-                                    <h6 id="recoveries" class="text-muted card-subtitle mb-2"></h6>
+                                    <h6 id="recoveries" class="text-muted card-subtitle mb-2">Subtitle</h6>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +82,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Total deaths</h4>
-                                    <h6 id="deaths" class="text-muted card-subtitle mb-2"></h6>
+                                    <h6 id="deaths" class="text-muted card-subtitle mb-2">Subtitle</h6>
                                 </div>
                             </div>
                         </div>
@@ -115,14 +105,15 @@
                 <input type="range" class="slider" id="myRange">
             </div>
         </div>
-        <section class="clean-block features" style="padding-bottom: 50px;background-color: #f6f6f6;">
+        <section class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
             <div class="container">
                 <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">State-Wise Trends if National Average is Followed</h3>
+                    <h3 class="text-left text-info" style="margin-right: 70px;margin-left: 70px;">Cumulative Numbers</h3>
                     <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
                         <div class="col" style = "padding-left: 0%;">
                             <select class="btn btn-primary" name="myselect" id="myselect" style="width: 300px; margin-bottom: 10px;margin-top: 15px;" onchange="getSelected();">
-                                <option value="Total">Choose state/UT</option>
+                                <option value="Total">Choose state</option>
+                                <option value="Total">Total</option>
                             </select>
                         </div>
                     </div>
@@ -130,13 +121,53 @@
                         <div id="chart-container" style = "width: 100%; height: 100%;">Chart here</div>
                     </div>
                     <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
-                    <h4 class="text-left text-info" style="margin-right: 70px;margin-left: 70px; margin-top: 20px;">Explanation</h4>
-                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">-</p>
                 </div>
             </div>
         </section>
-        
-        <section class="clean-block features" style="padding-bottom: 10px;background-color: #fff;padding-top: 10px;color: #31373a;">
+        <section class="clean-block features" style="padding-bottom: 50px;background-color: #f6f6f6;">
+            <div class="container" >
+                <div class="block-heading">
+                    <h3 class="text-left text-info" style="margin-right: 70px;margin-left: 70px;">Diagnostics</h3>
+                    <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
+                        <div class="col" style = "padding-left: 0%;">
+                            <select class="btn btn-primary" name="myselect" id="myselect2" style="width: 300px; margin-bottom: 10px;margin-top: 15px;" onchange="getSelected2();">
+                                <option value="Total">Choose state</option>
+                                <option value="Total">Total</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
+                        <div id="diagnostics" style = "width: 100%; height: 100%;">Chart here</div>
+                    </div>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Click on the legend to remove/add a plot.</b></p>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Ratio-1:</b> Ratio of new cases to cumulative active</p>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Product-1:</b> Product of above ratio to model predictions</p>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Ratio-2:</b> Ratio of recovered cases to confirmed cases</p>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Ratio-3:</b> Ratio of daily death to cumulative active</p>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;"><b>Ratio-4:</b> Ratio of daily recovery to cumulative active</p>
+                </div>
+            </div>
+        </section>
+        <section class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
+            <div class="container" >
+                <div class="block-heading">
+                    <h3 class="text-left text-info" style="margin-right: 70px;margin-left: 70px;">Daily Numbers</h3>
+                    <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
+                        <div class="col" style = "padding-left: 0%;">
+                            <select class="btn btn-primary" name="myselect" id="myselect3" style="width: 300px; margin-bottom: 10px;margin-top: 15px;" onchange="getSelected3();">
+                                <option value="Total">Choose state</option>
+                                <option value="Total">Total</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
+                        <div id="daily-numbers" style = "width: 100%; height: 100%;">Chart here</div>
+                    </div>
+                    <p class="text-left" style="width: 100%; margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
+                </div>
+            </div>
+        </section>
+        <section class="clean-block features" style="padding-bottom: 10px;background-color: #f6f6f6;padding-top: 10px;color: #31373a;">
             <div class="container">
                 <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">
                     <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">

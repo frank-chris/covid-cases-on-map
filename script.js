@@ -1,13 +1,16 @@
 // For geoJson layers
 var geojson = {}
 
-var currentBaseLayer = "Total(Predicted)";
+var currentBaseLayer = "Predicted";
 
-var currentState = "Delhi";
+var currentState = "Total";
 
-// Start date parameters
-var startDate = new Date(SD); 
+// Start and end date parameters
+var startDate = new Date("03/23/2020"); 
+var endDate= new Date("05/07/2020"); 
 
+// Total number of days for the slider
+var noOfDays = 75;
 
 var todaysDate = new Date();
 var daysTillToday = (todaysDate.getTime()-startDate.getTime())/(1000 * 3600 * 24);
@@ -73,39 +76,10 @@ function getColor(value, prop) {
                       '#fdfdfd';
 }
 
-function getColorTotal(value, prop1, prop2) {
-    
-    var max = getMax(prop1) + getMax(prop2);
-    
-    return value > max ? '#990000' :
-           value > max/2  ? '#d7301f' :
-           value > max/5  ? '#ef6548' :
-           value > max/10  ? '#fc8d59' :
-           value > max/20   ? '#fdd49e' :
-           value > max/50   ? '#ffff29' :
-           value > max/100   ? '#d6ff75' :
-           value >= 0   ? '#78c679' :
-                      '#fdfdfd';
-}
-
 
 
 // Function to set style for geoJson layer
-function styleTotalPred(feature) {
-    return {
-        fillColor: getColorTotal(Number(feature.properties[(slider.value).toString()]) 
-                            + Number(feature.properties["Recovered" + (slider.value).toString()]), 
-                            (slider.value).toString(), "Recovered" + (slider.value).toString()),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '',
-        fillOpacity: 0.7
-    };
-}
-
-
-function styleActivePred(feature) {
+function style(feature) {
     return {
         fillColor: getColor(feature.properties[(slider.value).toString()], (slider.value).toString()),
         weight: 2,
@@ -116,7 +90,7 @@ function styleActivePred(feature) {
     };
 }
 
-function styleRecoveredPred(feature) {
+function stylePredictedRecovered(feature) {
     return {
         fillColor: getColor(feature.properties["Recovered" + (slider.value).toString()], "Recovered" + (slider.value).toString()),
         weight: 2,
@@ -127,7 +101,18 @@ function styleRecoveredPred(feature) {
     };
 }
 
-function styleTotal(feature) {
+function styleNucleation(feature) {
+    return {
+        fillColor: getColor(feature.properties["Nucleation" + (slider.value).toString()], "Nucleation" + (slider.value).toString()),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
+function styleConfirmed(feature) {
     return {
         fillColor: getColor(feature.properties['Confirmed_' + calculatedDate(slider.value)], 'Confirmed_' + calculatedDate(slider.value)),
         weight: 2,
@@ -163,6 +148,17 @@ function styleRecovered(feature) {
     };
 }
 
+function styleDeceased(feature) {
+    return {
+        fillColor: getColor(feature.properties['Deceased_' + calculatedDate(slider.value)], 'Deceased_' + calculatedDate(slider.value)),
+        weight: 2,
+        opacity: 1,
+        color: 'white',
+        dashArray: '',
+        fillOpacity: 0.7
+    };
+}
+
 
 function legendGrades(prop){
     
@@ -171,12 +167,7 @@ function legendGrades(prop){
     return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
 }
 
-function legendGradesTotal(prop1, prop2){
 
-    var max = getMax(prop1) + getMax(prop2);
-
-    return [0, max/100, max/50, max/20, max/10, max/5, max/2, max];
-}
 
 // Event listener function to highlight a feature when mouse hovers on it
 function highlightFeature(e) {
@@ -229,207 +220,8 @@ function onEachFeature(feature, layer) {
 
 
 
-
-// Function to return shortened month name
-// Output of the JavaScript date function 'getMonth()' is passed as argument
-function monthName(month){
-    return month == 0  ? 'Jan' :
-           month == 1  ? 'Feb' :
-           month == 2  ? 'Mar' :
-           month == 3  ? 'Apr' :
-           month == 4  ? 'May' :
-           month == 5  ? 'Jun' :
-           month == 6  ? 'Jul' :
-           month == 7  ? 'Aug' :
-           month == 8  ? 'Sep' :
-           month == 9  ? 'Oct' :
-           month == 10 ? 'Nov' :
-           month == 11 ? 'Dec' :
-                      'Error: Invalid Argument';
-  }
-  
-  // Function to pad a zero on the left for single digit dates
-  // Output of the JavaScript date function 'getDate()' is passed as argument
-  function paddedDate(date){
-    if (date >= 10){
-        return date.toString();
-    }
-    else{
-        return "0" + date.toString();
-    }
-  }
-  
-  // Function to calculate date
-  function chartDate(value){
-    var reqDate = new Date(startDate.getTime() + value * (1000 * 3600 * 24));
-  
-    return (paddedDate(reqDate.getDate()) + "-"
-            + monthName(reqDate.getMonth()) + "-"
-            + reqDate.getFullYear().toString().substring(2)).toString();
-  
-  }
-  
-  
-  
-  let overallData = {}
-  let stateData = {}
-  
-  var i;
-  overallData["Total"] = [];
-  for(i=0;i<=noOfDays;i++){
-    overallData["Total"].push([chartDate(i), "Active(Predicted)", totalData[0][i.toString()]]);
-    overallData["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
-    overallData["Total"].push([chartDate(i), "Recovered(Predicted)", totalData[0]["Recovered" + i.toString()]]);
-    overallData["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
-    overallData["Total"].push([chartDate(i), "Total(Predicted)", Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()])]);
-    overallData["Total"].push([chartDate(i), "Total", totalData[0]["Confirmed_" + calculatedDate(i)]]);
-  }
-  
-  var stateDropDown = document.getElementById("myselect");
-  
-  
-  var state;
-  for (state of statesData["features"]){
-    stateData[state.properties["name"]] = [];
-  
-    for(i=0;i<=noOfDays;i++){
-      stateData[state.properties["name"]].push([chartDate(i), "Active(Predicted)[if national average followed]", state.properties[i.toString()]]);
-      stateData[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
-    }
-    stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
-  }
-  
-  function getSelected()
-  {
-  var selectedSource = document.getElementById("myselect").value;
-  loadChart(selectedSource);
-  }
-  
-  
-  let schema = [{
-      "name": "Time",
-      "type": "date",
-      "format": "%d-%b-%y"
-    }, {
-      "name": "Type",
-      "type": "string"
-    }, {
-      "name": "Value",
-      "type": "number"
-    }]
-    
-    
-   var dataStore = new FusionCharts.DataStore();
-   var dataSource = {
-      chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
-              exportEnabled: "1",
-              style: {
-                  "background": {
-                      "fill": "#f6f6f6",
-                  },
-                  "canvas": {
-                      "fill": "#f6f6f6",
-                  }
-              }
-    },
-      caption: {
-        text: currentState
-      },
-      // subcaption: {
-      //   text: currentState
-      // },
-      series: "Type",
-      yaxis: [
-        {
-          plot: "Cases",
-          title: "Cases",
-          // format: {
-          //   prefix: ""
-          // }
-        }
-      ]
-    };
-  
-    dataSource.data = dataStore.createDataTable(stateData[currentState], schema);
-    
-    new FusionCharts({
-      type: "timeseries",
-      renderAt: "chart-container",
-      width: "100%",
-      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
-      dataSource: dataSource
-    }).render();
-  
-    var dataStore2 = new FusionCharts.DataStore();
-    var dataSource2 = {
-       chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
-               exportEnabled: "1",
-               style: {
-                  "background": {
-                      "fill": "#f6f6f6",
-                  },
-                  "canvas": {
-                      "fill": "#f6f6f6",
-                  }
-              }
-     },
-       caption: {
-         text: "India"
-       },
-       // subcaption: {
-       //   text: currentState
-       // },
-       series: "Type",
-       yaxis: [
-         {
-           plot: "",
-           title: "",
-           // format: {
-           //   prefix: ""
-           // }
-         }
-       ]
-     };
-   
-     dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema);
-     
-     new FusionCharts({
-       type: "timeseries",
-       renderAt: "overall",
-       width: "100%",
-       height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
-       dataSource: dataSource2
-     }).render();
-  
-  
-    
-  function loadChart(state){
-    if(state){
-        state = state;
-    }
-    else{
-        state = "Delhi";
-    }
-    dataSource.caption.text = state;
-    dataSource.data = dataStore.createDataTable(stateData[state], schema);
-    
-    new FusionCharts({
-      type: "timeseries",
-      renderAt: "chart-container",
-      width: "100%",
-      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
-      dataSource: dataSource
-    }).render();
-  
-  }
-  
-
 // Set location and zoom 
-var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.5}).setView([22.146, 79.088], 4.5);
+var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
 
 // Map Filter
 let myFilter = [
@@ -437,36 +229,38 @@ let myFilter = [
     'brightness:95%'
 ];
 
-
-// CartoDB Tile Layer with grayscale filter
+// http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}
+// Google Streets Tile Layer with grayscale filter
 var googleStreets = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
         // minZoom: 2,
         subdomains: 'abcd',
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        // attribution: 'Map Data &copy; <a href="https://www.google.com/maps/">2020 Google Maps</a>',
         filter: myFilter
     }).addTo(mymap);
 
 
-// GeoJson Layers
-geojson["Total(Predicted)"] = L.geoJson(statesData, {
-    style: styleTotalPred,
+// GeoJson Layer
+geojson["Predicted"] = L.geoJson(statesData, {
+    style: style,
     onEachFeature: onEachFeature
 }).addTo(mymap);
 
-geojson["Active(Predicted)"] = L.geoJson(statesData, {
-    style: styleActivePred,
-    onEachFeature: onEachFeature
-});
-
-geojson["Recovered(Predicted)"] = L.geoJson(statesData, {
-    style: styleRecoveredPred,
+geojson["Nucleation"] = L.geoJson(statesData, {
+    style: styleNucleation,
     onEachFeature: onEachFeature
 });
 
 
-geojson["Total"] = L.geoJson(statesData, {
-    style: styleTotal,
+geojson["PredictedRecovered"] = L.geoJson(statesData, {
+    style: stylePredictedRecovered,
+    onEachFeature: onEachFeature
+});
+
+
+geojson["Confirmed"] = L.geoJson(statesData, {
+    style: styleConfirmed,
     onEachFeature: onEachFeature
 });
 
@@ -477,6 +271,11 @@ geojson["Active"] = L.geoJson(statesData, {
 
 geojson["Recovered"] = L.geoJson(statesData, {
     style: styleRecovered,
+    onEachFeature: onEachFeature
+});
+
+geojson["Deceased"] = L.geoJson(statesData, {
+    style: styleDeceased,
     onEachFeature: onEachFeature
 });
 
@@ -491,15 +290,20 @@ title.onAdd = function (map) {
 };
 
 title.update = function () {
-    this._div.innerHTML = '<h3>India</h3>' 
-                            + "Total(Predicted)<br> <b>" + (Number(totalData[0][slider.value.toString()]) + Number(totalData[0]["Recovered" + slider.value.toString()])).toString()
-                            + "</b><br> Total<br> <b>"   + (totalData[0]["Confirmed_" + calculatedDate(slider.value)]===undefined?'-':totalData[0]["Confirmed_" + calculatedDate(slider.value)])
-                            + "</b><br> Active(Predicted)<br> <b>" + parseInt(totalData[0][slider.value.toString()]).toString()
-                            + "</b><br> Active<br> <b>" + (totalData[0]["Confirmed_" + calculatedDate(slider.value)]===undefined?'-':(totalData[0]["Confirmed_" + calculatedDate(slider.value)] 
-                                                        - totalData[0]["Recovered_" + calculatedDate(slider.value)] 
-                                                        - totalData[0]["Deceased_" + calculatedDate(slider.value)] ).toString() )
-                            + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?"</b><br> Recovered(Predicted)<br> <b>" + parseInt(totalData[0]["Recovered" + slider.value.toString()]).toString():'')
-                            + "</b><br> Recovered<br> <b>" + (totalData[0]["Recovered_" + calculatedDate(slider.value)]===undefined?'-':totalData[0]["Recovered_" + calculatedDate(slider.value)]);
+    this._div.innerHTML = '<h3>'+ runID + '</h3>' 
+                            + "Total predicted<br> cases: <b>" + totalData[0][slider.value.toString()]
+                            + "</b><br> Total(Nucleation)<br> cases: <b>" + totalData[0]["Nucleation" + slider.value.toString()]
+                            + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?"</b><br> Recovered(Pred)<br> cases: <b>" + totalData[0]["Recovered" + slider.value.toString()]:'')
+                            + "</b><br> Total confirmed<br> cases: <b>" 
+                            + totalData[0]["Confirmed_" + calculatedDate(slider.value)]
+                            + "</b><br> Total active<br> cases: <b>" 
+                            + (totalData[0]["Confirmed_" + calculatedDate(slider.value)] 
+                                    - totalData[0]["Recovered_" + calculatedDate(slider.value)] 
+                                    - totalData[0]["Deceased_" + calculatedDate(slider.value)] ).toString()
+                            + "</b><br> Total recovered<br> cases: <b>" 
+                            + totalData[0]["Recovered_" + calculatedDate(slider.value)]
+                            + "</b><br> Total deceased<br> cases: <b>" 
+                            + totalData[0]["Deceased_" + calculatedDate(slider.value)];
 };
 
 title.setPosition('topleft');
@@ -519,15 +323,15 @@ info.onAdd = function (map) {
 info.update = function (props) {
     this._div.innerHTML = '<h3>'+ calculatedDate(slider.value).replace(/_/g, ' ') + '</h3>' +  (props ?
         '<b>' + props.name +'</b>'
-        +'<br />' + 'Total(Predicted):<br /> ' + '<b>' + ((Number(props[slider.value.toString()])+Number(props["Recovered" + slider.value.toString()])).toString()=="NaN"?'-':(Number(props[slider.value.toString()])+Number(props["Recovered" + slider.value.toString()])).toString() )+ '</b>'
-        +'<br />' + 'Active(Predicted):<br /> ' + '<b>' + (parseInt(props[slider.value.toString()]).toString()=="NaN"?'-':parseInt(props[slider.value.toString()]).toString() ) +'</b>'
-        + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?'<br />' + 'Recovered(Predicted)<br /> ' + '<b>' + (parseInt(props["Recovered" + slider.value.toString()]).toString()=="NaN"?'-':parseInt(props["Recovered" + slider.value.toString()]).toString() ) +'</b>':'')
-        +'<br />' + 'Total<br /> ' + '<b>' + (props["Confirmed_" + calculatedDate(slider.value)]===undefined?'-':props["Confirmed_" + calculatedDate(slider.value)]) +'</b>'
-        +'<br />' + 'Active<br /> ' + '<b>' + (props["Confirmed_" + calculatedDate(slider.value)]===undefined?'-':
-                                                    (props["Confirmed_" + calculatedDate(slider.value)] 
+        +'<br />' + 'Predicted<br />Cases: ' + '<b>' + props[slider.value.toString()] +'</b>'
+        +'<br />' + 'Nucleation<br />Cases: ' + '<b>' + props["Nucleation" + slider.value.toString()] +'</b>'
+        + ((recoveredAvailable=='y' || recoveredAvailable=='Y')?'<br />' + 'Recovered(Pred)<br />Cases: ' + '<b>' + props["Recovered" + slider.value.toString()] +'</b>':'')
+        +'<br />' + 'Confirmed<br />Cases: ' + '<b>' + props["Confirmed_" + calculatedDate(slider.value)] +'</b>'
+        +'<br />' + 'Active<br />Cases: ' + '<b>' + (props["Confirmed_" + calculatedDate(slider.value)] 
                                                   - props["Recovered_" + calculatedDate(slider.value)] 
-                                                  - props["Deceased_" + calculatedDate(slider.value)]).toString() ) +'</b>'
-        +'<br />' + 'Recovered<br /> ' + '<b>' + (props["Recovered_" + calculatedDate(slider.value)]===undefined?'-':props["Recovered_" + calculatedDate(slider.value)]) +'</b>'
+                                                  - props["Deceased_" + calculatedDate(slider.value)]).toString() +'</b>'
+        +'<br />' + 'Recovered<br />Cases: ' + '<b>' + props["Recovered_" + calculatedDate(slider.value)] +'</b>'
+        +'<br />' + 'Deceased<br />Cases: ' + '<b>' + props["Deceased_" + calculatedDate(slider.value)] +'</b>'
         : 'Hover over<br />a state');
 };
 
@@ -549,7 +353,7 @@ legend.update = function (currentBaseLayer){
     var grades;
     var labels;
 
-    if (currentBaseLayer == "Active(Predicted)"){
+    if (currentBaseLayer == "Predicted"){
         grades = legendGrades((slider.value).toString());
         labels = [];
 
@@ -561,20 +365,20 @@ legend.update = function (currentBaseLayer){
         }
     }
 
-    else if (currentBaseLayer == "Total(Predicted)"){
-        grades = legendGradesTotal((slider.value).toString(), "Recovered" + (slider.value).toString());
+
+    else if(currentBaseLayer == "Nucleation"){
+        grades = legendGrades("Nucleation" + (slider.value).toString());
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorTotal(grades[i] + 1, (slider.value).toString(), "Recovered" + (slider.value).toString()) + '"></i> ' +
-                grades[i].toString() + (grades[i + 1] ? '&ndash;' + grades[i + 1].toString() + '<br>' : '+');
+                '<i style="background:' + getColor(grades[i] + 1, "Nucleation" + (slider.value).toString()) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
 
-
-    else if(currentBaseLayer == "Recovered(Predicted)"){
+    else if(currentBaseLayer == "Recovered(Pred)"){
         grades = legendGrades("Recovered" + (slider.value).toString());
         labels = [];
 
@@ -586,7 +390,7 @@ legend.update = function (currentBaseLayer){
         }
     }
 
-    else if(currentBaseLayer == "Total" || currentBaseLayer == "Active" ){
+    else if(currentBaseLayer == "Confirmed" || currentBaseLayer == "Active" ){
         grades = legendGrades("Confirmed_" + calculatedDate(slider.value));
         labels = [];
 
@@ -611,15 +415,27 @@ legend.update = function (currentBaseLayer){
         }
     }
 
-    else{
-        grades = legendGradesTotal((slider.value).toString(), "Recovered" + (slider.value).toString());
+    else if(currentBaseLayer == "Deceased"){
+        grades = legendGrades("Deceased_" + calculatedDate(slider.value));
         labels = [];
 
         this._div.innerHTML = "";
         for (var i = 0; i < grades.length; i++) {
             this._div.innerHTML +=
-                '<i style="background:' + getColorTotal(grades[i] + 1, (slider.value).toString(), "Recovered" + (slider.value).toString()) + '"></i> ' +
-                grades[i].toString() + (grades[i + 1] ? '&ndash;' + grades[i + 1].toString() + '<br>' : '+');
+                '<i style="background:' + getColor(grades[i] + 1, "Deceased_" + calculatedDate(slider.value)) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
+    }
+
+    else{
+        grades = legendGrades((slider.value).toString());
+        labels = [];
+
+        this._div.innerHTML = "";
+        for (var i = 0; i < grades.length; i++) {
+            this._div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1, (slider.value).toString()) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
         }
     }
     
@@ -632,12 +448,13 @@ legend.addTo(mymap);
 
 
 var baseMaps = {
-    "Total(Predicted)": geojson["Total(Predicted)"],
-    "Active(Predicted)": geojson["Active(Predicted)"],
-    "Recovered(Predicted)":geojson["Recovered(Predicted)"],
-    "Total": geojson["Total"],
+    "Predicted": geojson["Predicted"],
+    "Nucleation": geojson["Nucleation"],
+    "Recovered(Pred)":geojson["PredictedRecovered"],
+    "Confirmed": geojson["Confirmed"],
     "Active": geojson["Active"],
     "Recovered": geojson["Recovered"],
+    "Deceased" : geojson["Deceased"]
 };
 
 
@@ -688,12 +505,13 @@ function calculatedDate(value){
 slider.oninput = function() {
   info.update();
   title.update();
-  geojson["Total(Predicted)"].resetStyle();
-  geojson["Active(Predicted)"].resetStyle();
-  geojson["Recovered(Predicted)"].resetStyle();
-  geojson["Total"].resetStyle();
+  geojson["Predicted"].resetStyle();
+  geojson["Confirmed"].resetStyle();
+  geojson["PredictedRecovered"].resetStyle();
   geojson["Active"].resetStyle();
   geojson["Recovered"].resetStyle(); 
+  geojson["Deceased"].resetStyle();
+  geojson["Nucleation"].resetStyle();
   legend.update(currentBaseLayer);
 }
 
@@ -701,6 +519,7 @@ slider.oninput = function() {
 
 mymap.on("baselayerchange", function(e){
     currentBaseLayer = e.name;
+    console.log(e.name);
     legend.update(currentBaseLayer);
  })
 
@@ -785,3 +604,322 @@ L.Control.zoomHome = L.Control.extend({
 var zoomBar = new L.Control.zoomHome();
 zoomBar.addTo(mymap);
 
+
+
+// Function to return shortened month name
+// Output of the JavaScript date function 'getMonth()' is passed as argument
+function monthName(month){
+  return month == 0  ? 'Jan' :
+         month == 1  ? 'Feb' :
+         month == 2  ? 'Mar' :
+         month == 3  ? 'Apr' :
+         month == 4  ? 'May' :
+         month == 5  ? 'Jun' :
+         month == 6  ? 'Jul' :
+         month == 7  ? 'Aug' :
+         month == 8  ? 'Sep' :
+         month == 9  ? 'Oct' :
+         month == 10 ? 'Nov' :
+         month == 11 ? 'Dec' :
+                    'Error: Invalid Argument';
+}
+
+// Function to pad a zero on the left for single digit dates
+// Output of the JavaScript date function 'getDate()' is passed as argument
+function paddedDate(date){
+  if (date >= 10){
+      return date.toString();
+  }
+  else{
+      return "0" + date.toString();
+  }
+}
+
+// Function to calculate date
+function chartDate(value){
+  var reqDate = new Date(startDate.getTime() + value * (1000 * 3600 * 24));
+
+  return (paddedDate(reqDate.getDate()) + "-"
+          + monthName(reqDate.getMonth()) + "-"
+          + reqDate.getFullYear().toString().substring(2)).toString();
+
+}
+
+
+
+let data = {}
+let diagnosticsData = {}
+let dailyData = {}
+
+var i;
+data["Total"] = [];
+diagnosticsData["Total"] = []
+dailyData["Total"] = []
+for(i=0;i<=75;i++){
+  data["Total"].push([chartDate(i), "Active(Pred)", totalData[0][i.toString()]]);
+  data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
+  data["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()])]);
+  data["Total"].push([chartDate(i), "Confirmed", totalData[0]["Confirmed_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
+  data["Total"].push([chartDate(i), "Recovered+Deceased", Number(totalData[0]["Recovered_" + calculatedDate(i)]) + Number(totalData[0]["Deceased_" + calculatedDate(i)])]);
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  diagnosticsData["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
+  diagnosticsData["Total"].push([chartDate(i), "Doubling Time", totalData[0]["DRConfirmed_" + calculatedDate(i)]]);  
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-3", Number(totalData[0]["RatiosDeceased_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-4", Number(totalData[0]["RatiosRecovered_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
+  dailyData["Total"].push([chartDate(i), "Active(Pred)", totalData[0]["DN"+i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["DNRecovered" + i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(totalData[0]["DN"+i.toString()])+Number(totalData[0]["DNRecovered" + i.toString()])]);
+  dailyData["Total"].push([chartDate(i), "Nucleation", totalData[0]["Nucleation" + i.toString()]]);
+  dailyData["Total"].push([chartDate(i), "Confirmed", totalData[0]["RatiosConfirmed_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Active", totalData[0]["RatiosConfirmed_" + calculatedDate(i)] - totalData[0]["RatiosRecovered_" + calculatedDate(i)] - totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Recovered", totalData[0]["RatiosRecovered_" + calculatedDate(i)]]);  
+  dailyData["Total"].push([chartDate(i), "Deceased", totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
+}
+
+var stateDropDown = document.getElementById("myselect");
+var stateDropDown2 = document.getElementById("myselect2");
+var stateDropDown3 = document.getElementById("myselect3");
+
+var state;
+for (state of statesData["features"]){
+  data[state.properties["name"]] = [];
+  diagnosticsData[state.properties["name"]] = [];
+  dailyData[state.properties["name"]] = [];
+  for(i=0;i<=75;i++){
+    data[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties[i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
+    data[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
+    data[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["Confirmed_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
+    data[state.properties["name"]].push([chartDate(i), "Recovered+Deceased", Number(state.properties["Recovered_" + calculatedDate(i)])+Number(state.properties["Deceased_" + calculatedDate(i)])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Doubling Time", state.properties["DRConfirmed_" + calculatedDate(i)]]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-3", Number(state.properties["RatiosDeceased_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-4", Number(state.properties["RatiosRecovered_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties["DN"+i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["DNRecovered" + i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(state.properties["DN"+i.toString()]) + Number(state.properties["DNRecovered" + i.toString()])]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Nucleation", state.properties["Nucleation" + i.toString()]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Confirmed", state.properties["RatiosConfirmed_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RatiosConfirmed_" + calculatedDate(i)] - state.properties["RatiosRecovered_" + calculatedDate(i)] - state.properties["RatiosDeceased_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["RatiosRecovered_" + calculatedDate(i)]]);
+    dailyData[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["RatiosDeceased_" + calculatedDate(i)]]);
+    }
+  stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+  stateDropDown2.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+  stateDropDown3.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+}
+
+function getSelected()
+{
+var selectedSource = document.getElementById("myselect").value;
+loadChart(selectedSource);
+}
+
+function getSelected2()
+{
+var selectedSource = document.getElementById("myselect2").value;
+loadChart2(selectedSource);
+}
+
+function getSelected3()
+{
+var selectedSource = document.getElementById("myselect3").value;
+loadChart3(selectedSource);
+}
+
+
+let schema = [{
+    "name": "Time",
+    "type": "date",
+    "format": "%d-%b-%y"
+  }, {
+    "name": "Type",
+    "type": "string"
+  }, {
+    "name": "Value",
+    "type": "number"
+  }]
+  
+  
+ var dataStore = new FusionCharts.DataStore();
+ var dataSource = {
+    chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
+            exportEnabled: "1",
+            
+  },
+    caption: {
+      text: currentState
+    },
+    // subcaption: {
+    //   text: currentState
+    // },
+    series: "Type",
+    yaxis: [
+      {
+        plot: "Cases",
+        title: "Cases",
+        // format: {
+        //   prefix: ""
+        // }
+      }
+    ]
+  };
+
+  dataSource.data = dataStore.createDataTable(data[currentState], schema);
+  
+  new FusionCharts({
+    type: "timeseries",
+    renderAt: "chart-container",
+    width: "100%",
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+    dataSource: dataSource
+  }).render();
+
+  var dataStore2 = new FusionCharts.DataStore();
+  var dataSource2 = {
+     chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
+             exportEnabled: "1",
+             style: {
+                "background": {
+                    "fill": "#f6f6f6",
+                },
+                "canvas": {
+                    "fill": "#f6f6f6",
+                }
+            }
+   },
+     caption: {
+       text: currentState
+     },
+     // subcaption: {
+     //   text: currentState
+     // },
+     series: "Type",
+     yaxis: [
+       {
+         plot: "",
+         title: "",
+         // format: {
+         //   prefix: ""
+         // }
+       }
+     ]
+   };
+ 
+   dataSource2.data = dataStore2.createDataTable(diagnosticsData[currentState], schema);
+   
+   new FusionCharts({
+     type: "timeseries",
+     renderAt: "diagnostics",
+     width: "100%",
+     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+     dataSource: dataSource2
+   }).render();
+
+
+   
+  var dataStore3 = new FusionCharts.DataStore();
+  var dataSource3 = {
+     chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
+             exportEnabled: "1",
+             
+   },
+     caption: {
+       text: currentState
+     },
+     // subcaption: {
+     //   text: currentState
+     // },
+     series: "Type",
+     yaxis: [
+       {
+         plot: "",
+         title: "",
+         // format: {
+         //   prefix: ""
+         // }
+       }
+     ]
+   };
+ 
+   dataSource3.data = dataStore3.createDataTable(dailyData[currentState], schema);
+   
+   new FusionCharts({
+     type: "timeseries",
+     renderAt: "daily-numbers",
+     width: "100%",
+     height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+     dataSource: dataSource3
+   }).render();
+  
+function loadChart(state){
+  if(state){
+      state = state;
+  }
+  else{
+      state = "Total";
+  }
+  dataSource.caption.text = state;
+  dataSource.data = dataStore.createDataTable(data[state], schema);
+  
+  new FusionCharts({
+    type: "timeseries",
+    renderAt: "chart-container",
+    width: "100%",
+    height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+    dataSource: dataSource
+  }).render();
+
+}
+
+function loadChart2(state){
+    if(state){
+        state = state;
+    }
+    else{
+        state = "Total";
+    }
+    dataSource2.caption.text = state;
+    dataSource2.data = dataStore2.createDataTable(diagnosticsData[state], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "diagnostics",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource2
+    }).render();
+  
+  }
+  
+  
+function loadChart3(state){
+    if(state){
+        state = state;
+    }
+    else{
+        state = "Total";
+    }
+    dataSource3.caption.text = state;
+    dataSource3.data = dataStore3.createDataTable(dailyData[state], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "daily-numbers",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource3
+    }).render();
+  
+  }
+  
+  

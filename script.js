@@ -219,7 +219,7 @@ function onEachFeature(feature, layer) {
 
 
 // Set location and zoom 
-var mymap = L.map('mapid',{zoomControl: false}).setView([22.146, 79.088], 5);
+var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.5}).setView([22.146, 79.088], 4.5);
 
 // Map Filter
 let myFilter = [

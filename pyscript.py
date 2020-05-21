@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import json
 import os
+import sys
 
 def modify(value):
     return "Nucleation" + str(value)
@@ -122,7 +123,9 @@ def statename(statecode):
     else:
         return statecode
 
-run_id = input("\nEnter run ID(folder name, eg: May12_run1): ")
+run_id = str(sys.argv[1])
+
+start_date = str(sys.argv[2])
 
 files = os.listdir(run_id+'/')
 
@@ -135,6 +138,8 @@ else:
 
 # Read population data 
 predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
+
+no_of_days = len(predicted_state_wise.index)-1
 
 # Read nucleation data
 nucleation = pd.read_csv(run_id + "/" + "CovidNucleation.data", delimiter=" ", header=1)
@@ -172,7 +177,6 @@ predicted_state_wise = pd.concat(frames)
 # List of day numbers
 day_list = list(predicted_state_wise.index)
 
-# Set column Day as index
 
 
 # States for which data doesn't exist in predictions
@@ -202,7 +206,7 @@ state_wise_daily['Daily_Status'] = state_wise_daily["Status"] + "-" + state_wise
 # Delete the columns Status and Date
 del state_wise_daily['Date']
 del state_wise_daily['Status']
-
+del state_wise_daily['UN']
 # Replace all hyphens to underscores in the column Daily_Status
 state_wise_daily['Daily_Status'] = state_wise_daily['Daily_Status'].apply(replace_hyphen)
 
@@ -318,7 +322,7 @@ states_data = str(loaded_json)
 
 # Save the data in a JavaScript file
 with open(run_id + "/data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';")
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';")
 
 print("\nData written into " + run_id + "/data.js")
 

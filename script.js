@@ -6,11 +6,9 @@ var currentBaseLayer = "Predicted";
 var currentState = "Total";
 
 // Start and end date parameters
-var startDate = new Date("03/23/2020"); 
-var endDate= new Date("05/07/2020"); 
+var startDate = new Date(SD); 
 
-// Total number of days for the slider
-var noOfDays = 75;
+
 
 var todaysDate = new Date();
 var daysTillToday = (todaysDate.getTime()-startDate.getTime())/(1000 * 3600 * 24);
@@ -655,7 +653,7 @@ var i;
 data["Total"] = [];
 diagnosticsData["Total"] = []
 dailyData["Total"] = []
-for(i=0;i<=75;i++){
+for(i=0;i<=noOfDays;i++){
   data["Total"].push([chartDate(i), "Active(Pred)", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
   data["Total"].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()])]);
@@ -689,7 +687,7 @@ for (state of statesData["features"]){
   data[state.properties["name"]] = [];
   diagnosticsData[state.properties["name"]] = [];
   dailyData[state.properties["name"]] = [];
-  for(i=0;i<=75;i++){
+  for(i=0;i<=noOfDays;i++){
     data[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Active(Pred)+Recovered(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);

@@ -320,11 +320,22 @@ for state_number in range(36):
 # Convert loaded_json dict to str
 states_data = str(loaded_json) 
 
-# Save the data in a JavaScript file
-with open(run_id + "/data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';")
 
-print("\nData written into " + run_id + "/data.js")
+# Save the data in a JavaScript file
+if len(sys.argv) == 4 and sys.argv[3] == 'high':
+    with open("uncertainty/high.js", 'w') as file:
+        file.write("var highstatesData = " + states_data + ";"+"var hightotalData = " + str(total_properties_list) + ";"+"var highrunID = '" + str(run_id) +"';"+"var highrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var highnoOfDays = '" + str(no_of_days) +"';"+"var highSD = '" + str(start_date) +"';")
+    print("\nData written into uncertainty/high.js")
+
+elif len(sys.argv) == 4 and sys.argv[3] == 'low':
+    with open("uncertainty/low.js", 'w') as file:
+        file.write("var lowstatesData = " + states_data + ";"+"var lowtotalData = " + str(total_properties_list) + ";"+"var lowrunID = '" + str(run_id) +"';"+"var lowrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var lownoOfDays = '" + str(no_of_days) +"';"+"var lowSD = '" + str(start_date) +"';")
+    print("\nData written into uncertainty/low.js")
+
+else:
+    with open(run_id + "/data.js", 'w') as file:
+        file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';")
+    print("\nData written into " + run_id + "/data.js")
 
 f.close()
 

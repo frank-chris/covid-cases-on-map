@@ -19,13 +19,6 @@ var endDateLabel = document.getElementById("end-date");
 startDateLabel.innerHTML = calculatedDate(0).replace(/_/g, ' ');
 endDateLabel.innerHTML = calculatedDate(noOfDays).replace(/_/g, ' ');
 
-// Set current stats
-var deaths = document.getElementById("deaths");
-var cases = document.getElementById("cases");
-var recoveries = document.getElementById("recoveries");
-cases.innerHTML = totalData[0]["Confirmed_" + calculatedDate(daysTillToday-1)];
-recoveries.innerHTML = totalData[0]["Recovered_" + calculatedDate(daysTillToday-1)];
-deaths.innerHTML = totalData[0]["Deceased_" + calculatedDate(daysTillToday-1)];
 
 // Slider accessed by Id and values set
 var slider = document.getElementById("myRange");
@@ -277,29 +270,44 @@ function monthName(month){
   var i;
   overallData["Total"] = [];
   for(i=0;i<=noOfDays;i++){
-    overallData["Total"].push([chartDate(i), "Active(Predicted)", totalData[0][i.toString()]]);
-    overallData["Total"].push([chartDate(i), "Active", totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]]);
-    overallData["Total"].push([chartDate(i), "Recovered(Predicted)", totalData[0]["Recovered" + i.toString()]]);
-    overallData["Total"].push([chartDate(i), "Recovered", totalData[0]["Recovered_" + calculatedDate(i)]]);
-    overallData["Total"].push([chartDate(i), "Total(Predicted)", Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()])]);
-    overallData["Total"].push([chartDate(i), "Total", totalData[0]["Confirmed_" + calculatedDate(i)]]);
+    overallData["Total"].push([chartDate(i), 
+    /*Active(Predicted)*/      totalData[0][i.toString()],
+    /*Active*/                 (totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]),
+    /*Recovered(Predicted)*/   totalData[0]["Recovered" + i.toString()],
+    /*Recovered*/              totalData[0]["Recovered_" + calculatedDate(i)],
+    /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
+    /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
+                               hightotalData[0][i.toString()], // HA
+                               lowtotalData[0][i.toString()],  // LA
+                               hightotalData[0]["Recovered" + i.toString()], // HR
+                               lowtotalData[0]["Recovered" + i.toString()],  // LR
+                               Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
+                               Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
+                        ]);
   }
   
   var stateDropDown = document.getElementById("myselect");
   
   
   var state;
+  var k = 0;
   for (state of statesData["features"]){
     stateData[state.properties["name"]] = [];
   
     for(i=0;i<=noOfDays;i++){
-      stateData[state.properties["name"]].push([chartDate(i), "Active(Predicted)[if national average followed]", state.properties[i.toString()]]);
-      stateData[state.properties["name"]].push([chartDate(i), "Active", state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]]);
+      stateData[state.properties["name"]].push([chartDate(i),
+                                                state.properties[i.toString()],
+                                                (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
+                                                highstatesData["features"][k]["properties"][i.toString()],
+                                                lowstatesData["features"][k]["properties"][i.toString()]
+                                            ]);
+      
       // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
       // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
       // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
       // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
     }
+    k += 1;
     stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
   }
   
@@ -310,22 +318,70 @@ function monthName(month){
   }
   
   
-  let schema = [{
-      "name": "Time",
-      "type": "date",
-      "format": "%d-%b-%y"
+let schema2 = [{
+    "name": "Time",
+    "type": "date",
+    "format": "%d-%b-%y"
     }, {
-      "name": "Type",
-      "type": "string"
+    "name": "Active(Predicted)",
+    "type": "number"
     }, {
-      "name": "Value",
-      "type": "number"
-    }]
+    "name": "Active",
+    "type": "number"
+    }, {
+    "name": "Recovered(Predicted)",
+    "type": "number"
+    }, {
+    "name": "Recovered",
+    "type": "number"
+    }, {
+    "name": "Total(Predicted)",
+    "type": "number"
+    }, {
+    "name": "Total",
+    "type": "number"
+    }, {
+    "name": "HA",
+    "type": "number"
+    }, {
+    "name": "LA",
+    "type": "number"
+    }, {
+    "name": "HR",
+    "type": "number"
+    }, {
+    "name": "LR",
+    "type": "number"
+    }, {
+    "name": "HT",
+    "type": "number"
+    }, {
+    "name": "LT",
+    "type": "number"
+    }
+];
     
+let schema = [{
+    "name": "Time",
+    "type": "date",
+    "format": "%d-%b-%y"
+    }, {
+    "name": "Active(Predicted)",
+    "type": "number"
+    }, {
+    "name": "Active",
+    "type": "number"
+    }, {
+    "name": "HA",
+    "type": "number"
+    }, {
+    "name": "LA",
+    "type": "number"
+    }];
     
    var dataStore = new FusionCharts.DataStore();
    var dataSource = {
-      chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
+      chart: {palettecolors: "E41A1C,4DAF4A,E41A1C,FF7F00,A65628,F781BF,111111,999999",
               exportEnabled: "1",
               style: {
                   "background": {
@@ -342,14 +398,32 @@ function monthName(month){
       // subcaption: {
       //   text: currentState
       // },
-      series: "Type",
+      
       yaxis: [
-        {
-          plot: "Cases",
-          title: "Cases",
-          // format: {
-          //   prefix: ""
-          // }
+        {title: "Cases",
+        plot: [
+            {
+                value:  {
+                            high: "HA",
+                            low: "LA"
+                        },
+                type: "area-range",
+                style: {
+                    plot:{
+                        "stroke-opacity": "0",
+                        "fill-opacity": "0.1"
+                    }
+                }
+            },
+            {
+                value: "Active(Predicted)",
+                type: "line"
+            },
+            {
+                value: "Active",
+                type: "line"
+            }
+        ],
         }
       ]
     };
@@ -366,7 +440,7 @@ function monthName(month){
   
     var dataStore2 = new FusionCharts.DataStore();
     var dataSource2 = {
-       chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999",
+       chart: {palettecolors: "E41A1C,F781BF,A65628,FF7F00,4DAF4A,984EA3,E41A1C,A65628,4DAF4A,111111,999999",
                exportEnabled: "1",
                style: {
                   "background": {
@@ -383,19 +457,78 @@ function monthName(month){
        // subcaption: {
        //   text: currentState
        // },
-       series: "Type",
        yaxis: [
-         {
-           plot: "",
-           title: "",
-           // format: {
-           //   prefix: ""
-           // }
-         }
+        {   title: "Cases",
+            plot: [
+                {
+                    value:  {
+                                high: "HA",
+                                low: "LA"
+                            },
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value:  {
+                                high: "HR",
+                                low: "LR"
+                            },
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value:  {
+                                high: "HT",
+                                low: "LT"
+                            },
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value: "Active(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Active",
+                    type: "line"
+                },
+                {
+                    value: "Recovered(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Recovered",
+                    type: "line"
+                },
+                {
+                    value: "Total(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Total",
+                    type: "line"
+                }
+            ],
+        }
        ]
      };
    
-     dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema);
+     dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
      
      new FusionCharts({
        type: "timeseries",

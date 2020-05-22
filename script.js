@@ -565,20 +565,13 @@ let schema = [{
 // Set location and zoom 
 var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.5}).setView([22.146, 79.088], 4.5);
 
-// Map Filter
-let myFilter = [
-    'saturation:140%',
-    'brightness:95%'
-];
-
 
 // CartoDB Tile Layer with grayscale filter
-var googleStreets = L.tileLayer.colorFilter('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
+var googleStreets = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
         // minZoom: 2,
         subdomains: 'abcd',
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        filter: myFilter
     }).addTo(mymap);
 
 

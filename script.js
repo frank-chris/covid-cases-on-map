@@ -29,6 +29,7 @@ slider.max = noOfDays;
 if(L.Browser.mobile){
     var mapdiv = document.getElementById("mapid");
     mapdiv.style.width = "100%";
+    mapdiv.style.height = "470px";
     var slidercontainer = document.getElementById("slider1");
     slidercontainer.style.left = "2%";
 }
@@ -434,7 +435,7 @@ let schema = [{
       type: "timeseries",
       renderAt: "chart-container",
       width: "100%",
-      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
       dataSource: dataSource
     }).render();
   
@@ -534,7 +535,7 @@ let schema = [{
        type: "timeseries",
        renderAt: "overall",
        width: "100%",
-       height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+       height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
        dataSource: dataSource2
      }).render();
   
@@ -554,7 +555,7 @@ let schema = [{
       type: "timeseries",
       renderAt: "chart-container",
       width: "100%",
-      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
       dataSource: dataSource
     }).render();
   
@@ -661,7 +662,7 @@ info.update = function (props) {
                                                   - props["Recovered_" + calculatedDate(slider.value)] 
                                                   - props["Deceased_" + calculatedDate(slider.value)]).toString() ) +'</b>'
         +'<br />' + 'Recovered<br /> ' + '<b>' + (props["Recovered_" + calculatedDate(slider.value)]===undefined?'-':props["Recovered_" + calculatedDate(slider.value)]) +'</b>'
-        : 'Hover over<br />a state');
+        : (L.Browser.mobile?'Touch on<br />a state':'Hover over<br />a state'));
 };
 
 // Add to info control to the map

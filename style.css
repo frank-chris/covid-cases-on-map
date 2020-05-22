@@ -4,26 +4,32 @@ html, body {
 }
 
 main{
-  background-color: #efefef;
+  background-color: #121212;
+  padding-bottom: 17px;
+}
+
+#heading{
+  font-size: 300%;
+  font-weight: 600;
+  padding: 30px;
+  color: #EAEBED;
 }
 
 #title-section{
-  margin: 0px 17px 17px 17px;
-  background-color: #fff;
-  border-radius: 0px 0px 17px 17px;
-  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+  margin: 0px 17px 0px 17px;
+  background-color: #121212;
 }
 
 #chart-1{
-  margin: 17px 17px 17px 17px;
-  background-color: #fff;
+  margin: 0px 17px 17px 17px;
+  background-color: #1F1F1F;
   border-radius: 17px 17px 17px 17px;
   box-shadow: 0 0 15px rgba(2,2,2,0.1);
 }
 
 #map-section{
   margin: 0px 17px 0px 17px;
-  background-color: #fff;
+  background-color: #1F1F1F;
   border-radius: 17px 17px 0px 0px;
   box-shadow: 0 0 15px rgba(2,2,2,0.1);
 }
@@ -31,7 +37,7 @@ main{
 
 #main {
   margin: 0px 17px 17px 17px;
-  background-color: #fff;
+  background-color: #1F1F1F;
   border-radius: 0px 0px 17px 17px;
   box-shadow: 0 17px 15px rgba(2,2,2,0.02);
   padding-bottom: 6%;
@@ -40,17 +46,17 @@ main{
 
 #chart-2{
   margin: 17px 17px 17px 17px;
-  background-color: #fff;
+  background-color: #1F1F1F;
   border-radius: 17px 17px 17px 17px;
   box-shadow: 0 0 15px rgba(2,2,2,0.1);
 }
 
 #footer{
-  margin: 0px 17px 0px 17px;
-  background-color: #fff;
-  border-radius: 17px 17px 0px 0px;
+  margin: 17px 17px 0px 17px;
+  background-color: #1F1F1F;
+  border-radius: 17px 17px 17px 17px;
   box-shadow: 0 0 15px rgba(2,2,2,0.1);
-  color: #555;
+  color: #EAEBED;
 }
 
 #mapid {

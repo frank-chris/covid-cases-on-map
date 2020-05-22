@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-primary clean-navbar" >
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top clean-navbar" style="background-color: #1F1F1F;">
         <div class="container"><a class="navbar-brand logo" href="#">COVID-19</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse"
                 id="navcol-1">
@@ -37,16 +37,13 @@
         </div>
     </nav>
     <main class="page landing-page">
-        <section id = 'title-section' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
-            <div class="container">
-                <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">DATA-DRIVEN PDE-BASED MODELLING OF COVID-19 INFECTIONS</h3>
-                    <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px;"></p>
-                </div>
+        <section id = 'title-section'>
+            <div id="heading">
+                DATA-DRIVEN PDE-BASED MODELLING OF COVID-19 INFECTIONS
             </div>
         </section>
         
-        <section id = 'chart-1' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
+        <section id = 'chart-1' class="clean-block features" style="padding-bottom: 50px;">
             <div class="container" >
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">Prediction for India</h3>
@@ -71,12 +68,12 @@
                     <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
                         <div class="col-md-auto" style = "padding-left: 0%; width:fit-content; align-self: right;">
                             <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
-                                <a href="../May21_sd=0.5/index.html" type="button" class="btn btn-primary material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 1">
+                                <a href="../May21_sd=0.5/index.html" type="button" class="btn btn-danger material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 1">
                                     show_chart
                                 </a>
                             </div>
                             <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
-                                <a href="../May21_sd=0.3/index.html" type="button" class="btn btn-outline-primary material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 2">
+                                <a href="../May21_sd=0.3/index.html" type="button" class="btn btn-outline-danger material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 2">
                                     show_chart
                                 </a>
                             </div>
@@ -85,15 +82,15 @@
                             <div id="overall" style = "width: 100%; height: 100%;">Chart loading</div>
                         </div>
                     </div>
-                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
+                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px; color:#D5D5D5">Click on the legend to remove/add a plot.</p>
                 </div>
             </div>
         </section>
-        <section id='map-section' class="clean-block features" style="padding-bottom: 1px;background-color: #fff;">
+        <section id='map-section' class="clean-block features" style="padding-bottom: 1px;">
             <div class="container">
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">State Performance Compared to National Trend</h3>
-                    <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px;"></p>
+                    <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px; color:#D5D5D5"></p>
                     <!-- <div class="dropdown" style= "margin-bottom: 10px;">
                         <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Scenario
@@ -130,13 +127,13 @@
                 <input type="range" class="slider" id="myRange">
             </div>
         </div>
-        <section id='chart-2' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
+        <section id='chart-2' class="clean-block features" style="padding-bottom: 50px;">
             <div class="container">
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">State-Wise Trends if National Average is Followed</h3>
                     <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
                         <div class="col" style = "padding-left: 0%;">
-                            <select class="btn btn-primary" name="myselect" id="myselect" style="width: 180px; margin-bottom: 10px;margin-top: 15px;" onchange="getSelected();">
+                            <select class="btn btn-danger" name="myselect" id="myselect" style="width: 180px; margin-bottom: 10px;margin-top: 15px;" onchange="getSelected();">
                                 <option value="Total">Choose state/UT</option>
                             </select>
                         </div>
@@ -164,12 +161,12 @@
                     <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
                         <div class="col-md-auto" style = "padding-left: 0%; width:fit-content; align-self: right;">
                             <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
-                                <a href="../May21_sd=0.5/index.html" type="button" class="btn btn-primary material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 1">
+                                <a href="../May21_sd=0.5/index.html" type="button" class="btn btn-danger material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 1">
                                     show_chart
                                 </a>
                             </div>
                             <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
-                                <a href="../May21_sd=0.3/index.html" type="button" class="btn btn-outline-primary material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 2">
+                                <a href="../May21_sd=0.3/index.html" type="button" class="btn btn-outline-danger material-icons" data-toggle="tooltip" data-placement="top" title="Scenario 2">
                                     show_chart
                                 </a>
                             </div>
@@ -178,14 +175,14 @@
                             <div id="chart-container" style = "width: 100%; height: 100%;">Chart loading</div>
                         </div>
                     </div>
-                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
+                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px; color:#D5D5D5">Click on the legend to remove/add a plot.</p>
                     <h4 class="text-left text-info" style="margin-right: 70px;margin-left: 70px; margin-top: 20px;">Explanation</h4>
-                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px;">-</p>
+                    <p class="text-left" style="margin-bottom: 5px; margin-right: 70px; margin-left: 70px;margin-top: 0px; color:#D5D5D5">-</p>
                 </div>
             </div>
         </section>
         
-        <section id='footer' class="clean-block features" style="padding-bottom: 10px;background-color: #fff;padding-top: 18px;">
+        <section id='footer' class="clean-block features" style="padding-bottom: 10px; padding-top: 18px;">
             <div class="container">
                 <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">
                     <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">
@@ -200,6 +197,7 @@
 
     <!-- FusionCharts JavaScript -->
     <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.candy.js"></script>
 
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"

@@ -384,12 +384,13 @@ let schema = [{
    var dataSource = {
       chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
               exportEnabled: "1",
+              theme: "candy",
               style: {
                   "background": {
-                      "fill": "#ffffff",
+                      "fill": "#1F1F1F",
                   },
                   "canvas": {
-                      "fill": "#ffffff",
+                      "fill": "#1F1F1F",
                   }
               }
     },
@@ -444,12 +445,13 @@ let schema = [{
     var dataSource2 = {
        chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
                exportEnabled: "1",
+               theme: "candy",
                style: {
                   "background": {
-                      "fill": "#ffffff",
+                      "fill": "#1F1F1F",
                   },
                   "canvas": {
-                      "fill": "#ffffff",
+                      "fill": "#1F1F1F",
                   }
               }
      },

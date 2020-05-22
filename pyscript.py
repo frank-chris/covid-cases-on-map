@@ -305,7 +305,7 @@ for i, column in enumerate(predicted_state_wise):
         state_wise_properties_list[i]["DR" + index] = str(rates.loc[index, column])
 
 # Open GeoJSON file
-f = open('States_GeoJSON.json') 
+f = open('states_geojson_simplified.json') 
 loaded_json = json.load(f)
 
 # Sort the list of features based on ST_NM, 

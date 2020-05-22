@@ -298,8 +298,8 @@ function monthName(month){
       stateData[state.properties["name"]].push([chartDate(i),
                                                 state.properties[i.toString()],
                                                 (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
-                                                highstatesData["features"][k]["properties"][i.toString()],
-                                                lowstatesData["features"][k]["properties"][i.toString()]
+                                                highstatesData[k][i.toString()],
+                                                lowstatesData[k][i.toString()]
                                             ]);
       
       // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
@@ -846,7 +846,7 @@ L.Control.zoomHome = L.Control.extend({
         zoomInTitle: 'Zoom In',
         zoomOutText: '<big>-</big>',
         zoomOutTitle: 'Zoom Out',
-        zoomHomeText: '<i class="fa fa-home"></i>',
+        zoomHomeText: '<small><i class="material-icons">home</i></small>',
         zoomHomeTitle: 'Zoom Home'
     },
 
@@ -881,7 +881,7 @@ L.Control.zoomHome = L.Control.extend({
     },
 
     _zoomHome: function (e) {
-        this._map.setView([22.146, 79.088], 5);
+        this._map.setView([22.146, 79.088], 4.5);
     },
 
     _createButton: function (html, title, className, container, fn) {

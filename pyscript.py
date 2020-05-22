@@ -324,12 +324,12 @@ states_data = str(loaded_json)
 # Save the data in a JavaScript file
 if len(sys.argv) == 4 and sys.argv[3] == 'high':
     with open("uncertainty/high.js", 'w') as file:
-        file.write("var highstatesData = " + states_data + ";"+"var hightotalData = " + str(total_properties_list) + ";"+"var highrunID = '" + str(run_id) +"';"+"var highrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var highnoOfDays = '" + str(no_of_days) +"';"+"var highSD = '" + str(start_date) +"';")
+        file.write("var highstatesData = " + str(state_wise_properties_list) + ";"+"var hightotalData = " + str(total_properties_list) + ";"+"var highrunID = '" + str(run_id) +"';"+"var highrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var highnoOfDays = '" + str(no_of_days) +"';"+"var highSD = '" + str(start_date) +"';")
     print("\nData written into uncertainty/high.js")
 
 elif len(sys.argv) == 4 and sys.argv[3] == 'low':
     with open("uncertainty/low.js", 'w') as file:
-        file.write("var lowstatesData = " + states_data + ";"+"var lowtotalData = " + str(total_properties_list) + ";"+"var lowrunID = '" + str(run_id) +"';"+"var lowrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var lownoOfDays = '" + str(no_of_days) +"';"+"var lowSD = '" + str(start_date) +"';")
+        file.write("var lowstatesData = " + str(state_wise_properties_list) + ";"+"var lowtotalData = " + str(total_properties_list) + ";"+"var lowrunID = '" + str(run_id) +"';"+"var lowrecoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var lownoOfDays = '" + str(no_of_days) +"';"+"var lowSD = '" + str(start_date) +"';")
     print("\nData written into uncertainty/low.js")
 
 else:

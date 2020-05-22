@@ -2,22 +2,69 @@ html, body {
   height: 100%; 
   overflow-x: hidden;
 }
+
+main{
+  background-color: #efefef;
+}
+
+#title-section{
+  margin: 0px 17px 17px 17px;
+  background-color: #fff;
+  border-radius: 0px 0px 17px 17px;
+  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+}
+
+#chart-1{
+  margin: 17px 17px 17px 17px;
+  background-color: #fff;
+  border-radius: 17px 17px 17px 17px;
+  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+}
+
+#map-section{
+  margin: 0px 17px 0px 17px;
+  background-color: #fff;
+  border-radius: 17px 17px 0px 0px;
+  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+}
+
+
+#main {
+  margin: 0px 17px 17px 17px;
+  background-color: #fff;
+  border-radius: 0px 0px 17px 17px;
+  box-shadow: 0 17px 15px rgba(2,2,2,0.02);
+  padding-bottom: 6%;
+}
+
+
+#chart-2{
+  margin: 17px 17px 17px 17px;
+  background-color: #fff;
+  border-radius: 17px 17px 17px 17px;
+  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+}
+
+#footer{
+  margin: 0px 17px 0px 17px;
+  background-color: #fff;
+  border-radius: 17px 17px 0px 0px;
+  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+  color: #555;
+}
+
 #mapid {
   height: 570px;
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   z-index: 0;
-}
-
-#main {
-  transition: margin-left .5s;
-  background-color: #fff;
+  border-radius: 10px;
 }
 
 #slider1 {
   position: absolute;
-  bottom: 3%;
+  bottom: 15%;
   left: 22%;
 }
 

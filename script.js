@@ -386,10 +386,10 @@ let schema = [{
               exportEnabled: "1",
               style: {
                   "background": {
-                      "fill": "#f6f6f6",
+                      "fill": "#ffffff",
                   },
                   "canvas": {
-                      "fill": "#f6f6f6",
+                      "fill": "#ffffff",
                   }
               }
     },
@@ -446,10 +446,10 @@ let schema = [{
                exportEnabled: "1",
                style: {
                   "background": {
-                      "fill": "#f6f6f6",
+                      "fill": "#ffffff",
                   },
                   "canvas": {
-                      "fill": "#f6f6f6",
+                      "fill": "#ffffff",
                   }
               }
      },

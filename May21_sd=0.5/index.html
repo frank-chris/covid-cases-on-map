@@ -26,7 +26,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-white clean-navbar" style="color: rgb(255,255,255);">
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-primary clean-navbar" >
         <div class="container"><a class="navbar-brand logo" href="#">COVID-19</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse"
                 id="navcol-1">
@@ -37,7 +37,7 @@
         </div>
     </nav>
     <main class="page landing-page">
-        <section class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
+        <section id = 'title-section' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
             <div class="container">
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">DATA-DRIVEN PDE-BASED MODELLING OF COVID-19 INFECTIONS</h3>
@@ -46,7 +46,7 @@
             </div>
         </section>
         
-        <section class="clean-block features" style="padding-bottom: 50px;background-color: #f6f6f6;">
+        <section id = 'chart-1' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
             <div class="container" >
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">Prediction for India</h3>
@@ -89,10 +89,10 @@
                 </div>
             </div>
         </section>
-        <section class="clean-block features" style="padding-bottom: 1px;background-color: #fff;">
+        <section id='map-section' class="clean-block features" style="padding-bottom: 1px;background-color: #fff;">
             <div class="container">
                 <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">Prediction for States if National Average is Followed</h3>
+                    <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">State Performance Compared to National Trend</h3>
                     <p class="text-left" style="margin-bottom: 30px;margin-right: 70px;margin-left: 70px;"></p>
                     <!-- <div class="dropdown" style= "margin-bottom: 10px;">
                         <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -120,7 +120,7 @@
                 </div>
             </div>
         </section>
-        <div id="main" style="position:relative; height:100%; margin: 0%;" >
+        <div id="main" style="position:relative; height:100%;" >
              
             <!-- Leaflet Map -->
             <div id="mapid"></div>
@@ -130,7 +130,7 @@
                 <input type="range" class="slider" id="myRange">
             </div>
         </div>
-        <section class="clean-block features" style="padding-bottom: 50px;background-color: #f6f6f6;">
+        <section id='chart-2' class="clean-block features" style="padding-bottom: 50px;background-color: #fff;">
             <div class="container">
                 <div class="block-heading">
                     <h3 class="text-center text-info" style="margin-right: 70px;margin-left: 70px;">State-Wise Trends if National Average is Followed</h3>
@@ -185,7 +185,7 @@
             </div>
         </section>
         
-        <section class="clean-block features" style="padding-bottom: 10px;background-color: #fff;padding-top: 10px;color: #31373a;">
+        <section id='footer' class="clean-block features" style="padding-bottom: 10px;background-color: #fff;padding-top: 18px;">
             <div class="container">
                 <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">
                     <div class="row align-items-center" style="margin-right: 70px;margin-left: 70px;">

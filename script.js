@@ -382,7 +382,7 @@ let schema = [{
     
    var dataStore = new FusionCharts.DataStore();
    var dataSource = {
-      chart: {palettecolors: "E41A1C,4DAF4A,E41A1C,FF7F00,A65628,F781BF,111111,999999",
+      chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
               exportEnabled: "1",
               style: {
                   "background": {
@@ -408,6 +408,7 @@ let schema = [{
                             high: "HA",
                             low: "LA"
                         },
+                name: " ",
                 type: "area-range",
                 style: {
                     plot:{
@@ -441,7 +442,7 @@ let schema = [{
   
     var dataStore2 = new FusionCharts.DataStore();
     var dataSource2 = {
-       chart: {palettecolors: "E41A1C,F781BF,A65628,FF7F00,4DAF4A,984EA3,E41A1C,A65628,4DAF4A,111111,999999",
+       chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
                exportEnabled: "1",
                style: {
                   "background": {
@@ -466,32 +467,7 @@ let schema = [{
                                 high: "HA",
                                 low: "LA"
                             },
-                    type: "area-range",
-                    style: {
-                        plot:{
-                            "stroke-opacity": "0",
-                            "fill-opacity": "0.1"
-                        }
-                    }
-                },
-                {
-                    value:  {
-                                high: "HR",
-                                low: "LR"
-                            },
-                    type: "area-range",
-                    style: {
-                        plot:{
-                            "stroke-opacity": "0",
-                            "fill-opacity": "0.1"
-                        }
-                    }
-                },
-                {
-                    value:  {
-                                high: "HT",
-                                low: "LT"
-                            },
+                    name: "   ",
                     type: "area-range",
                     style: {
                         plot:{
@@ -509,12 +485,40 @@ let schema = [{
                     type: "line"
                 },
                 {
+                    value:  {
+                                high: "HR",
+                                low: "LR"
+                            },
+                    name: "  ",
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
                     value: "Recovered(Predicted)",
                     type: "line"
                 },
                 {
                     value: "Recovered",
                     type: "line"
+                },
+                {
+                    value:  {
+                                high: "HT",
+                                low: "LT"
+                            },
+                    name: " ",
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
                 },
                 {
                     value: "Total(Predicted)",

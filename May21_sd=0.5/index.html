@@ -33,64 +33,72 @@
 
 <body>
     <nav class="navbar navbar-dark navbar-expand-lg fixed-top clean-navbar" style="background-color: #666666;">
-        <div class="container"><a style = "font-family: 'Fira Sans', sans-serif; font-weight: 400;" class="navbar-brand logo" href="#">Data-driven Modelling of Covid-19 Pandemic</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+        <div class="container"><a style = "font-family: 'Fira Sans', sans-serif; font-weight: 400;" class="navbar-brand logo" href="#">DATA-DRIVEN MODELLING OF COVID-19 PANDEMIC</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse"
                 id="navcol-1">
                 <ul class="nav navbar-nav ml-auto">
-                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#title-section">Home</a></li>
-                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#chart-2">Results</a></li>
-                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#modeldesc">Model</a></li>
-                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#footer">Group</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#result">Results</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#slider1">Team</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#model">Model</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-    <main class="page landing-page">
-        <section id = 'title-section' class="clean-block features" style="padding-bottom: 50px; padding-top: 20px;">
+    <main class="page landing-page" id = 'home'>
+        <section id = 'title-section' class="clean-block features" style=" padding-top:10px; padding-bottom: 5px;">
             <div class="container">
-                <div class="block-heading">
-                    <h3 id='home' class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">PDE-based modelling of Covid-19 infections</h3>
+                <div class="block-heading" style='padding-top: 40px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">PDE-based modelling of Covid-19 infections</h3>
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
-                        <div class="text-left para" style="margin-bottom: 30px;">
+                        <div class="text-left para" style="margin-bottom: 10px;">
                             The aim of this project is to develop and apply a predictive computational model for the Covid-19 epidemic based on the population balance modelling.
                         </div>
                         <h5>Key Features</h5>   
                         <ul class='para'>
                             <li> Population Size Distribution (PSD) based predictive computational model for an epidemic.
                             <li>  The proposed comprehensive six-dimensional PSD model incorporates the infection severity, age, immunity and pre-medical history  of the population, days of infection,  effective treatment, point-to-point movement of infected population (e.g., by air, train etc), interactivity (community spread), hygiene and the social distancing of the population.
-                            <li>  Almost all existing computational models for epidemic predicts population size or density, which is the number of infected  individuals in a population or an average number of infected individuals in a region. Contrarily, the proposed PSD model describes how the Covid-19 spread throughout the region, across different age groups, which population gets affected over a period of time.
+                            <li>  Almost all existing computational models for epidemic predicts population size or density, which is the number of infected  individuals in a population or an average number of infected individuals in a region. Contrarily, the proposed PSD model describes how the Covid-19 spread throughout the region, across different age groups, which population gets affected over a period of <span id='result'>time.</span>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
         
-        <section id='chart-2' class="clean-block features" style="padding-bottom: 50px;">
+        <section id='chart-2' class="clean-block features" style="padding-bottom: 10px;">
             <div class="container">
-                <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 5px;margin-left: 5px;"> </h3>
-                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px; padding-bottom: 20px;">
                         <div class="col" style = "padding-left: 0%;">
+                            <div class="text-center para">
+                                Choose India/state/UT
+                            </div>
                             <select class="btn btn-secondary" name="myselect" id="myselect" style="width: 180px; margin-bottom: 10px;margin-top: 15px; font-family: 'Fira Sans', sans-serif;" onchange="getSelected();">
                                 <option value="India">Choose state/UT</option>
                                 <option value="India">India</option>
                             </select>
                         </div>
                     </div>
-                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;padding-bottom: 2px;">
-                        <div class="col-md-auto" style = "padding-left: 0%; margin: 0%;">
-                            <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
+                    <div class="row align-items-center" style="margin-right: 90px;margin-left: 90px;padding-bottom: 2px;">
+                        <div class="col align-items-right" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
                                 <button id='May21_sd=0.5' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('May21_sd=0.5');" title="Scenario 1">
                                     <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-1
                                 </button>
-                            </div>
                         </div>
-                        <div class="col" style = "padding-left: 0%; margin: 0%;">
-                            <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px; margin-top: 10px;">
+                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
                                 <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('May21_sd=0.3');" title="Scenario 2">
                                     <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-2
                                 </button>
-                            </div>
+                        </div>
+                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
+                            <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top"  title="Scenario 3">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-3
+                            </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
+                            <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top"  title="Scenario 3">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-4
+                            </button>
                         </div>
                     </div>
                     <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
@@ -106,15 +114,8 @@
         </section>
         <section id='map-section' class="clean-block features" style="padding-bottom: 1px;">
             <div class="container">
-                <div class="block-heading">
-                    <h3 class="text-center text-info" style="margin-right: 5px;margin-left: 5px;">State Performance Compared to National Trend</h3>
-                    <p class="text-left" style="margin-bottom: 30px;margin-right: 5px;margin-left: 5px;"></p>
-                    
-                    
-                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;margin-top: 0px;padding-right: 15px;padding-left: 15px;">
-                        
-                    </div>
-                    
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-center text-info" style="margin-right: 5px;margin-left: 5px;">State Performance Compared to National Trend</h3>              
                 </div>
             </div>
         </section>
@@ -128,11 +129,36 @@
                 <input type="range" class="slider" id="myRange">
             </div>
         </div>
-      
-        <section id = 'modeldesc' class="clean-block features" style="padding-bottom: 50px;  padding-top: 20px;">
+        <section id = 'team' class="clean-block features" style="padding-bottom: 10px; padding-top: 5px;">
             <div class="container">
-                <div class="block-heading">
-                    <h3 id='home' class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">Team</h3>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <ul class='para'>
+                            <li>
+                                <a href='https://cmg.cds.iisc.ac.in/' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Prof. Sashikumaar Ganesan
+                                </a>
+                            </li>
+                            <li>
+                                <a href='http://cds.iisc.ac.in/faculty/deepakns/' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Prof. Deepak Subramani
+                                </a>
+                            </li>
+                            <li id = 'model'>
+                                <a href='http://linkedin.com/in/chrisfrancis09' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Chris Francis
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>      
+        <section id = 'modeldesc' class="clean-block features" style="padding-bottom: 10px;  padding-top: 5px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">
                         Population Size Distribution (PSD) Model
                     </h3>
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
@@ -225,7 +251,13 @@
                 <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
                         <div class="col">Department of Computational and Data Sciences (CDS), Indian Institute of Science, Bangalore</div>
-                        
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="col">
+                            <a href='http://cds.iisc.ac.in/' rel='noopener noreferrer' target="_blank" style = 'color:#EAEBED'>
+                                <u>cds.iisc.ac.in</u>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

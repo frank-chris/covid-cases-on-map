@@ -295,7 +295,7 @@ function monthName(month){
         }
         
         var stateDropDown = document.getElementById("myselect");
-        stateDropDown.innerHTML = "<option value='India'>Choose state/UT</option> <option value='India'>India</option>"
+        stateDropDown.innerHTML = "<option value='India'>India</option>"
         
         var state;
         var k = 0;
@@ -392,14 +392,31 @@ function monthName(month){
                     }
             },
             caption: {
-                text: currentState
+                text: currentState,
+                position: "center",
+                style: {
+                    text: {
+                        "font-size": 22,
+                        'font-family': "'Fira Sans', sans-serif",
+                        'font-weight': 500,
+                        'text-align' : "center",
+                    }
+                }
             },
-            // subcaption: {
-            //   text: currentState
-            // },
+            subcaption: {
+              text: '(Data Compared to National Trend Based Prediction)',
+              position: 'center',
+              style: {
+                  text:{
+                    'font-family': "'Fira Sans', sans-serif",
+                    'font-size' : 16,
+                    'fill' : '#666666',
+                  }
+              }
+            },
             
             yaxis: [
-                {title: "Cases",
+                {title: "Population",
                 plot: [
                     {
                         value:  {
@@ -444,13 +461,22 @@ function monthName(month){
                     }
             },
             caption: {
-                text: "India"
+                text: "India",
+                position: "center",
+                style: {
+                    text: {
+                        "font-size": 22,
+                        'font-family': "'Fira Sans', sans-serif",
+                        'font-weight': 500,
+                        'text-align' : "center",
+                    }
+                }
             },
             // subcaption: {
             //   text: currentState
             // },
             yaxis: [
-                {   title: "Cases",
+                {   title: "Population",
                     plot: [
                         {
                             value:  {
@@ -619,14 +645,30 @@ schema = [{
               }
     },
       caption: {
-        text: currentState
+        text: currentState,
+        position: "center",
+        style: {
+            text: {
+                "font-size": 22,
+                'font-family': "'Fira Sans', sans-serif",
+                'font-weight': 500,
+                'text-align' : "center",
+            }
+        }
       },
-      // subcaption: {
-      //   text: currentState
-      // },
-      
+      subcaption: {
+        text: '(Data Compared to National Trend Based Prediction)',
+        position: 'center',
+        style: {
+            text:{
+              'font-family': "'Fira Sans', sans-serif",
+              'font-size' : 16,
+              'fill' : '#666666',
+            }
+        }
+      },
       yaxis: [
-        {title: "Cases",
+        {title: "Population",
         plot: [
             {
                 value:  {
@@ -671,13 +713,22 @@ schema = [{
               }
      },
        caption: {
-         text: "India"
+         text: "India",
+         position: "center",
+         style: {
+            text: {
+                "font-size": 22,
+                'font-family': "'Fira Sans', sans-serif",
+                'font-weight': 500,
+                'text-align' : "center",
+            }
+        }
        },
        // subcaption: {
        //   text: currentState
        // },
        yaxis: [
-        {   title: "Cases",
+        {   title: "Population",
             plot: [
                 {
                     value:  {
@@ -780,7 +831,7 @@ schema = [{
         btn.class = 'btn btn-secondary';
         console.log(document.getElementById(value).class)
         document.getElementsByTagName("body")[0].appendChild(element);
-        setTimeout(changeScript, 700, value );
+        setTimeout(changeScript, 300, value );
         loadChartData();
     }
 

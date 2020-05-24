@@ -55,8 +55,12 @@ h5{
   background-color: #fff;
 }
 
-#modeldesc{
+#team{
   background-color: #fff;
+}
+
+#modeldesc{
+  background-color: #f1f1f1;
 }
 
 .note{
@@ -211,6 +215,10 @@ h5{
     background: #FEFEFE;
     cursor: pointer;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  }
+
+  svg > g[class^="raphael-group-"] > text{
+    display: none;
   }
   
   .slider::-moz-range-thumb {

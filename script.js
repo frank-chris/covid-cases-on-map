@@ -32,6 +32,9 @@ if(L.Browser.mobile){
     mapdiv.style.height = "470px";
     var slidercontainer = document.getElementById("slider1");
     slidercontainer.style.left = "2%";
+    slidercontainer.style.bottom = '7%';
+    var main = document.getElementById('main');
+    main.style.paddingBottom = '0%';
 }
 
 function getMax(prop){
@@ -402,7 +405,7 @@ function monthName(month){
                                     high: "HA",
                                     low: "LA"
                                 },
-                        name: " ",
+                        name: "Active(Predicted uncertainty)",
                         type: "area-range",
                         style: {
                             plot:{
@@ -453,7 +456,7 @@ function monthName(month){
                                         high: "HA",
                                         low: "LA"
                                     },
-                            name: "   ",
+                            name: "Active(Predicted Uncertainty)",
                             type: "area-range",
                             style: {
                                 plot:{
@@ -475,7 +478,7 @@ function monthName(month){
                                         high: "HR",
                                         low: "LR"
                                     },
-                            name: "  ",
+                            name: "Recovered(Predicted Uncertainty)",
                             type: "area-range",
                             style: {
                                 plot:{
@@ -497,7 +500,7 @@ function monthName(month){
                                         high: "HT",
                                         low: "LT"
                                     },
-                            name: " ",
+                            name: "Total(Predicted Uncertainty)",
                             type: "area-range",
                             style: {
                                 plot:{
@@ -629,7 +632,7 @@ schema = [{
                             high: "HA",
                             low: "LA"
                         },
-                name: " ",
+                name: "Active(Predicted Uncertainty)",
                 type: "area-range",
                 style: {
                     plot:{
@@ -680,7 +683,7 @@ schema = [{
                                 high: "HA",
                                 low: "LA"
                             },
-                    name: "   ",
+                    name: "Active(Predicted Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{
@@ -702,7 +705,7 @@ schema = [{
                                 high: "HR",
                                 low: "LR"
                             },
-                    name: "  ",
+                    name: "Recovered(Predicted Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{
@@ -724,7 +727,7 @@ schema = [{
                                 high: "HT",
                                 low: "LT"
                             },
-                    name: " ",
+                    name: "Total(Predicted Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{

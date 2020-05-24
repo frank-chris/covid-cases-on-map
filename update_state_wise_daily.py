@@ -3,15 +3,17 @@ import requests
 import pandas as pd
 import os
 
+csv = 'state_wise_daily.csv'
+
 def download_csv():
     url = 'https://api.covid19india.org/csv/latest/state_wise_daily.csv'
     r = requests.get(url, allow_redirects=True)
-    open('state_wise_daily.csv', 'wb').write(r.content)
+    open(csv, 'wb').write(r.content)
 
 def modify_csv():
-    df = pd.read_csv('state_wise_daily.csv')
+    df = pd.read_csv(csv)
     df.loc[6,'MP'] = 0
-    df.to_csv('state_wise_daily.csv', index=False)
+    df.to_csv(csv, index=False)
 
 def run_pyscript():
     d = '.'
@@ -34,9 +36,9 @@ def git_push():
     except:
         print('Some error occured while pushing the code')    
 
-# download_csv()
+download_csv()
 
-# modify_csv()
+modify_csv()
 
 run_pyscript()
 

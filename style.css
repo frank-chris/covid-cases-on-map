@@ -59,6 +59,14 @@ h5{
   background-color: #fff;
 }
 
+.note{
+  font-family: 'Fira Sans', sans-serif;
+  text-align: left;
+  font-size: smaller;
+  padding-bottom: 20px;
+  color: #555;
+}
+
 #more {display: none;}
 
 .equation{

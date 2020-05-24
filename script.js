@@ -779,7 +779,7 @@ schema = [{
         btn.class = 'btn btn-secondary';
         console.log(document.getElementById(value).class)
         document.getElementsByTagName("body")[0].appendChild(element);
-        setTimeout(changeScript, 400, value );
+        setTimeout(changeScript, 700, value );
         loadChartData();
     }
 

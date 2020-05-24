@@ -272,158 +272,295 @@ function monthName(month){
   var schema = [];
   var schema2 = [];
   
-    function loadChartData(){    
-        overallData = {}
-        stateData = {}
-        var i;
-        overallData["Total"] = [];
+function loadChartData(){    
+    overallData = {}
+    stateData = {}
+    var i;
+    overallData["Total"] = [];
+    for(i=0;i<=noOfDays;i++){
+        overallData["Total"].push([chartDate(i), 
+        /*Active(Predicted)*/      totalData[0][i.toString()],
+        /*Active*/                 (totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]),
+        /*Recovered(Predicted)*/   totalData[0]["Recovered" + i.toString()],
+        /*Recovered*/              totalData[0]["Recovered_" + calculatedDate(i)],
+        /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
+        /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
+                                hightotalData[0][i.toString()], // HA
+                                lowtotalData[0][i.toString()],  // LA
+                                hightotalData[0]["Recovered" + i.toString()], // HR
+                                lowtotalData[0]["Recovered" + i.toString()],  // LR
+                                Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
+                                Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
+                            ]);
+    }
+    
+    var stateDropDown = document.getElementById("myselect");
+    stateDropDown.innerHTML = "<option value='India'>India</option>"
+    
+    var state;
+    var k = 0;
+    for (state of statesData["features"]){
+        stateData[state.properties["name"]] = [];
+    
         for(i=0;i<=noOfDays;i++){
-            overallData["Total"].push([chartDate(i), 
-            /*Active(Predicted)*/      totalData[0][i.toString()],
-            /*Active*/                 (totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]),
-            /*Recovered(Predicted)*/   totalData[0]["Recovered" + i.toString()],
-            /*Recovered*/              totalData[0]["Recovered_" + calculatedDate(i)],
-            /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
-            /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
-                                    hightotalData[0][i.toString()], // HA
-                                    lowtotalData[0][i.toString()],  // LA
-                                    hightotalData[0]["Recovered" + i.toString()], // HR
-                                    lowtotalData[0]["Recovered" + i.toString()],  // LR
-                                    Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
-                                    Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
-                                ]);
+        stateData[state.properties["name"]].push([chartDate(i),
+                                                    state.properties[i.toString()],
+                                                    (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
+                                                    highstatesData[k][i.toString()],
+                                                    lowstatesData[k][i.toString()],
+                                                    state.properties["Recovered" + i.toString()],
+                                                    state.properties["Recovered_" + calculatedDate(i)],
+                                                    highstatesData[k]["Recovered" + i.toString()],
+                                                    lowstatesData[k]["Recovered" + i.toString()],
+                                                    Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()]),
+                                                    state.properties["Confirmed_" + calculatedDate(i)],
+                                                    Number(highstatesData[k][i.toString()])+Number(highstatesData[k]["Recovered" + i.toString()]),
+                                                    Number(lowstatesData[k][i.toString()])+Number(lowstatesData[k]["Recovered" + i.toString()])
+                                                ]);
+        
+        // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
+        // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
+        // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
+        // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
         }
+        k += 1;
+        stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+    }    
+    schema2 = [{
+        "name": "Time",
+        "type": "date",
+        "format": "%d-%b-%y"
+        }, {
+        "name": "Active(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Active",
+        "type": "number"
+        }, {
+        "name": "Recovered(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Recovered",
+        "type": "number"
+        }, {
+        "name": "Total(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Total",
+        "type": "number"
+        }, {
+        "name": "HA",
+        "type": "number"
+        }, {
+        "name": "LA",
+        "type": "number"
+        }, {
+        "name": "HR",
+        "type": "number"
+        }, {
+        "name": "LR",
+        "type": "number"
+        }, {
+        "name": "HT",
+        "type": "number"
+        }, {
+        "name": "LT",
+        "type": "number"
+        }
+    ];
         
-        var stateDropDown = document.getElementById("myselect");
-        stateDropDown.innerHTML = "<option value='India'>India</option>"
-        
-        var state;
-        var k = 0;
-        for (state of statesData["features"]){
-            stateData[state.properties["name"]] = [];
-        
-            for(i=0;i<=noOfDays;i++){
-            stateData[state.properties["name"]].push([chartDate(i),
-                                                        state.properties[i.toString()],
-                                                        (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
-                                                        highstatesData[k][i.toString()],
-                                                        lowstatesData[k][i.toString()]
-                                                    ]);
-            
-            // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
-            // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
-            // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
-            // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
-            }
-            k += 1;
-            stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
-        }    
-        schema2 = [{
-            "name": "Time",
-            "type": "date",
-            "format": "%d-%b-%y"
-            }, {
-            "name": "Active(Predicted)",
-            "type": "number"
-            }, {
-            "name": "Active",
-            "type": "number"
-            }, {
-            "name": "Recovered(Predicted)",
-            "type": "number"
-            }, {
-            "name": "Recovered",
-            "type": "number"
-            }, {
-            "name": "Total(Predicted)",
-            "type": "number"
-            }, {
-            "name": "Total",
-            "type": "number"
-            }, {
-            "name": "HA",
-            "type": "number"
-            }, {
-            "name": "LA",
-            "type": "number"
-            }, {
-            "name": "HR",
-            "type": "number"
-            }, {
-            "name": "LR",
-            "type": "number"
-            }, {
-            "name": "HT",
-            "type": "number"
-            }, {
-            "name": "LT",
-            "type": "number"
-            }
-        ];
-            
-        schema = [{
-            "name": "Time",
-            "type": "date",
-            "format": "%d-%b-%y"
-            }, {
-            "name": "Active(Predicted)",
-            "type": "number"
-            }, {
-            "name": "Active",
-            "type": "number"
-            }, {
-            "name": "HA",
-            "type": "number"
-            }, {
-            "name": "LA",
-            "type": "number"
-            }];
-            dataStore = new FusionCharts.DataStore();
-            dataSource = {
-            chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
-                    exportEnabled: "1",
-                    style: {
-                        "background": {
-                            "fill": "#FFFFFF",
-                        },
-                        "canvas": {
-                            "fill": "#FFFFFF",
-                        }
-                    }
-            },
-            caption: {
-                text: currentState,
-                position: "center",
+    schema = [{
+        "name": "Time",
+        "type": "date",
+        "format": "%d-%b-%y"
+        }, {
+        "name": "Active(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Active",
+        "type": "number"
+        }, {
+        "name": "HA",
+        "type": "number"
+        }, {
+        "name": "LA",
+        "type": "number"
+        }, {
+        "name": "Recovered(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Recovered",
+        "type": "number"
+        }, {
+        "name": "HR",
+        "type": "number"
+        }, {
+        "name": "LR",
+        "type": "number"
+        }, {
+        "name": "Total(Predicted)",
+        "type": "number"
+        }, {
+        "name": "Total",
+        "type": "number"
+        }, {
+        "name": "HT",
+        "type": "number"
+        }, {
+        "name": "LT",
+        "type": "number"
+        }
+    ];
+        dataStore = new FusionCharts.DataStore();
+        dataSource = {
+        chart: {palettecolors: "E41A1C,E41A1C,F781BF,4DAF4A,4DAF4A,FF7F00,A65628,A65628,984EA3,111111,999999",
+                exportEnabled: "1",
                 style: {
-                    text: {
-                        "font-size": 22,
-                        'font-family': "'Fira Sans', sans-serif",
-                        'font-weight': 500,
-                        'text-align' : "center",
+                    "background": {
+                        "fill": "#FFFFFF",
+                    },
+                    "canvas": {
+                        "fill": "#FFFFFF",
                     }
                 }
-            },
-            subcaption: {
-              text: '(Data Compared to National Trend Based Prediction)',
-              position: 'center',
-              style: {
-                  text:{
+        },
+        caption: {
+            text: currentState,
+            position: "center",
+            style: {
+                text: {
+                    "font-size": 22,
                     'font-family': "'Fira Sans', sans-serif",
-                    'font-size' : 16,
-                    'fill' : '#666666',
-                  }
-              }
-            },
-            
-            yaxis: [
-                {title: "Population",
+                    'font-weight': 500,
+                    'text-align' : "center",
+                }
+            }
+        },
+        subcaption: {
+            text: '(Data Compared to National Trend Based Prediction)',
+            position: 'center',
+            style: {
+                text:{
+                'font-family': "'Fira Sans', sans-serif",
+                'font-size' : 16,
+                'fill' : '#666666',
+                }
+            }
+        },
+        
+        yaxis: [
+            {title: "Population",
+            plot: [
+                {
+                    value:  {
+                                high: "HA",
+                                low: "LA"
+                            },
+                    name: "Active(Uncertainty)",
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value: "Active(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Active",
+                    type: "line"
+                },
+                {
+                    value:  {
+                                high: "HR",
+                                low: "LR"
+                            },
+                    name: "Recovered(Uncertainty)",
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value: "Recovered(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Recovered",
+                    type: "line"
+                },
+                {
+                    value:  {
+                                high: "HT",
+                                low: "LT"
+                            },
+                    name: "Total(Uncertainty)",
+                    type: "area-range",
+                    style: {
+                        plot:{
+                            "stroke-opacity": "0",
+                            "fill-opacity": "0.1"
+                        }
+                    }
+                },
+                {
+                    value: "Total(Predicted)",
+                    type: "line"
+                },
+                {
+                    value: "Total",
+                    type: "line"
+                }
+            ],
+            }
+        ]
+        };
+    
+        
+    
+        dataStore2 = new FusionCharts.DataStore();
+        dataSource2 = {
+        chart: {palettecolors: "E41A1C,E41A1C,F781BF,4DAF4A,4DAF4A,FF7F00,A65628,A65628,984EA3,111111,999999",
+                exportEnabled: "1",
+                style: {
+                    "background": {
+                        "fill": "#FFFFFF",
+                    },
+                    "canvas": {
+                        "fill": "#FFFFFF",
+                    }
+                }
+        },
+        caption: {
+            text: "India",
+            position: "center",
+            style: {
+                text: {
+                    "font-size": 22,
+                    'font-family': "'Fira Sans', sans-serif",
+                    'font-weight': 500,
+                    'text-align' : "center",
+                }
+            }
+        },
+        // subcaption: {
+        //   text: currentState
+        // },
+        yaxis: [
+            {   title: "Population",
                 plot: [
                     {
                         value:  {
                                     high: "HA",
                                     low: "LA"
                                 },
-                        name: "Active(Predicted uncertainty)",
+                        name: "Active(Uncertainty)",
                         type: "area-range",
                         style: {
                             plot:{
@@ -439,127 +576,67 @@ function monthName(month){
                     {
                         value: "Active",
                         type: "line"
+                    },
+                    {
+                        value:  {
+                                    high: "HR",
+                                    low: "LR"
+                                },
+                        name: "Recovered(Uncertainty)",
+                        type: "area-range",
+                        style: {
+                            plot:{
+                                "stroke-opacity": "0",
+                                "fill-opacity": "0.1"
+                            }
+                        }
+                    },
+                    {
+                        value: "Recovered(Predicted)",
+                        type: "line"
+                    },
+                    {
+                        value: "Recovered",
+                        type: "line"
+                    },
+                    {
+                        value:  {
+                                    high: "HT",
+                                    low: "LT"
+                                },
+                        name: "Total(Uncertainty)",
+                        type: "area-range",
+                        style: {
+                            plot:{
+                                "stroke-opacity": "0",
+                                "fill-opacity": "0.1"
+                            }
+                        }
+                    },
+                    {
+                        value: "Total(Predicted)",
+                        type: "line"
+                    },
+                    {
+                        value: "Total",
+                        type: "line"
                     }
                 ],
-                }
-            ]
-            };
+            }
+        ]
+        };
+    
+        dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
         
-            
+        new FusionCharts({
+        type: "timeseries",
+        renderAt: "chart-container",
+        width: "100%",
+        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
+        dataSource: dataSource2
+        }).render();
         
-            dataStore2 = new FusionCharts.DataStore();
-            dataSource2 = {
-            chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
-                    exportEnabled: "1",
-                    style: {
-                        "background": {
-                            "fill": "#FFFFFF",
-                        },
-                        "canvas": {
-                            "fill": "#FFFFFF",
-                        }
-                    }
-            },
-            caption: {
-                text: "India",
-                position: "center",
-                style: {
-                    text: {
-                        "font-size": 22,
-                        'font-family': "'Fira Sans', sans-serif",
-                        'font-weight': 500,
-                        'text-align' : "center",
-                    }
-                }
-            },
-            // subcaption: {
-            //   text: currentState
-            // },
-            yaxis: [
-                {   title: "Population",
-                    plot: [
-                        {
-                            value:  {
-                                        high: "HA",
-                                        low: "LA"
-                                    },
-                            name: "Active(Predicted Uncertainty)",
-                            type: "area-range",
-                            style: {
-                                plot:{
-                                    "stroke-opacity": "0",
-                                    "fill-opacity": "0.1"
-                                }
-                            }
-                        },
-                        {
-                            value: "Active(Predicted)",
-                            type: "line"
-                        },
-                        {
-                            value: "Active",
-                            type: "line"
-                        },
-                        {
-                            value:  {
-                                        high: "HR",
-                                        low: "LR"
-                                    },
-                            name: "Recovered(Predicted Uncertainty)",
-                            type: "area-range",
-                            style: {
-                                plot:{
-                                    "stroke-opacity": "0",
-                                    "fill-opacity": "0.1"
-                                }
-                            }
-                        },
-                        {
-                            value: "Recovered(Predicted)",
-                            type: "line"
-                        },
-                        {
-                            value: "Recovered",
-                            type: "line"
-                        },
-                        {
-                            value:  {
-                                        high: "HT",
-                                        low: "LT"
-                                    },
-                            name: "Total(Predicted Uncertainty)",
-                            type: "area-range",
-                            style: {
-                                plot:{
-                                    "stroke-opacity": "0",
-                                    "fill-opacity": "0.1"
-                                }
-                            }
-                        },
-                        {
-                            value: "Total(Predicted)",
-                            type: "line"
-                        },
-                        {
-                            value: "Total",
-                            type: "line"
-                        }
-                    ],
-                }
-            ]
-            };
-        
-            dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
-            
-            new FusionCharts({
-            type: "timeseries",
-            renderAt: "chart-container",
-            width: "100%",
-            height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
-            dataSource: dataSource2
-            }).render();
-          
-    }
+}
 
     loadChartData();
 
@@ -629,11 +706,36 @@ schema = [{
     }, {
     "name": "LA",
     "type": "number"
-    }];
+    }, {
+    "name": "Recovered(Predicted)",
+    "type": "number"
+    }, {
+    "name": "Recovered",
+    "type": "number"
+    }, {
+    "name": "HR",
+    "type": "number"
+    }, {
+    "name": "LR",
+    "type": "number"
+    }, {
+    "name": "Total(Predicted)",
+    "type": "number"
+    }, {
+    "name": "Total",
+    "type": "number"
+    }, {
+    "name": "HT",
+    "type": "number"
+    }, {
+    "name": "LT",
+    "type": "number"
+    }
+];
     
    var dataStore = new FusionCharts.DataStore();
    var dataSource = {
-      chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
+      chart: {palettecolors: "E41A1C,E41A1C,F781BF,4DAF4A,4DAF4A,FF7F00,A65628,A65628,984EA3,111111,999999",
               exportEnabled: "1",
               style: {
                   "background": {
@@ -675,7 +777,7 @@ schema = [{
                             high: "HA",
                             low: "LA"
                         },
-                name: "Active(Predicted Uncertainty)",
+                name: "Active(Uncertainty)",
                 type: "area-range",
                 style: {
                     plot:{
@@ -691,6 +793,50 @@ schema = [{
             {
                 value: "Active",
                 type: "line"
+            },
+            {
+                value:  {
+                            high: "HR",
+                            low: "LR"
+                        },
+                name: "Recovered(Uncertainty)",
+                type: "area-range",
+                style: {
+                    plot:{
+                        "stroke-opacity": "0",
+                        "fill-opacity": "0.1"
+                    }
+                }
+            },
+            {
+                value: "Recovered(Predicted)",
+                type: "line"
+            },
+            {
+                value: "Recovered",
+                type: "line"
+            },
+            {
+                value:  {
+                            high: "HT",
+                            low: "LT"
+                        },
+                name: "Total(Uncertainty)",
+                type: "area-range",
+                style: {
+                    plot:{
+                        "stroke-opacity": "0",
+                        "fill-opacity": "0.1"
+                    }
+                }
+            },
+            {
+                value: "Total(Predicted)",
+                type: "line"
+            },
+            {
+                value: "Total",
+                type: "line"
             }
         ],
         }
@@ -701,7 +847,7 @@ schema = [{
   
     var dataStore2 = new FusionCharts.DataStore();
     var dataSource2 = {
-       chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
+       chart: {palettecolors: "E41A1C,E41A1C,F781BF,4DAF4A,4DAF4A,FF7F00,A65628,A65628,984EA3,111111,999999",
                exportEnabled: "1",
                style: {
                   "background": {
@@ -735,7 +881,7 @@ schema = [{
                                 high: "HA",
                                 low: "LA"
                             },
-                    name: "Active(Predicted Uncertainty)",
+                    name: "Active(Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{
@@ -757,7 +903,7 @@ schema = [{
                                 high: "HR",
                                 low: "LR"
                             },
-                    name: "Recovered(Predicted Uncertainty)",
+                    name: "Recovered(Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{
@@ -779,7 +925,7 @@ schema = [{
                                 high: "HT",
                                 low: "LT"
                             },
-                    name: "Total(Predicted Uncertainty)",
+                    name: "Total(Uncertainty)",
                     type: "area-range",
                     style: {
                         plot:{
@@ -807,7 +953,7 @@ schema = [{
        type: "timeseries",
        renderAt: "chart-container",
        width: "100%",
-       height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+       height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
        dataSource: dataSource2
      }).render();
   
@@ -845,7 +991,7 @@ schema = [{
         type: "timeseries",
         renderAt: "chart-container",
         width: "100%",
-        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
         dataSource: dataSource2
         }).render();
     }
@@ -857,7 +1003,7 @@ schema = [{
         type: "timeseries",
         renderAt: "chart-container",
         width: "100%",
-        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
         dataSource: dataSource
         }).render();
     }

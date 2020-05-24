@@ -33,6 +33,7 @@ if(L.Browser.mobile){
     var slidercontainer = document.getElementById("slider1");
     slidercontainer.style.left = "2%";
     slidercontainer.style.bottom = '5%';
+    slidercontainer.style.width = '50%';
     var main = document.getElementById('main');
     main.style.paddingBottom = '0%';
 }

@@ -4,57 +4,48 @@ html, body {
 }
 
 main{
-  background-color: #121212;
-  padding-bottom: 17px;
+  background-color: #F1F1F1;
 }
 
-#heading{
-  font-size: 300%;
-  font-weight: 600;
-  padding: 30px;
-  color: #EAEBED;
+p{
+  font-family: 'Fira Sans', sans-serif;
+}
+
+h3{
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 500;
+}
+
+h4{
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 500;
 }
 
 #title-section{
-  margin: 0px 17px 0px 17px;
-  background-color: #121212;
+  background-color: #F1F1F1;
 }
 
 #chart-1{
-  margin: 0px 17px 17px 17px;
-  background-color: #1F1F1F;
-  border-radius: 17px 17px 17px 17px;
-  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+  background-color: #fff;
 }
 
 #map-section{
-  margin: 0px 17px 0px 17px;
-  background-color: #1F1F1F;
-  border-radius: 17px 17px 0px 0px;
-  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+  background-color: #F1F1F1;
 }
 
 
 #main {
-  margin: 0px 17px 17px 17px;
-  background-color: #1F1F1F;
-  border-radius: 0px 0px 17px 17px;
-  box-shadow: 0 17px 15px rgba(2,2,2,0.02);
+  background-color: #F1F1F1;
   padding-bottom: 6%;
 }
 
 
 #chart-2{
-  margin: 17px 17px 17px 17px;
-  background-color: #1F1F1F;
-  border-radius: 17px 17px 17px 17px;
-  box-shadow: 0 0 15px rgba(2,2,2,0.1);
+  background-color: #fff;
 }
 
 #footer{
-  margin: 17px 17px 0px 17px;
-  background-color: #1F1F1F;
-  border-radius: 17px 17px 17px 17px;
+  background-color: #666;
   box-shadow: 0 0 15px rgba(2,2,2,0.1);
   color: #EAEBED;
 }
@@ -82,7 +73,7 @@ main{
   background: #cccccc;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   padding: 6px 8px;
-  font: 14px/16px Arial, Helvetica, sans-serif;
+  font: 14px/16px 'Fira Sans', sans-serif;
   background: white;
   background: rgba(255,255,255,0.6);
 }
@@ -105,14 +96,14 @@ main{
   background: #cccccc;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   padding: 6px 8px;
-  font: 14px/16px Arial, Helvetica, sans-serif;
+  font: 14px/16px 'Fira Sans', sans-serif;
   background: white;
   background: rgba(255,255,255,0.6);
 }
 
 .title{
   padding: 6px 8px;
-  font: 14px/16px Arial, Helvetica, sans-serif;
+  font: 14px/16px 'Fira Sans', sans-serif;
   background: white;
   background: rgba(255,255,255,0.8);
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -128,7 +119,7 @@ main{
 
 .info {
     padding: 6px 15px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
+    font: 14px/16px 'Fira Sans', sans-serif;
     background: white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);

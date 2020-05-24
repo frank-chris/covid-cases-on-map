@@ -263,55 +263,276 @@ function monthName(month){
   
   }
   
-  
-  
   let overallData = {}
   let stateData = {}
+  var schema = [];
+  var schema2 = [];
   
-  var i;
-  overallData["Total"] = [];
-  for(i=0;i<=noOfDays;i++){
-    overallData["Total"].push([chartDate(i), 
-    /*Active(Predicted)*/      totalData[0][i.toString()],
-    /*Active*/                 (totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]),
-    /*Recovered(Predicted)*/   totalData[0]["Recovered" + i.toString()],
-    /*Recovered*/              totalData[0]["Recovered_" + calculatedDate(i)],
-    /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
-    /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
-                               hightotalData[0][i.toString()], // HA
-                               lowtotalData[0][i.toString()],  // LA
-                               hightotalData[0]["Recovered" + i.toString()], // HR
-                               lowtotalData[0]["Recovered" + i.toString()],  // LR
-                               Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
-                               Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
-                        ]);
-  }
-  
-  var stateDropDown = document.getElementById("myselect");
-  
-  
-  var state;
-  var k = 0;
-  for (state of statesData["features"]){
-    stateData[state.properties["name"]] = [];
-  
-    for(i=0;i<=noOfDays;i++){
-      stateData[state.properties["name"]].push([chartDate(i),
-                                                state.properties[i.toString()],
-                                                (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
-                                                highstatesData[k][i.toString()],
-                                                lowstatesData[k][i.toString()]
-                                            ]);
-      
-      // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
-      // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
+    function loadChartData(){    
+        overallData = {}
+        stateData = {}
+        var i;
+        overallData["Total"] = [];
+        for(i=0;i<=noOfDays;i++){
+            overallData["Total"].push([chartDate(i), 
+            /*Active(Predicted)*/      totalData[0][i.toString()],
+            /*Active*/                 (totalData[0]["Confirmed_" + calculatedDate(i)] - totalData[0]["Recovered_" + calculatedDate(i)] - totalData[0]["Deceased_" + calculatedDate(i)]),
+            /*Recovered(Predicted)*/   totalData[0]["Recovered" + i.toString()],
+            /*Recovered*/              totalData[0]["Recovered_" + calculatedDate(i)],
+            /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
+            /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
+                                    hightotalData[0][i.toString()], // HA
+                                    lowtotalData[0][i.toString()],  // LA
+                                    hightotalData[0]["Recovered" + i.toString()], // HR
+                                    lowtotalData[0]["Recovered" + i.toString()],  // LR
+                                    Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
+                                    Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
+                                ]);
+        }
+        
+        var stateDropDown = document.getElementById("myselect");
+        stateDropDown.innerHTML = "<option value='India'>Choose state/UT</option> <option value='India'>India</option>"
+        
+        var state;
+        var k = 0;
+        for (state of statesData["features"]){
+            stateData[state.properties["name"]] = [];
+        
+            for(i=0;i<=noOfDays;i++){
+            stateData[state.properties["name"]].push([chartDate(i),
+                                                        state.properties[i.toString()],
+                                                        (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
+                                                        highstatesData[k][i.toString()],
+                                                        lowstatesData[k][i.toString()]
+                                                    ]);
+            
+            // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
+            // stateData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["Recovered_" + calculatedDate(i)]]);
+            // stateData[state.properties["name"]].push([chartDate(i), "Total(Pred)", Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])]);
+            // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
+            }
+            k += 1;
+            stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+        }    
+        schema2 = [{
+            "name": "Time",
+            "type": "date",
+            "format": "%d-%b-%y"
+            }, {
+            "name": "Active(Predicted)",
+            "type": "number"
+            }, {
+            "name": "Active",
+            "type": "number"
+            }, {
+            "name": "Recovered(Predicted)",
+            "type": "number"
+            }, {
+            "name": "Recovered",
+            "type": "number"
+            }, {
+            "name": "Total(Predicted)",
+            "type": "number"
+            }, {
+            "name": "Total",
+            "type": "number"
+            }, {
+            "name": "HA",
+            "type": "number"
+            }, {
+            "name": "LA",
+            "type": "number"
+            }, {
+            "name": "HR",
+            "type": "number"
+            }, {
+            "name": "LR",
+            "type": "number"
+            }, {
+            "name": "HT",
+            "type": "number"
+            }, {
+            "name": "LT",
+            "type": "number"
+            }
+        ];
+            
+        schema = [{
+            "name": "Time",
+            "type": "date",
+            "format": "%d-%b-%y"
+            }, {
+            "name": "Active(Predicted)",
+            "type": "number"
+            }, {
+            "name": "Active",
+            "type": "number"
+            }, {
+            "name": "HA",
+            "type": "number"
+            }, {
+            "name": "LA",
+            "type": "number"
+            }];
+            dataStore = new FusionCharts.DataStore();
+            dataSource = {
+            chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
+                    exportEnabled: "1",
+                    style: {
+                        "background": {
+                            "fill": "#FFFFFF",
+                        },
+                        "canvas": {
+                            "fill": "#FFFFFF",
+                        }
+                    }
+            },
+            caption: {
+                text: currentState
+            },
+            // subcaption: {
+            //   text: currentState
+            // },
+            
+            yaxis: [
+                {title: "Cases",
+                plot: [
+                    {
+                        value:  {
+                                    high: "HA",
+                                    low: "LA"
+                                },
+                        name: " ",
+                        type: "area-range",
+                        style: {
+                            plot:{
+                                "stroke-opacity": "0",
+                                "fill-opacity": "0.1"
+                            }
+                        }
+                    },
+                    {
+                        value: "Active(Predicted)",
+                        type: "line"
+                    },
+                    {
+                        value: "Active",
+                        type: "line"
+                    }
+                ],
+                }
+            ]
+            };
+        
+            
+        
+            dataStore2 = new FusionCharts.DataStore();
+            dataSource2 = {
+            chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
+                    exportEnabled: "1",
+                    style: {
+                        "background": {
+                            "fill": "#FFFFFF",
+                        },
+                        "canvas": {
+                            "fill": "#FFFFFF",
+                        }
+                    }
+            },
+            caption: {
+                text: "India"
+            },
+            // subcaption: {
+            //   text: currentState
+            // },
+            yaxis: [
+                {   title: "Cases",
+                    plot: [
+                        {
+                            value:  {
+                                        high: "HA",
+                                        low: "LA"
+                                    },
+                            name: "   ",
+                            type: "area-range",
+                            style: {
+                                plot:{
+                                    "stroke-opacity": "0",
+                                    "fill-opacity": "0.1"
+                                }
+                            }
+                        },
+                        {
+                            value: "Active(Predicted)",
+                            type: "line"
+                        },
+                        {
+                            value: "Active",
+                            type: "line"
+                        },
+                        {
+                            value:  {
+                                        high: "HR",
+                                        low: "LR"
+                                    },
+                            name: "  ",
+                            type: "area-range",
+                            style: {
+                                plot:{
+                                    "stroke-opacity": "0",
+                                    "fill-opacity": "0.1"
+                                }
+                            }
+                        },
+                        {
+                            value: "Recovered(Predicted)",
+                            type: "line"
+                        },
+                        {
+                            value: "Recovered",
+                            type: "line"
+                        },
+                        {
+                            value:  {
+                                        high: "HT",
+                                        low: "LT"
+                                    },
+                            name: " ",
+                            type: "area-range",
+                            style: {
+                                plot:{
+                                    "stroke-opacity": "0",
+                                    "fill-opacity": "0.1"
+                                }
+                            }
+                        },
+                        {
+                            value: "Total(Predicted)",
+                            type: "line"
+                        },
+                        {
+                            value: "Total",
+                            type: "line"
+                        }
+                    ],
+                }
+            ]
+            };
+        
+            dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
+            
+            new FusionCharts({
+            type: "timeseries",
+            renderAt: "chart-container",
+            width: "100%",
+            height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+            dataSource: dataSource2
+            }).render();
+          
     }
-    k += 1;
-    stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
-  }
-  
+
+    loadChartData();
+
   function getSelected()
   {
   var selectedSource = document.getElementById("myselect").value;
@@ -319,7 +540,7 @@ function monthName(month){
   }
   
   
-let schema2 = [{
+schema2 = [{
     "name": "Time",
     "type": "date",
     "format": "%d-%b-%y"
@@ -362,7 +583,7 @@ let schema2 = [{
     }
 ];
     
-let schema = [{
+schema = [{
     "name": "Time",
     "type": "date",
     "format": "%d-%b-%y"
@@ -384,13 +605,12 @@ let schema = [{
    var dataSource = {
       chart: {palettecolors: "E41A1C,E41A1C,4DAF4A,FF7F00,A65628,F781BF,111111,999999",
               exportEnabled: "1",
-              theme: "candy",
               style: {
                   "background": {
-                      "fill": "#1F1F1F",
+                      "fill": "#FFFFFF",
                   },
                   "canvas": {
-                      "fill": "#1F1F1F",
+                      "fill": "#FFFFFF",
                   }
               }
     },
@@ -431,27 +651,18 @@ let schema = [{
       ]
     };
   
-    dataSource.data = dataStore.createDataTable(stateData[currentState], schema);
     
-    new FusionCharts({
-      type: "timeseries",
-      renderAt: "chart-container",
-      width: "100%",
-      height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
-      dataSource: dataSource
-    }).render();
   
     var dataStore2 = new FusionCharts.DataStore();
     var dataSource2 = {
        chart: {palettecolors: "E41A1C,E41A1C,F781BF,A65628,A65628,FF7F00,4DAF4A,4DAF4A,984EA3,111111,999999",
                exportEnabled: "1",
-               theme: "candy",
                style: {
                   "background": {
-                      "fill": "#1F1F1F",
+                      "fill": "#FFFFFF",
                   },
                   "canvas": {
-                      "fill": "#1F1F1F",
+                      "fill": "#FFFFFF",
                   }
               }
      },
@@ -535,35 +746,67 @@ let schema = [{
        ]
      };
    
-     dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
+    dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
      
      new FusionCharts({
        type: "timeseries",
-       renderAt: "overall",
+       renderAt: "chart-container",
        width: "100%",
        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
        dataSource: dataSource2
      }).render();
   
-  
+     function changeScript(value){
+        document.getElementById('data').removeElement;
+        element = document.createElement("script");
+        element.src = "../"+value+"/data.js";
+        element.type = "text/javascript";
+        element.id = "data";
+        document.getElementsByTagName("body")[0].appendChild(element);
+        loadChartData();
+     }
+
+    function changeScenario(value){
+        document.getElementById('data').removeElement;
+        element = document.createElement("script");
+        element.src = "../"+value+"/data.js";
+        element.type = "text/javascript";
+        element.id = "data";
+        var btn = document.getElementById(value);
+        btn.class = 'btn btn-secondary';
+        console.log(document.getElementById(value).class)
+        document.getElementsByTagName("body")[0].appendChild(element);
+        setTimeout(changeScript, 400, value );
+        loadChartData();
+    }
+
     
+
   function loadChart(state){
-    if(state){
-        state = state;
+    if(state == "India"){
+        dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
+     
+        new FusionCharts({
+        type: "timeseries",
+        renderAt: "chart-container",
+        width: "100%",
+        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+        dataSource: dataSource2
+        }).render();
     }
     else{
-        state = "Delhi";
+        dataSource.caption.text = state;
+        dataSource.data = dataStore.createDataTable(stateData[state], schema);
+        
+        new FusionCharts({
+        type: "timeseries",
+        renderAt: "chart-container",
+        width: "100%",
+        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
+        dataSource: dataSource
+        }).render();
     }
-    dataSource.caption.text = state;
-    dataSource.data = dataStore.createDataTable(stateData[state], schema);
     
-    new FusionCharts({
-      type: "timeseries",
-      renderAt: "chart-container",
-      width: "100%",
-      height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 140).toString() ,
-      dataSource: dataSource
-    }).render();
   
   }
   

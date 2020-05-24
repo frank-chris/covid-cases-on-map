@@ -32,7 +32,7 @@ if(L.Browser.mobile){
     mapdiv.style.height = "470px";
     var slidercontainer = document.getElementById("slider1");
     slidercontainer.style.left = "2%";
-    slidercontainer.style.bottom = '7%';
+    slidercontainer.style.bottom = '5%';
     var main = document.getElementById('main');
     main.style.paddingBottom = '0%';
 }

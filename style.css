@@ -11,12 +11,23 @@ p{
   font-family: 'Fira Sans', sans-serif;
 }
 
+.para{
+  font-family: 'Fira Sans', sans-serif;
+  text-align: left;
+  font-size: large;
+}
+
 h3{
   font-family: 'Fira Sans', sans-serif;
   font-weight: 500;
 }
 
 h4{
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 500;
+}
+
+h5{
   font-family: 'Fira Sans', sans-serif;
   font-weight: 500;
 }
@@ -42,6 +53,20 @@ h4{
 
 #chart-2{
   background-color: #fff;
+}
+
+#model{
+  background-color: #fff;
+}
+
+#more {display: none;}
+
+.equation{
+  font-size: 10px;
+}
+
+#myBtn{
+  font-family: 'Fira Sans', sans-serif;
 }
 
 #footer{

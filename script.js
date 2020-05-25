@@ -976,7 +976,7 @@ schema = [{
         element.type = "text/javascript";
         element.id = "data";
         document.getElementsByTagName("body")[0].appendChild(element);
-        setTimeout(changeScript, 1000, value );
+        setTimeout(changeScript, 1500, value );
         loadChartData();
         console.log(runID);
         var buttons = document.getElementsByClassName('scenario');

@@ -1027,7 +1027,7 @@ schema = [{
 
 // Set location and zoom 
 if(L.Browser.mobile){
-    var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.25, dragging: false, tap: false}).setView([22.146, 79.088], 4.25);
+    var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.25, dragging: false}).setView([22.146, 79.088], 4.25);
 }
 else{
     var mymap = L.map('mapid',{zoomControl: false, zoomSnap: 0.5}).setView([22.146, 79.088], 4.5);

@@ -975,12 +975,19 @@ schema = [{
         element.src = "../"+value+"/data.js";
         element.type = "text/javascript";
         element.id = "data";
-        var btn = document.getElementById(value);
-        btn.class = 'btn btn-secondary';
         document.getElementsByTagName("body")[0].appendChild(element);
         setTimeout(changeScript, 1000, value );
         loadChartData();
         console.log(runID);
+        var buttons = document.getElementsByClassName('scenario');
+        var i;
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].style.backgroundColor = "#fff";
+            buttons[i].style.color = '#5A6268';
+        } 
+        var selectedButton = document.getElementById(value);
+        selectedButton.style.backgroundColor = '#5A6268';
+        selectedButton.style.color = '#fff';
     }
 
     

@@ -287,12 +287,12 @@ function loadChartData(){
         /*Recovered*/              Number(totalData[0]["Recovered_" + calculatedDate(i)]) + Number(totalData[0]["Deceased_" + calculatedDate(i)]),
         /*Total(Predicted)*/       Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]),
         /*Total*/                  totalData[0]["Confirmed_" + calculatedDate(i)],
-                                hightotalData[0][i.toString()], // HA
-                                lowtotalData[0][i.toString()],  // LA
-                                hightotalData[0]["Recovered" + i.toString()], // HR
-                                lowtotalData[0]["Recovered" + i.toString()],  // LR
-                                Number(hightotalData[0][i.toString()]) + Number(hightotalData[0]["Recovered" + i.toString()]), // HT
-                                Number(lowtotalData[0][i.toString()]) + Number(lowtotalData[0]["Recovered" + i.toString()])    // LT
+                                hightotalData[i.toString()], // HA
+                                lowtotalData[i.toString()],  // LA
+                                hightotalData["Recovered" + i.toString()], // HR
+                                lowtotalData["Recovered" + i.toString()],  // LR
+                                Number(hightotalData[i.toString()]) + Number(hightotalData["Recovered" + i.toString()]), // HT
+                                Number(lowtotalData[i.toString()]) + Number(lowtotalData["Recovered" + i.toString()])    // LT
                             ]);
     }
     
@@ -308,16 +308,16 @@ function loadChartData(){
         stateData[state.properties["name"]].push([chartDate(i),
                                                     state.properties[i.toString()],
                                                     (state.properties["Confirmed_" + calculatedDate(i)] - state.properties["Recovered_" + calculatedDate(i)] - state.properties["Deceased_" + calculatedDate(i)]),
-                                                    highstatesData[k][i.toString()],
-                                                    lowstatesData[k][i.toString()],
+                                                    highstatesData[state.properties["name"]][i.toString()],
+                                                    lowstatesData[state.properties["name"]][i.toString()],
                                                     state.properties["Recovered" + i.toString()],
                                                     Number(state.properties["Recovered_" + calculatedDate(i)]) + Number(state.properties["Deceased_" + calculatedDate(i)]),
-                                                    highstatesData[k]["Recovered" + i.toString()],
-                                                    lowstatesData[k]["Recovered" + i.toString()],
+                                                    highstatesData[state.properties["name"]]["Recovered" + i.toString()],
+                                                    lowstatesData[state.properties["name"]]["Recovered" + i.toString()],
                                                     Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()]),
                                                     state.properties["Confirmed_" + calculatedDate(i)],
-                                                    Number(highstatesData[k][i.toString()])+Number(highstatesData[k]["Recovered" + i.toString()]),
-                                                    Number(lowstatesData[k][i.toString()])+Number(lowstatesData[k]["Recovered" + i.toString()])
+                                                    Number(highstatesData[state.properties["name"]][i.toString()])+Number(highstatesData[state.properties["name"]]["Recovered" + i.toString()]),
+                                                    Number(lowstatesData[state.properties["name"]][i.toString()])+Number(lowstatesData[state.properties["name"]]["Recovered" + i.toString()])
                                                 ]);
         
         // stateData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
@@ -977,10 +977,10 @@ schema = [{
         element.id = "data";
         var btn = document.getElementById(value);
         btn.class = 'btn btn-secondary';
-        console.log(document.getElementById(value).class)
         document.getElementsByTagName("body")[0].appendChild(element);
-        setTimeout(changeScript, 300, value );
+        setTimeout(changeScript, 700, value );
         loadChartData();
+        console.log(runID);
     }
 
     

@@ -79,25 +79,30 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row align-items-center" style="margin-right: 90px;margin-left: 90px;padding-bottom: 2px;">
-                        <div class="col align-items-right" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
-                                <button id='May21_sd=0.5' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('May21_sd=0.5');" title="Scenario 1">
-                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-1
+                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;padding-bottom: 2px;">
+                        <div class="col align-items-right" style = "padding-bottom: 10px; margin: 0%;">
+                                <button id='Current_Trend' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Current_Trend');" title="Current Trend">
+                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Current Trend
                                 </button>
                         </div>
-                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
-                                <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('May21_sd=0.3');" title="Scenario 2">
-                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-2
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                                <button id='Bad_Scenario' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Bad_Scenario');" title="Bad Scenario">
+                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Bad Scenario
                                 </button>
                         </div>
-                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
-                            <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top"  title="Scenario 3">
-                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-3
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Worse_Scenario' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Worse_Scenario');" title="Worse Scenario">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Worse Scenario
                             </button>
                         </div>
-                        <div class="col align-items-left" style = "padding-left: 0%; padding-bottom: 10px; margin: 0%;">
-                            <button id='May21_sd=0.3' style="width: 150px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top"  title="Scenario 3">
-                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Scenario-4
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Sunday_Lockdown' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Lockdown');" title="Sunday Lockdown">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Lockdown
+                            </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Sunday_Wednesday_Lockdown' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Wednesday_Lockdown');" title="Sunday Wednesday Lockdown">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Wednesday Lockdown
                             </button>
                         </div>
                     </div>
@@ -276,8 +281,7 @@
     <script id="data" src="data.js"></script>
 
     <!-- Data for uncertainty region -->
-    <script src="../uncertainty/high.js"></script>
-    <script src="../uncertainty/low.js"></script>
+    <script src="../uncertainty/uncertainty.js"></script>
 
     <!-- JavaScript for Map and Slider -->
     <script src="../script.js"></script>

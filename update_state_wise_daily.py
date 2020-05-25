@@ -36,11 +36,11 @@ def git_push():
     except:
         print('Some error occured while pushing the code')    
 
-download_csv()
+# download_csv()
 
-modify_csv()
+# modify_csv()
 
-run_pyscript()
+# run_pyscript()
 
-git_push()
+# git_push()
 

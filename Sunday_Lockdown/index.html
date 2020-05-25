@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>COVID-19</title>
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/smoothproducts.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="../style.css">
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}, menuSettings: { zoom: "Double-Click" }});
+    </script>
+    <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+    
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-lg fixed-top clean-navbar" style="background-color: #666666;">
+        <div class="container"><a style = "font-family: 'Fira Sans', sans-serif; font-weight: 400;" class="navbar-brand logo" href="#">DATA-DRIVEN MODELLING OF COVID-19 PANDEMIC</a><button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1">
+                <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#home">Home</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#result">Results</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#slider1">Team</a></li>
+                    <li class="nav-item" role="presentation"><a  style = "font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;" class="nav-link active" href="#model">Model</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="page landing-page" id = 'home'>
+        <section id = 'title-section' class="clean-block features" style=" padding-top:10px; padding-bottom: 5px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 40px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">PDE-based modelling of Covid-19 infections</h3>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="text-left para" style="margin-bottom: 10px;">
+                            The aim of this project is to develop and apply a predictive computational model for the Covid-19 epidemic based on the population balance modelling.
+                        </div>
+                        <h5>Key Features</h5>   
+                        <ul class='para'>
+                            <li> Population Size Distribution (PSD) based predictive computational model for an epidemic.
+                            <li>  The proposed comprehensive six-dimensional PSD model incorporates the infection severity, age, immunity and pre-medical history  of the population, days of infection,  effective treatment, point-to-point movement of infected population (e.g., by air, train etc), interactivity (community spread), hygiene and the social distancing of the population.
+                            <li>  Almost all existing computational models for epidemic predicts population size or density, which is the number of infected  individuals in a population or an average number of infected individuals in a region. Contrarily, the proposed PSD model describes how the Covid-19 spread throughout the region, across different age groups, which population gets affected over a period of <span id='result'>time.</span>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id='chart-2' class="clean-block features" style="padding-bottom: 10px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px; padding-bottom: 20px;">
+                        <div class="col" style = "padding-left: 0%;">
+                            <div class="text-center para">
+                                Choose India/state/UT
+                            </div>
+                            <select class="btn btn-secondary" name="myselect" id="myselect" style="width: 180px; margin-bottom: 10px;margin-top: 15px; font-family: 'Fira Sans', sans-serif;" onchange="getSelected();">
+                                <option value="India">Choose state/UT</option>
+                                <option value="India">India</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;padding-bottom: 2px;">
+                        <div class="col align-items-right" style = "padding-bottom: 10px; margin: 0%;">
+                                <button id='Current_Trend' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Current_Trend');" title="Current Trend">
+                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Current Trend
+                                </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                                <button id='Bad_Scenario' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Bad_Scenario');" title="Bad Scenario">
+                                    <i class="material-icons" style="padding-right: 10px;">show_chart</i> Bad Scenario
+                                </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Worse_Scenario' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Worse_Scenario');" title="Worse Scenario">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Worse Scenario
+                            </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Sunday_Lockdown' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Lockdown');" title="Sunday Lockdown">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Lockdown
+                            </button>
+                        </div>
+                        <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
+                            <button id='Sunday_Wednesday_Lockdown' style="width: max-content; font-size: 15px; height:min-content; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Wednesday_Lockdown');" title="Sunday Wednesday Lockdown">
+                                <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Wednesday Lockdown
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
+                        <div class="col" style = "padding-left: 0%; margin: 0%;">
+                            <div id="chart-container" style = "width: 100%; height: 100%;">Chart loading</div>
+                        </div>
+                    </div>
+                    <p class="text-left" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">Click on the legend to remove/add a plot.</p>
+                    <h4 class="text-left text-info" style="margin-right: 5px;margin-left: 5px; margin-top: 20px;">Explanation</h4>
+                    <p class="text-left" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">-</p>
+                </div>
+            </div>
+        </section>
+        <section id='map-section' class="clean-block features" style="padding-bottom: 1px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-center text-info" style="margin-right: 5px;margin-left: 5px;">State Performance Compared to National Trend</h3>              
+                </div>
+            </div>
+        </section>
+        <div id="main" style="position:relative; height:100%;" >
+             
+            <!-- Leaflet Map -->
+            <div id="mapid"></div>
+            <!-- Time Slider -->
+            <div class="slidecontainer ml-auto mr-auto" id = "slider1">
+                <div id = "start-date"></div> <div id = "end-date"></div>
+                <input type="range" class="slider" id="myRange">
+            </div>
+        </div>
+        <section id = 'team' class="clean-block features" style="padding-bottom: 10px; padding-top: 5px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">Team</h3>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <ul class='para'>
+                            <li>
+                                <a href='http://cds.iisc.ac.in/faculty/sashi/' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Prof. Sashikumaar Ganesan
+                                </a>
+                            </li>
+                            <li>
+                                <a href='http://cds.iisc.ac.in/faculty/deepakns/' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Prof. Deepak Subramani
+                                </a>
+                            </li>
+                            <li id = 'model'>
+                                <a href='http://linkedin.com/in/chrisfrancis09' rel='noopener noreferrer' target="_blank" style = 'color:#444' >
+                                    Chris Francis
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>      
+        <section id = 'modeldesc' class="clean-block features" style="padding-bottom: 10px;  padding-top: 5px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">
+                        Population Size Distribution (PSD) Model
+                    </h3>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="text-left note">
+                            Note: Double-click/double-tap on an equation to zoom.
+                        </div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="text-left para" style="margin-bottom: 30px; margin-right: 5px;">
+                            Let $T_\infty$ be a given final time and $\Omega:=\Omega_x\otimes\Omega_\ell$ be the computational domain of interest. Here, $\Omega_x\subset\mathbb{R}^2$ is the spatial domain defining the geographical region of interest and $\Omega_\ell:=L_v\times L_d\times L_a$ is an internal domain, where  $L_v=[0, 1]$ denotes the Covid-19 infection severity interval, $L_d=[0,d_{\max}]$ denotes the time interval since contracting the disease, and $L_a=[0, 1]$ denotes the non-dimensional age interval with the non-dimensionalization constant being 125 years. The infection index $\ell_v\in L_v$ quantifies the severity of the population being infected by Covid-19.  Specifically, the population with infection index $\ell_v=0$ has recovered completely from Covid-19,  with $\ell_v = 1$ has died due it, with $\ell_v\ge v_{\rm sym}$ shows symptoms and those with $\ell_v\le v_{\rm sym}$ are asymptomatic. The time since contracting the disease index $\ell_d\in L_d$ quantifies the time since a population has been exposed to and contracted the disease. Specifically, the population that just contracted the disease has $\ell_d=0$. Typically, a person is asymptomatic until they reach $\ell_v=v_{\rm sym}$, and the duration elapsed $\ell_d$ is the incubation period in which the disease is sub-clinical and that population is actively spreading the disease. After recovery, a population doesn't necessarily go to $\ell_v=0$, rather they reach $\ell_v\le v_{\rm reco}$.<br><br>
+                            <span id="dots">...</span><span id="more" >
+                            Let $I(t,x,\ell_v,\ell_d,\ell_a)$ be the size distribution function of the infected population.  
+                            To describe the evolution of the active infected population size distribution, we propose the population balance equation  
+                            <span class ='equation'>
+                            \begin{equation}\label{model}
+                            \begin{array}{rcll}
+                            \displaystyle\frac{\partial I}{\partial t} + \nabla_x\cdot({\bf u} I) +\nabla_\ell\cdot({\bf G} I) +CI  &=& F  \quad  &{\rm  in }  \quad (0,T_\infty]\times\Omega_x\times\Omega_\ell \,,\\
+                            {\bf u}\cdot {\bf n} &=&g_n    &{\rm in }  \quad (0,T_\infty]\times\partial\Omega_{ x}\,, \\
+                            I(0,x,\ell) & =& I_0 &{\rm in }  \quad  \Omega_{x}\times\Omega_\ell \,,\\
+                            I(t,\mathbf{x},\ell_v,0,\ell_a)  & =& B_{\rm nuc} \quad  &{\rm in }  \quad (0,T_\infty]\times\Omega_{x}\times L_v\times L_a \,,\\
+                            I(t,\mathbf{x},0,\ell_d>0,\ell_a)  & =& 0 \quad  &{\rm in }  \quad (0,T_\infty]\times\Omega_{x}\times L_d\times L_a \,.
+                            \end{array}
+                            \end{equation}
+                            </span>
+                            Here, ${\bf u}$ denotes the advection vector that quantifies the spatial movement of the population in a differential neighbourhood of $\Omega_{x}$, 
+                            %$f(t,x,\ell_a)$ denotes the net addition of an infected population into $\Omega_{\rm x}$ from outside,
+                            ${\bf n}$  is the outward unit normal vector to $\Omega_x$,
+                            $g_n$ is the flux that quantifies the net addition of an infected population into $\Omega_{\rm x}$ from outside (the spatial movement of the population across the border of the domain $\partial\Omega_{\rm x}$), and $I_0$ is the initial distribution of infected population.
+                            Further,
+                            $
+                            {\bf G} = (G_{\ell_v}, G_{\ell_d}, G_{\ell_a})^T
+                            $
+                            is the internal growth vector. Here, the Covid-19 infection severity growth rate in an infected population is defined by
+                            \begin{equation}
+                              G_{\ell_v} = \frac{d \ell_v}{d t} = G_{\ell_v}(\ell_a, \beta, \gamma(\ell_a), \alpha(x) ),
+                            \end{equation}
+                            where $\beta$ is the immunity of the infected population, $\gamma$ is the pre-medical history of the infected population and $\alpha$ is the effective treatment index. 
+                            Additionally, the time since infection index has a growth rate 
+                            \begin{equation}
+                              G_{\ell_d} = \frac{d \ell_d}{d t} = 1\,.
+                            \end{equation}
+                            %
+                            Moreover, the change of age of the active, infected population can be modelled through the growth rate
+                            \begin{equation}
+                              G_{\ell_a} = \frac{d \ell_a}{d t}.
+                            \end{equation}
+                            Nevertheless, the influence will be negligible when the study is performed for a short duration $(0, T_\infty]$, and thereby may be ignored. 
+                            % $G_{\ell_v}$ is the growth function of the Covid-19 infection index $l_v$, 
+                            We next rate term
+                            \begin{equation}
+                            C =  C_R + C_{ID},
+                            \end{equation}
+                            where $C_R(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a recovery rate function that quantifies the rate of recovery of the population from Covid-19, %$C_Q(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a quarantine rate that quantifies the removal of people into a quarantine facility 
+                            and $C_{ID}(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is the Covid-19 death rate. 
+                            We also define a source term $F = C_T(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ that quantifies the point-to-point movement of infected population (e.g., by air, train etc) within $\Omega_x$ not explained by ${\bf u}$ and the source/sink of infected population travelled by air into $\Omega_x$ not explained by $g_n$.
+                            Moreover,  $C_T$ and ${\bf u}$ need to be defined in such a way 
+                            that the net internal movement of infected population within $\Omega_{x}$ is conserved.
+                            Moreover $B_{\rm nuc}$ is the nucleation function that quantifies how a susceptible population becomes infected and it is defined by
+                            <span class='equation'>
+                            \begin{equation}
+                              B_{\rm nuc}(t,\mathbf{x},\ell_v,\ell_a) = B_{\rm nuc}\left(\ell_a, \sigma, H, S_D, N_S(t), N_Q(t) I\right), \qquad \forall ~\ell_v,\ell_a\in L_v\times L_a.
+                            \end{equation}
+                            </span>    
+                            Here, $\sigma\in[0,1]$ is the interactivity index, $H\in[0,1]$ is the hygiene index, $S_D\in[0,1]$ is the social distancing index. 
+            
+                            Finally, the total population $N(t)$ at a given time $t\in(0,T_\infty]$ is defined by
+                            <span class = 'equation'>
+                            \begin{align*}
+                              N(t) &= N_S(t) + N_R(t) + N_I(t) +N_Q(t) - N_{ID}(t) - N_D(t),    \\
+                            N_I(t) &= \int_{\Omega} I(t,\mathbf{x},\ell_v,\ell_d,\ell_a)\,d\Omega\,,\\
+                            N_Q(t) &= \int_{\Omega} \gamma_Q(t,\mathbf{x},\ell_v,\ell_d,\ell_a)I(t,\mathbf{x},\ell_v,\ell_d,\ell_a) \,dx\,d\ell\,,\\
+                            N_{R}(t) &=  \int_{\Omega} C_RI(t,\mathbf{x},\ell_v,\ell_d,\ell_a)\,d\Omega\ \,,\\
+                            N_{ID}(t) &=  \int_{\Omega} C_{ID}I(t,\mathbf{x},\ell_v,\ell_d,\ell_a)\,d\Omega \,,\\
+                            N_S(t) &=  N(t) - [N_I(t)+N_Q(t)+N_R(t)-N_{ID}(t)-N_D(t)] \,.
+                            \end{align*}
+                            </span>
+                            Here, $N_S$, $N_B$, $N_R$, $N_I$, $N_Q$ $N_{ID}$ and $N_D$ are the number of susceptible, newborn, recovered, asymptomatic/symptomatic infectives, qurantined, infective death and natural death populations, respectively.
+                            The population in the interval $(v_{\rm reco},v_{\min})$ has recovered from Covid-19.
+            
+                  </span>
+                        </div>
+                        <button onclick="myFunction()" id="myBtn" class = 'btn btn-secondary'>Read more</button> 
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id='footer' class="clean-block features" style="padding-bottom: 18px;padding-top: 18px; font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;">
+            <div class="container">
+                <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="col">Department of Computational and Data Sciences (CDS), Indian Institute of Science, Bangalore</div>
+                    </div>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <div class="col">
+                            <a href='http://cds.iisc.ac.in/' rel='noopener noreferrer' target="_blank" style = 'color:#EAEBED'>
+                                <u>cds.iisc.ac.in</u>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FusionCharts JavaScript -->
+    <script type="text/javascript" src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    
+    <!-- GeoJSON data and predicted CSV data combined and saved as JavaScript -->
+    <script id="data" src="data.js"></script>
+
+    <!-- Data for uncertainty region -->
+    <script src="../uncertainty/uncertainty.js"></script>
+
+    <!-- JavaScript for Map and Slider -->
+    <script src="../script.js"></script>
+
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+    <script src="../assets/js/smoothproducts.min.js"></script>
+    <script src="../assets/js/theme.js"></script>
+</body>
+
+</html>

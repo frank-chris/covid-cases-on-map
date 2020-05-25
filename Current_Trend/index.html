@@ -9,7 +9,6 @@
     <title>COVID-19</title>
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/smoothproducts.css">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -52,13 +51,14 @@
                     <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">PDE-based modelling of Covid-19 infections</h3>
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
                         <div class="text-left para" style="margin-bottom: 10px;">
-                            The aim of this project is to develop and apply a predictive computational model for the Covid-19 epidemic based on the population balance modelling.
+                            The aim of this project is to develop and apply a predictive computational model for the Covid-19 epidemic based on a high-dimensional population balance modelling.
                         </div>
                         <h5>Key Features</h5>   
                         <ul class='para'>
-                            <li> Population Size Distribution (PSD) based predictive computational model for an epidemic.
-                            <li>  The proposed comprehensive six-dimensional PSD model incorporates the infection severity, age, immunity and pre-medical history  of the population, days of infection,  effective treatment, point-to-point movement of infected population (e.g., by air, train etc), interactivity (community spread), hygiene and the social distancing of the population.
-                            <li>  Almost all existing computational models for epidemic predicts population size or density, which is the number of infected  individuals in a population or an average number of infected individuals in a region. Contrarily, the proposed PSD model describes how the Covid-19 spread throughout the region, across different age groups, which population gets affected over a period of <span id='result'>time.</span>
+                            <li> A six-dimensional population balance predictive computational model for an epidemic.
+                            <li> Unlike the existing (Compartment or Network) models, proposed model predicts the distribution of infected population across the region, the age of the infected people, the day since infection, and the severity of infection, over a period of time.
+                            <li> Incorporates the immunity, pre-medical history, effective treatment, point-to-point movement of infected population (e.g., by air, train etc), interactivity (community spread), hygiene and the social distancing of the population. 
+                            <li> Finite element operator-splitting scheme for the high-dimensional<span id='result'> PDE. </span> 
                         </ul>
                     </div>
                 </div>
@@ -71,10 +71,9 @@
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px; padding-bottom: 20px;">
                         <div class="col" style = "padding-left: 0%;">
                             <div class="text-center para">
-                                Choose India/state/UT
+                                Choose India/State/UT<a href = '#Acknowledgements' data-toggle="tooltip" data-placement="top" title="Acknowledgements">*</a>
                             </div>
                             <select class="btn btn-secondary" name="myselect" id="myselect" style="width: 180px; margin-bottom: 10px;margin-top: 15px; font-family: 'Fira Sans', sans-serif;" onchange="getSelected();">
-                                <option value="India">Choose state/UT</option>
                                 <option value="India">India</option>
                             </select>
                         </div>
@@ -111,14 +110,19 @@
                             <div id="chart-container" style = "width: 100%; height: 100%;">Chart loading</div>
                         </div>
                     </div>
-                    <p class="text-left" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">
-                        Click on the legend to remove/add a plot.<br>
-                        Scroll/pinch-zoom on the plot to zoom. <br>
-                        Use the time slider to adjust time period.<br>
+                    <div class="text-left para" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">
+                        Click on the legend to remove/add a plot.
+                        Scroll/pinch-zoom on the plot to zoom. 
+                        Use the time slider to adjust time period.
                         Use the calendar on top-right corner to set a specific time period.
-                    </p>
-                    <h4 class="text-left text-info" style="margin-right: 5px;margin-left: 5px; margin-top: 20px;">Explanation</h4>
-                    <p class="text-left" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">-</p>
+                    </div>
+                    <h4 class="text-left text-info" style="margin-right: 5px;margin-left: 5px; margin-top: 20px;">Discussion and Observation</h4>
+                    <ul class='para'>
+                        <li> ...
+                        <li> ...
+                        <li> ...
+                        <li> ...
+                    </ul>
                 </div>
             </div>
         </section>
@@ -169,7 +173,7 @@
             <div class="container">
                 <div class="block-heading" style='padding-top: 30px;'>
                     <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">
-                        Population Size Distribution (PSD) Model
+                        High-Dimensional Population Balance Model
                     </h3>
                     <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
                         <div class="text-left note">
@@ -194,7 +198,7 @@
                             \end{equation}
                             </span>
                             Here, ${\bf u}$ denotes the advection vector that quantifies the spatial movement of the population in a differential neighbourhood of $\Omega_{x}$, 
-                            %$f(t,x,\ell_a)$ denotes the net addition of an infected population into $\Omega_{\rm x}$ from outside,
+                            $f(t,x,\ell_a)$ denotes the net addition of an infected population into $\Omega_{\rm x}$ from outside,
                             ${\bf n}$  is the outward unit normal vector to $\Omega_x$,
                             $g_n$ is the flux that quantifies the net addition of an infected population into $\Omega_{\rm x}$ from outside (the spatial movement of the population across the border of the domain $\partial\Omega_{\rm x}$), and $I_0$ is the initial distribution of infected population.
                             Further,
@@ -210,18 +214,18 @@
                             \begin{equation}
                               G_{\ell_d} = \frac{d \ell_d}{d t} = 1\,.
                             \end{equation}
-                            %
+                            
                             Moreover, the change of age of the active, infected population can be modelled through the growth rate
                             \begin{equation}
                               G_{\ell_a} = \frac{d \ell_a}{d t}.
                             \end{equation}
                             Nevertheless, the influence will be negligible when the study is performed for a short duration $(0, T_\infty]$, and thereby may be ignored. 
-                            % $G_{\ell_v}$ is the growth function of the Covid-19 infection index $l_v$, 
+                             $G_{\ell_v}$ is the growth function of the Covid-19 infection index $l_v$, 
                             We next rate term
                             \begin{equation}
                             C =  C_R + C_{ID},
                             \end{equation}
-                            where $C_R(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a recovery rate function that quantifies the rate of recovery of the population from Covid-19, %$C_Q(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a quarantine rate that quantifies the removal of people into a quarantine facility 
+                            where $C_R(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a recovery rate function that quantifies the rate of recovery of the population from Covid-19, $C_Q(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is a quarantine rate that quantifies the removal of people into a quarantine facility 
                             and $C_{ID}(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ is the Covid-19 death rate. 
                             We also define a source term $F = C_T(t,\mathbf{x},\ell_v,\ell_d,\ell_a)$ that quantifies the point-to-point movement of infected population (e.g., by air, train etc) within $\Omega_x$ not explained by ${\bf u}$ and the source/sink of infected population travelled by air into $\Omega_x$ not explained by $g_n$.
                             Moreover,  $C_T$ and ${\bf u}$ need to be defined in such a way 
@@ -247,15 +251,44 @@
                             </span>
                             Here, $N_S$, $N_B$, $N_R$, $N_I$, $N_Q$ $N_{ID}$ and $N_D$ are the number of susceptible, newborn, recovered, asymptomatic/symptomatic infectives, qurantined, infective death and natural death populations, respectively.
                             The population in the interval $(v_{\rm reco},v_{\min})$ has recovered from Covid-19.
-            
+                            <h5 style='margin-top: 20px;'>Finite Element Approximation</h5> 
+                            A finite element scheme <sup>[1]</sup> based on operator splitting <sup>[2-5]</sup> has been implemented in our in-house (open-source) finite element package to solve the high-dimensional population balance equation.
+                            <h5 style='margin-top: 20px;'>References</h5> 
+                            <ol class='para'>
+                                <li> S. Ganesan, L. Tobiska, Finite Elements: Theory and Algorithms, Cambridge IISc Series, Cambridge University Press, 2016.
+                                <li> S. Ganesan, L. Tobiska, Operator-splitting finite element algorithms for computations of high-dimensional parabolic problems, Appl. Math. Comp. 219 (2013) 6182-6196.
+                                <li> S. Ganesan, L. Tobiska, An operator-splitting finite element method for the efficient parallel solution of multidimensional population balance systems, Chem. Eng. Sci. 69 (1) (2012) 59-68.
+                                <li> S. Ganesan, An operator-splitting Galerkin/SUPG finite element method for population balance equations: Stability and convergence, ESAIM: M2AN 46 (2012) 1447-1465.
+                                <li> P. S. kumar, S. Ganesan, Numerical simulation of nanocrystal synthesis in a microfluidic reactor, Chem. Eng. Sci. 96 (2017) 128-138.    
+                            </ol>
                   </span>
                         </div>
                         <button onclick="myFunction()" id="myBtn" class = 'btn btn-secondary'>Read more</button> 
-
+                        <div id = 'Acknowledgements'></div>
                     </div>
                 </div>
             </div>
         </section>
+        <section id = 'team' class="clean-block features" style="padding-bottom: 10px; padding-top: 5px;">
+            <div class="container">
+                <div class="block-heading" style='padding-top: 30px;'>
+                    <h3 class="text-left text-info" style="margin-right: 5px;margin-left: 5px;">Acknowledgements</h3>
+                    <div class="row align-items-center" style="margin-right: 5px;margin-left: 5px;">
+                        <ol class='para'>
+                            <li>
+                                
+                            </li>
+                            <li>
+                                
+                            </li>
+                            <li>
+                                
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>   
         <section id='footer' class="clean-block features" style="padding-bottom: 18px;padding-top: 18px; font-family: 'Fira Sans', sans-serif; font-weight: 400; font-size: 100%;">
             <div class="container">
                 <div class="block-heading" style="margin-bottom: 0px;padding-top: 0px;">

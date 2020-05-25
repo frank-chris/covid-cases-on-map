@@ -978,7 +978,7 @@ schema = [{
         var btn = document.getElementById(value);
         btn.class = 'btn btn-secondary';
         document.getElementsByTagName("body")[0].appendChild(element);
-        setTimeout(changeScript, 700, value );
+        setTimeout(changeScript, 1000, value );
         loadChartData();
         console.log(runID);
     }

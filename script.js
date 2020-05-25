@@ -29,7 +29,7 @@ slider.max = noOfDays;
 if(L.Browser.mobile){
     var mapdiv = document.getElementById("mapid");
     mapdiv.style.width = "100%";
-    mapdiv.style.height = "470px";
+    mapdiv.style.height = "420px";
     var slidercontainer = document.getElementById("slider1");
     slidercontainer.style.left = "2%";
     slidercontainer.style.bottom = '5%';

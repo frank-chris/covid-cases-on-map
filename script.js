@@ -3,7 +3,7 @@ var geojson = {}
 
 var currentBaseLayer = "Total(Predicted)";
 
-var currentState = "Delhi";
+var currentState = "India";
 
 // Start date parameters
 var startDate = new Date(SD); 
@@ -273,7 +273,65 @@ function monthName(month){
   let stateData = {}
   var schema = [];
   var schema2 = [];
-  
+  var dropDownFlag = 1;
+  var legendStatus = {
+      'Active(Predicted)':0,
+      'Active(Uncertainty)':1,
+      'Active':0,
+      'Recovered(Predicted)':0,
+      'Recovered(Uncertainty)':1,
+      'Recovered':0,
+      'Total(Predicted)':0,
+      'Total(Uncertainty)':1,
+      'Total':0
+  };
+
+var legendButton;
+var temp;
+function setLegend(value){
+    if(value=='Active'){
+        legendButton = document.getElementById('Active');
+        legendStatus['Active'] = (legendButton.value=='on'?1:0);
+        legendStatus['Active(Predicted)'] = (legendButton.value=='on'?1:0);
+        loadChart(currentState);
+        legendButton.value = (legendButton.value=='on'?'off':'on');
+        temp = legendButton.style.color;
+        legendButton.style.color = legendButton.style.backgroundColor;
+        legendButton.style.backgroundColor = temp;
+    }
+    else if(value == 'Recovered'){
+        legendButton = document.getElementById('Recovered');
+        legendStatus['Recovered'] = (legendButton.value=='on'?1:0);
+        legendStatus['Recovered(Predicted)'] = (legendButton.value=='on'?1:0);
+        loadChart(currentState);
+        legendButton.value = (legendButton.value=='on'?'off':'on');
+        temp = legendButton.style.color;
+        legendButton.style.color = legendButton.style.backgroundColor;
+        legendButton.style.backgroundColor = temp;
+    }
+    else if(value == 'Total'){
+        legendButton = document.getElementById('Total');
+        legendStatus['Total'] = (legendButton.value=='on'?1:0);
+        legendStatus['Total(Predicted)'] = (legendButton.value=='on'?1:0);
+        loadChart(currentState);
+        legendButton.value = (legendButton.value=='on'?'off':'on');
+        temp = legendButton.style.color;
+        legendButton.style.color = legendButton.style.backgroundColor;
+        legendButton.style.backgroundColor = temp;
+    }
+    else if(value == 'Uncertainty'){
+        legendButton = document.getElementById('Uncertainty');
+        legendStatus['Active(Uncertainty)'] = (legendButton.value=='on'?1:0);
+        legendStatus['Recovered(Uncertainty)'] = (legendButton.value=='on'?1:0);
+        legendStatus['Total(Uncertainty)'] = (legendButton.value=='on'?1:0);
+        loadChart(currentState);
+        legendButton.value = (legendButton.value=='on'?'off':'on');
+        temp = legendButton.style.color;
+        legendButton.style.color = legendButton.style.backgroundColor;
+        legendButton.style.backgroundColor = temp;
+    }
+}
+
 function loadChartData(){    
     overallData = {}
     stateData = {}
@@ -296,9 +354,11 @@ function loadChartData(){
                             ]);
     }
     
-    var stateDropDown = document.getElementById("myselect");
-    stateDropDown.innerHTML = "<option value='India'>India</option>"
-    
+    if(dropDownFlag==1){
+        var stateDropDown = document.getElementById("myselect");
+        stateDropDown.innerHTML = "<option value='India'>India</option>"
+    }
+
     var state;
     var k = 0;
     for (state of statesData["features"]){
@@ -326,8 +386,12 @@ function loadChartData(){
         // stateData[state.properties["name"]].push([chartDate(i), "Total", state.properties["Confirmed_" + calculatedDate(i)]]);
         }
         k += 1;
-        stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
-    }    
+        if(dropDownFlag==1){
+            stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+        }    
+    } 
+    dropDownFlag = 0;
+
     schema2 = [{
         "name": "Time",
         "type": "date",
@@ -427,6 +491,46 @@ function loadChartData(){
                     }
                 }
         },
+        legend: {
+            item:[
+                {
+                    value: 'Active',
+                    initiallyhidden: legendStatus['Active'],
+                },
+                {
+                    value: 'Active(Predicted)',
+                    initiallyhidden: legendStatus['Active(Predicted)'],
+                },
+                {
+                    value: 'Active(Uncertainty)',
+                    initiallyhidden: legendStatus['Active(Uncertainty)'],
+                },
+                {
+                    value: 'Recovered',
+                    initiallyhidden: legendStatus['Recovered'],
+                },
+                {
+                    value: 'Recovered(Predicted)',
+                    initiallyhidden: legendStatus['Recovered(Predicted)'],
+                },
+                {
+                    value: 'Recovered(Uncertainty)',
+                    initiallyhidden: legendStatus['Recovered(Uncertainty)'],
+                },
+                {
+                    value: 'Total',
+                    initiallyhidden: legendStatus['Total'],
+                },
+                {
+                    value: 'Total(Predicted)',
+                    initiallyhidden: legendStatus['Total(Predicted)'],
+                },
+                {
+                    value: 'Total(Uncertainty)',
+                    initiallyhidden: legendStatus['Total(Uncertainty)'],
+                }
+            ]
+        },
         caption: {
             text: currentState,
             position: "center",
@@ -450,7 +554,6 @@ function loadChartData(){
                 }
             }
         },
-        
         yaxis: [
             {title: "Population",
             plot: [
@@ -541,6 +644,46 @@ function loadChartData(){
                     }
                 }
         },
+        legend: {
+            item:[
+                {
+                    value: 'Active',
+                    initiallyhidden: legendStatus['Active'],
+                },
+                {
+                    value: 'Active(Predicted)',
+                    initiallyhidden: legendStatus['Active(Predicted)'],
+                },
+                {
+                    value: 'Active(Uncertainty)',
+                    initiallyhidden: legendStatus['Active(Uncertainty)'],
+                },
+                {
+                    value: 'Recovered',
+                    initiallyhidden: legendStatus['Recovered'],
+                },
+                {
+                    value: 'Recovered(Predicted)',
+                    initiallyhidden: legendStatus['Recovered(Predicted)'],
+                },
+                {
+                    value: 'Recovered(Uncertainty)',
+                    initiallyhidden: legendStatus['Recovered(Uncertainty)'],
+                },
+                {
+                    value: 'Total',
+                    initiallyhidden: legendStatus['Total'],
+                },
+                {
+                    value: 'Total(Predicted)',
+                    initiallyhidden: legendStatus['Total(Predicted)'],
+                },
+                {
+                    value: 'Total(Uncertainty)',
+                    initiallyhidden: legendStatus['Total(Uncertainty)'],
+                }
+            ]
+        },
         caption: {
             text: "India",
             position: "center",
@@ -629,16 +772,42 @@ function loadChartData(){
             }
         ]
         };
-    
-        dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
         
-        new FusionCharts({
-        type: "timeseries",
-        renderAt: "chart-container",
-        width: "100%",
-        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
-        dataSource: dataSource2
-        }).render();
+        if(currentState=='India'){
+            dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
+            new FusionCharts({
+            type: "timeseries",
+            renderAt: "chart-container",
+            width: "100%",
+            height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
+            dataSource: dataSource2,
+            events: {
+                "legendItemClicked": function(ev) {
+                  console.log(ev.data.datasetName);
+                  legendStatus[ev.data.datasetName] = (legendStatus[ev.data.datasetName]==0?1:0);
+                }
+            },
+            }).render();
+        }
+        else{
+            dataSource.caption.text = currentState;
+            dataSource.data = dataStore.createDataTable(stateData[currentState], schema);
+            
+            new FusionCharts({
+            type: "timeseries",
+            renderAt: "chart-container",
+            width: "100%",
+            height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
+            dataSource: dataSource,
+            events: {
+                "legendItemClicked": function(ev) {
+                  console.log(ev.data.datasetName);
+                  legendStatus[ev.data.datasetName] = (legendStatus[ev.data.datasetName]==0?1:0);
+                }
+            },
+            }).render();
+        }
+        
         
 }
 
@@ -647,6 +816,7 @@ function loadChartData(){
   function getSelected()
   {
   var selectedSource = document.getElementById("myselect").value;
+  currentState = selectedSource;
   loadChart(selectedSource);
   }
   
@@ -750,6 +920,46 @@ schema = [{
                       "fill": "#FFFFFF",
                   }
               }
+    },
+    legend: {
+        item:[
+            {
+                value: 'Active',
+                initiallyhidden: legendStatus['Active'],
+            },
+            {
+                value: 'Active(Predicted)',
+                initiallyhidden: legendStatus['Active(Predicted)'],
+            },
+            {
+                value: 'Active(Uncertainty)',
+                initiallyhidden: legendStatus['Active(Uncertainty)'],
+            },
+            {
+                value: 'Recovered',
+                initiallyhidden: legendStatus['Recovered'],
+            },
+            {
+                value: 'Recovered(Predicted)',
+                initiallyhidden: legendStatus['Recovered(Predicted)'],
+            },
+            {
+                value: 'Recovered(Uncertainty)',
+                initiallyhidden: legendStatus['Recovered(Uncertainty)'],
+            },
+            {
+                value: 'Total',
+                initiallyhidden: legendStatus['Total'],
+            },
+            {
+                value: 'Total(Predicted)',
+                initiallyhidden: legendStatus['Total(Predicted)'],
+            },
+            {
+                value: 'Total(Uncertainty)',
+                initiallyhidden: legendStatus['Total(Uncertainty)'],
+            }
+        ]
     },
       caption: {
         text: currentState,
@@ -864,6 +1074,46 @@ schema = [{
                   }
               }
      },
+     legend: {
+        item:[
+            {
+                value: 'Active',
+                initiallyhidden: legendStatus['Active'],
+            },
+            {
+                value: 'Active(Predicted)',
+                initiallyhidden: legendStatus['Active(Predicted)'],
+            },
+            {
+                value: 'Active(Uncertainty)',
+                initiallyhidden: legendStatus['Active(Uncertainty)'],
+            },
+            {
+                value: 'Recovered',
+                initiallyhidden: legendStatus['Recovered'],
+            },
+            {
+                value: 'Recovered(Predicted)',
+                initiallyhidden: legendStatus['Recovered(Predicted)'],
+            },
+            {
+                value: 'Recovered(Uncertainty)',
+                initiallyhidden: legendStatus['Recovered(Uncertainty)'],
+            },
+            {
+                value: 'Total',
+                initiallyhidden: legendStatus['Total'],
+            },
+            {
+                value: 'Total(Predicted)',
+                initiallyhidden: legendStatus['Total(Predicted)'],
+            },
+            {
+                value: 'Total(Uncertainty)',
+                initiallyhidden: legendStatus['Total(Uncertainty)'],
+            }
+        ]
+    },
        caption: {
          text: "India",
          position: "center",
@@ -960,16 +1210,16 @@ schema = [{
        renderAt: "chart-container",
        width: "100%",
        height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
-       dataSource: dataSource2
+       dataSource: dataSource2,
+       events: {
+        "legendItemClicked": function(ev) {
+          console.log(ev.data.datasetName);
+          legendStatus[ev.data.datasetName] = (legendStatus[ev.data.datasetName]==0?1:0);
+        }
+    },
      }).render();
   
      function changeScript(value){
-        document.getElementById('data').removeElement;
-        element = document.createElement("script");
-        element.src = "../"+value+"/data.js";
-        element.type = "text/javascript";
-        element.id = "data";
-        document.getElementsByTagName("body")[0].appendChild(element);
         loadChartData();
      }
 
@@ -999,25 +1249,55 @@ schema = [{
   function loadChart(state){
     if(state == "India"){
         dataSource2.data = dataStore2.createDataTable(overallData["Total"], schema2);
-     
+        dataSource2.legend.item[0].initiallyhidden = legendStatus['Active'];
+        dataSource2.legend.item[1].initiallyhidden = legendStatus['Active(Predicted)'];
+        dataSource2.legend.item[2].initiallyhidden = legendStatus['Active(Uncertainty)'];
+        dataSource2.legend.item[3].initiallyhidden = legendStatus['Recovered'];
+        dataSource2.legend.item[4].initiallyhidden = legendStatus['Recovered(Predicted)'];
+        dataSource2.legend.item[5].initiallyhidden = legendStatus['Recovered(Uncertainty)'];
+        dataSource2.legend.item[6].initiallyhidden = legendStatus['Total'];
+        dataSource2.legend.item[7].initiallyhidden = legendStatus['Total(Predicted)'];
+        dataSource2.legend.item[8].initiallyhidden = legendStatus['Total(Uncertainty)'];
+
         new FusionCharts({
         type: "timeseries",
         renderAt: "chart-container",
         width: "100%",
         height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
-        dataSource: dataSource2
+        dataSource: dataSource2,
+        events: {
+            "legendItemClicked": function(ev) {
+              console.log(ev.data.datasetName);
+              legendStatus[ev.data.datasetName] = (legendStatus[ev.data.datasetName]==0?1:0);
+            }
+        },
         }).render();
     }
     else{
         dataSource.caption.text = state;
         dataSource.data = dataStore.createDataTable(stateData[state], schema);
+        dataSource.legend.item[0].initiallyhidden = legendStatus['Active'];
+        dataSource.legend.item[1].initiallyhidden = legendStatus['Active(Predicted)'];
+        dataSource.legend.item[2].initiallyhidden = legendStatus['Active(Uncertainty)'];
+        dataSource.legend.item[3].initiallyhidden = legendStatus['Recovered'];
+        dataSource.legend.item[4].initiallyhidden = legendStatus['Recovered(Predicted)'];
+        dataSource.legend.item[5].initiallyhidden = legendStatus['Recovered(Uncertainty)'];
+        dataSource.legend.item[6].initiallyhidden = legendStatus['Total'];
+        dataSource.legend.item[7].initiallyhidden = legendStatus['Total(Predicted)'];
+        dataSource.legend.item[8].initiallyhidden = legendStatus['Total(Uncertainty)'];
         
         new FusionCharts({
         type: "timeseries",
         renderAt: "chart-container",
         width: "100%",
         height: L.Browser.mobile?(window.innerHeight*2/3).toString(): (window.innerHeight - 110).toString() ,
-        dataSource: dataSource
+        dataSource: dataSource,
+        events: {
+            "legendItemClicked": function(ev) {
+              console.log(ev.data.datasetName);
+              legendStatus[ev.data.datasetName] = (legendStatus[ev.data.datasetName]==0?1:0);
+            }
+        },
         }).render();
     }
     

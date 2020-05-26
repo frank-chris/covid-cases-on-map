@@ -40,7 +40,7 @@ def git_push():
 
 # modify_csv()
 
-# run_pyscript()
+run_pyscript()
 
-# git_push()
+git_push()
 

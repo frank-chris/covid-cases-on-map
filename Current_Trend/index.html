@@ -81,34 +81,67 @@
                     </div>
                     <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;padding-bottom: 2px;">
                         <div class="col align-items-right" style = "padding-bottom: 10px; margin: 0%;">
-                                <button id='Current_Trend' style="width: max-content; font-size: 15px; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-secondary scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Current_Trend');" title="Current Trend">
+                                <button id='Current_Trend' style="width: max-content; font-size: 15px; font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-secondary btn-sm scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Current_Trend');" title="Current Trend">
                                     <i class="material-icons" style="padding-right: 10px;">show_chart</i> Current Trend
                                 </button>
                         </div>
                         <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
-                                <button id='Bad_Scenario' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Bad_Scenario');" title="Bad Scenario">
+                                <button id='Bad_Scenario' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary btn-sm scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Bad_Scenario');" title="Bad Scenario">
                                     <i class="material-icons" style="padding-right: 10px;">show_chart</i> Bad Scenario
                                 </button>
                         </div>
                         <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
-                            <button id='Worse_Scenario' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Worse_Scenario');" title="Worse Scenario">
+                            <button id='Worse_Scenario' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary btn-sm scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Worse_Scenario');" title="Worse Scenario">
                                 <i class="material-icons" style="padding-right: 10px;">show_chart</i> Worse Scenario
                             </button>
                         </div>
                         <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
-                            <button id='Sunday_Lockdown' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Lockdown');" title="Sunday Lockdown">
+                            <button id='Sunday_Lockdown' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary btn-sm scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Lockdown');" title="Sunday Lockdown">
                                 <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Lockdown
                             </button>
                         </div>
                         <div class="col align-items-left" style = "padding-bottom: 10px; margin: 0%;">
-                            <button id='Sunday_Wednesday_Lockdown' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Wednesday_Lockdown');" title="Sunday Wednesday Lockdown">
+                            <button id='Sunday_Wednesday_Lockdown' style="width: max-content; font-size: 15px;  font-family: 'Fira Sans', sans serif;" type="button" class="btn btn-outline-secondary btn-sm scenario" data-toggle="tooltip" data-placement="top" onclick="changeScenario('Sunday_Wednesday_Lockdown');" title="Sunday Wednesday Lockdown">
                                 <i class="material-icons" style="padding-right: 10px;">show_chart</i> Sunday Wednesday Lockdown
                             </button>
                         </div>
                     </div>
+                    <div class="row align-items-center" style=" padding-bottom: 2px;">
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                        </div>
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                            <button id='Active' value='on' style="width: 90px;font-family: 'Fira Sans', sans serif; color: #ffffff; background-color: #DC3545;" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" onclick="setLegend('Active');"  title="Click to enable/disable">
+                                Active
+                            </button>
+                        </div>
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                            <button  id='Recovered' value='on' style="width: 90px; font-family: 'Fira Sans', sans serif; color: #ffffff; background-color: #28A745;" type="button" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" onclick="setLegend('Recovered');" title="Click to enable/disable">
+                                Recovered
+                            </button>
+                        </div>
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                            <button id='Total' value='on' style="width: 90px; font-family: 'Fira Sans', sans serif; background-color: #A65628; color: #ffffff; border-color: #A65628;" type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" onclick="setLegend('Total');"  title="Click to enable/disable">
+                                Total
+                            </button>
+                        </div>
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                            <button id='Uncertainty' value='off' style="width: 90px; font-family: 'Fira Sans', sans serif; color:#6C757D; background-color: #ffffff;" type="button" class="btn btn-outline-secondary btn-sm" data-toggle="tooltip" data-placement="top" onclick="setLegend('Uncertainty');"  title="Click to enable/disable">
+                                Uncertainty
+                            </button>
+                        </div>
+                        <div class="col-2 " style = "padding: 10px; margin: 0%;">
+                        </div>
+                    </div>
                     <div class="row align-items-center" style="margin-right: 0px;margin-left: 0px;">
                         <div class="col" style = "padding-left: 0%; margin: 0%;">
-                            <div id="chart-container" style = "width: 100%; height: 100%;">Chart loading</div>
+                            <div style='position: relative;'>
+                                <div id="chart-container" style = "width: 100%; height: 100%;">
+                                    Chart loading
+                                </div>
+                                <div class='para' style="position: absolute; right: 5%; top: 5%; font-size: 15px; line-height: 1; color:#5648D4">
+                                    Choose a specific <br>time interval here
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="text-left para" style="margin-bottom: 5px; margin-right: 5px; margin-left: 5px;margin-top: 0px;">

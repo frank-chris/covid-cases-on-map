@@ -17,6 +17,9 @@ def modify_ratios(value):
 def modify_recovered(value):
     return "Recovered" + str(value)
 
+def modify_deceased(value):
+    return "Deceased" + str(value)
+
 def modify_daily(value):
     return "DN" + str(value)
 
@@ -136,6 +139,14 @@ else:
     covid_recovered_availability = 'n'
     print("\nCovidRecovered.data not found, and hence will not be used.\n")
 
+if 'CovidDeaths.data' in files:
+    covid_deaths_availability = 'y'
+    print("\nCovidDeaths.data found.\n")
+else:
+    covid_deaths_availability = 'n'
+    print("\nCovidDeaths.data not found, and hence will not be used.\n")
+
+
 # Read population data 
 predicted_state_wise = pd.read_csv(run_id + "/" + "CovidPopulation.data", delimiter=" ", header=1)
 
@@ -171,6 +182,19 @@ if covid_recovered_availability == 'y' or covid_recovered_availability == 'Y':
     recovered = cumulative(recovered)
     frames.append(daily_recovered)
     frames.append(recovered)
+
+if covid_deaths_availability == 'y' or covid_deaths_availability == 'Y':
+    # Read CovidDeaths.data
+    deaths = pd.read_csv(run_id + "/" + "CovidDeaths.data", delimiter=" ", header=1)
+    deaths["Day"] = deaths["Day"].round(0).astype(int)
+    deaths["Day"] = deaths["Day"].apply(modify_deceased)
+    daily_deaths = deaths.copy()
+    daily_deaths["Day"] = daily_deaths["Day"].apply(modify_daily)
+    daily_deaths.set_index("Day", inplace = True) 
+    deaths.set_index("Day", inplace = True) 
+    deaths = cumulative(deaths)
+    frames.append(daily_deaths)
+    frames.append(deaths)
 
 predicted_state_wise = pd.concat(frames)
 

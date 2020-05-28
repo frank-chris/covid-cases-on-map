@@ -7,6 +7,7 @@ import numpy as np
 import json
 import os
 import sys
+from sklearn.linear_model import LinearRegression
 
 def modify(value):
     return "Nucleation" + str(value)
@@ -187,7 +188,6 @@ del confirmed['Date']
 del confirmed['Status']
 del confirmed['UN']
 confirmed.rename(columns={'TT' : 'Total'}, inplace=True)
-print(confirmed)
 
 recovered_df = state_wise_daily.copy()
 recovered_df = recovered_df[ pd.Series([x.startswith("Recovered") for x in recovered_df['Status'] ], index=list(recovered_df.index)) ]
@@ -200,7 +200,6 @@ del recovered_df['Date']
 del recovered_df['Status']
 del recovered_df['UN']
 recovered_df.rename(columns={'TT' : 'Total'}, inplace=True)
-print(recovered_df)
 
 deceased_df = state_wise_daily.copy()
 deceased_df = deceased_df[ pd.Series([x.startswith("Deceased") for x in deceased_df['Status'] ], index=list(deceased_df.index)) ]
@@ -213,10 +212,8 @@ del deceased_df['Date']
 del deceased_df['Status']
 del deceased_df['UN']
 deceased_df.rename(columns={'TT' : 'Total'}, inplace=True)
-print(deceased_df)
 
 active_df = confirmed - recovered_df - deceased_df
-print(active_df)
 active_rmse = daily_predicted.copy()
 active_rmse = active_rmse.iloc[:len(active_df.index)]
 active_rmse["index"]=[i for i in range(len(active_rmse.index))]
@@ -365,6 +362,62 @@ non_cumulative["Daily_Status"] = non_cumulative["Daily_Status"].apply(modify_rat
 # A list of elements from Daily_Status
 date_status_list = list(state_wise_daily["Daily_Status"]) + list(non_cumulative["Daily_Status"])
 
+ratio_3_numerator = state_wise_daily[ pd.Series([x.startswith("Deceased") for x in state_wise_daily['Daily_Status'] ], index=list(state_wise_daily.index)) ].copy()
+ratio_4_numerator = state_wise_daily[ pd.Series([x.startswith("Recovered") for x in state_wise_daily['Daily_Status'] ], index=list(state_wise_daily.index)) ].copy()
+
+dates_for_index = [ x.replace("Deceased_", "") for x in list(ratio_3_numerator["Daily_Status"])]
+temp_1 = state_wise_daily[ pd.Series([x.startswith("Deceased") for x in state_wise_daily['Daily_Status'] ], index=list(state_wise_daily.index)) ].copy()
+temp_2 = state_wise_daily[ pd.Series([x.startswith("Confirmed") for x in state_wise_daily['Daily_Status'] ], index=list(state_wise_daily.index)) ].copy()
+temp_3 = state_wise_daily[ pd.Series([x.startswith("Recovered") for x in state_wise_daily['Daily_Status'] ], index=list(state_wise_daily.index)) ].copy()
+del ratio_3_numerator['Daily_Status']
+del ratio_4_numerator['Daily_Status']
+del temp_1['Daily_Status']
+del temp_2['Daily_Status']
+del temp_3['Daily_Status']
+
+ratio_3_numerator['index'] = [i for i in range(len(ratio_3_numerator.index))]
+ratio_3_numerator.set_index("index", inplace = True)
+ratio_4_numerator['index'] = [i for i in range(len(ratio_4_numerator.index))]
+ratio_4_numerator.set_index("index", inplace = True)
+temp_1['index'] = [i for i in range(len(temp_1.index))]
+temp_1.set_index("index", inplace = True)
+temp_2['index'] = [i for i in range(len(temp_2.index))]
+temp_2.set_index("index", inplace = True)
+temp_3['index'] = [i for i in range(len(temp_3.index))]
+temp_3.set_index("index", inplace = True)
+
+temp_1 = cumulative(temp_1)
+temp_2 = cumulative(temp_2)
+temp_3 = cumulative(temp_3)
+
+ratio_3_denominator = temp_2 - temp_1 - temp_3
+
+ratio_3 = ratio_3_numerator/ratio_3_denominator
+ratio_4 = ratio_4_numerator/ratio_3_denominator
+
+ratio_3.replace([np.inf, -np.inf], np.nan, inplace=True)
+ratio_4.replace([np.inf, -np.inf], np.nan, inplace=True)
+ratio_3.fillna(0, inplace=True)
+ratio_4.fillna(0, inplace=True)
+
+for state in ratio_3.columns:
+    regressor = LinearRegression()  
+    regressor.fit(ratio_3.index.values.reshape(-1,1), ratio_3[state].values.reshape(-1,1))
+    for index in ratio_3.index:
+        ratio_3.loc[index, state] = (regressor.coef_[0][0]*index) + regressor.intercept_[0]
+
+for state in ratio_4.columns:
+    regressor = LinearRegression()  
+    regressor.fit(ratio_4.index.values.reshape(-1,1), ratio_4[state].values.reshape(-1,1))
+    for index in ratio_4.index:
+        ratio_4.loc[index, state] = (regressor.coef_[0][0]*index) + regressor.intercept_[0]
+
+ratio_3['index'] = ['Linear3'+x for x in dates_for_index]
+ratio_3.set_index('index',inplace=True)
+ratio_4['index'] = ['Linear4'+x for x in dates_for_index]
+ratio_4.set_index('index',inplace=True)
+print(ratio_3)
+print(ratio_4)
 
 # Set the column Daily_Status as the index of the DataFrame 
 state_wise_daily.set_index("Daily_Status", inplace = True) 
@@ -387,7 +440,9 @@ for column in state_wise_daily:
 doubling_rate = state_wise_daily.copy()
 doubling_rate = doubling_rate[ pd.Series([x.startswith("Confirmed") for x in doubling_rate.index ], index=list(doubling_rate.index)) ]
 
-state_wise_daily = pd.concat([state_wise_daily, non_cumulative])
+state_wise_daily = pd.concat([state_wise_daily, non_cumulative, ratio_3, ratio_4])
+
+date_status_list = list(state_wise_daily.index)
 
 # Rename all columns with actual state names in state_wise_daily
 for column in state_wise_daily:

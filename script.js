@@ -645,14 +645,16 @@ function chartDate(value){
 
 
 
-let data = {}
-let diagnosticsData = {}
-let dailyData = {}
+let data = {};
+let diagnosticsData = {};
+let dailyData = {};
+let rmseData = {};
 
 var i;
 data["Total"] = [];
-diagnosticsData["Total"] = []
-dailyData["Total"] = []
+diagnosticsData["Total"] = [];
+dailyData["Total"] = [];
+rmseData['Total'] = [];
 for(i=0;i<=noOfDays;i++){
   data["Total"].push([chartDate(i), "Active(Pred)", totalData[0][i.toString()]]);
   data["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["Recovered" + i.toString()]]);
@@ -664,6 +666,7 @@ for(i=0;i<=noOfDays;i++){
   data["Total"].push([chartDate(i), "Deceased", totalData[0]["Deceased_" + calculatedDate(i)]]);
   data["Total"].push([chartDate(i), "Recovered+Deceased", Number(totalData[0]["Recovered_" + calculatedDate(i)]) + Number(totalData[0]["Deceased_" + calculatedDate(i)])]);
   diagnosticsData["Total"].push([chartDate(i), "Ratio-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-1(Pred)", (Number(totalData[0]["DN"+i.toString()])+Number(totalData[0]["DNRecovered" + i.toString()])+Number(totalData[0]["DNDeceased" + i.toString()]))/Number(totalData[0][i.toString()])]);  
   diagnosticsData["Total"].push([chartDate(i), "Product-1", Number(totalData[0]["RatiosConfirmed_" + calculatedDate(i)])*Number(totalData[0][i.toString()])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]);  
   diagnosticsData["Total"].push([chartDate(i), "Ratio-2", Number(totalData[0]["Recovered_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
   diagnosticsData["Total"].push([chartDate(i), "Ratio-2(Pred)", Number(totalData[0]["Recovered" + i.toString()])/(Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]) + Number(totalData[0]["Deceased" + i.toString()])) ]);
@@ -672,6 +675,8 @@ for(i=0;i<=noOfDays;i++){
   diagnosticsData["Total"].push([chartDate(i), "Ratio-3(Pred)", Number(totalData[0]["DNDeceased" + i.toString()])/Number(totalData[0][i.toString()])]); 
   diagnosticsData["Total"].push([chartDate(i), "Ratio-4", Number(totalData[0]["RatiosRecovered_" + calculatedDate(i)])/(Number(totalData[0]["Confirmed_" + calculatedDate(i)]) - Number(totalData[0]["Recovered_" + calculatedDate(i)]) - Number(totalData[0]["Deceased_" + calculatedDate(i)]) )]); 
   diagnosticsData["Total"].push([chartDate(i), "Ratio-4(Pred)", Number(totalData[0]["DNRecovered" + i.toString()])/Number(totalData[0][i.toString()])]); 
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-5", Number(totalData[0]["Deceased_" + calculatedDate(i)])/Number(totalData[0]["Confirmed_" + calculatedDate(i)]) ]);
+  diagnosticsData["Total"].push([chartDate(i), "Ratio-5(Pred)", Number(totalData[0]["Deceased" + i.toString()])/(Number(totalData[0][i.toString()]) + Number(totalData[0]["Recovered" + i.toString()]) + Number(totalData[0]["Deceased" + i.toString()])) ]);
   dailyData["Total"].push([chartDate(i), "Active(Pred)", totalData[0]["DN"+i.toString()]]);
   dailyData["Total"].push([chartDate(i), "Recovered(Pred)", totalData[0]["DNRecovered" + i.toString()]]);
   dailyData["Total"].push([chartDate(i), "Deceased(Pred)", totalData[0]["DNDeceased" + i.toString()]]);
@@ -681,17 +686,22 @@ for(i=0;i<=noOfDays;i++){
   dailyData["Total"].push([chartDate(i), "Active", totalData[0]["RatiosConfirmed_" + calculatedDate(i)] - totalData[0]["RatiosRecovered_" + calculatedDate(i)] - totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
   dailyData["Total"].push([chartDate(i), "Recovered", totalData[0]["RatiosRecovered_" + calculatedDate(i)]]);  
   dailyData["Total"].push([chartDate(i), "Deceased", totalData[0]["RatiosDeceased_" + calculatedDate(i)]]);  
+  rmseData['Total'].push([chartDate(i), 'Active', totalData[0]["RMSE" + i.toString()]]);
+  rmseData['Total'].push([chartDate(i), 'Recovered', totalData[0]["RMSERecovered" + i.toString()]]);
+  rmseData['Total'].push([chartDate(i), 'Deceased', totalData[0]["RMSEDeceased" + i.toString()]]);
 }
 
 var stateDropDown = document.getElementById("myselect");
 var stateDropDown2 = document.getElementById("myselect2");
 var stateDropDown3 = document.getElementById("myselect3");
+var stateDropDown4 = document.getElementById("myselect4");
 
 var state;
 for (state of statesData["features"]){
   data[state.properties["name"]] = [];
   diagnosticsData[state.properties["name"]] = [];
   dailyData[state.properties["name"]] = [];
+  rmseData[state.properties["name"]] = [];
   for(i=0;i<=noOfDays;i++){
     data[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties[i.toString()]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["Recovered" + i.toString()]]);
@@ -703,6 +713,7 @@ for (state of statesData["features"]){
     data[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["Deceased_" + calculatedDate(i)]]);
     data[state.properties["name"]].push([chartDate(i), "Recovered+Deceased", Number(state.properties["Recovered_" + calculatedDate(i)])+Number(state.properties["Deceased_" + calculatedDate(i)])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-1(Pred)", (Number(state.properties["DN"+i.toString()]) + Number(state.properties["DNRecovered" + i.toString()]) + Number(state.properties["DNDeceased" + i.toString()]))/Number(state.properties[i.toString()])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Product-1", Number(state.properties["RatiosConfirmed_" + calculatedDate(i)])*Number(state.properties[i.toString()])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2", Number(state.properties["Recovered_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-2(Pred)", Number(state.properties["Recovered" + i.toString()])/(Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])+Number(state.properties["Deceased" + i.toString()]))]);
@@ -711,6 +722,8 @@ for (state of statesData["features"]){
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-3(Pred)", Number(state.properties["DNDeceased" + i.toString()])/Number(state.properties[i.toString()])]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-4", Number(state.properties["RatiosRecovered_" + calculatedDate(i)])/(Number(state.properties["Confirmed_" + calculatedDate(i)]) - Number(state.properties["Recovered_" + calculatedDate(i)]) - Number(state.properties["Deceased_" + calculatedDate(i)]) )]);
     diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-4(Pred)", Number(state.properties["DNRecovered" + i.toString()])/Number(state.properties[i.toString()])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-5", Number(state.properties["Deceased_" + calculatedDate(i)])/Number(state.properties["Confirmed_" + calculatedDate(i)])]);
+    diagnosticsData[state.properties["name"]].push([chartDate(i), "Ratio-5(Pred)", Number(state.properties["Deceased" + i.toString()])/(Number(state.properties[i.toString()])+Number(state.properties["Recovered" + i.toString()])+Number(state.properties["Deceased" + i.toString()]))]);
     dailyData[state.properties["name"]].push([chartDate(i), "Active(Pred)", state.properties["DN"+i.toString()]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Recovered(Pred)", state.properties["DNRecovered" + i.toString()]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Deceased(Pred)", state.properties["DNDeceased" + i.toString()]]);
@@ -720,10 +733,14 @@ for (state of statesData["features"]){
     dailyData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RatiosConfirmed_" + calculatedDate(i)] - state.properties["RatiosRecovered_" + calculatedDate(i)] - state.properties["RatiosDeceased_" + calculatedDate(i)]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["RatiosRecovered_" + calculatedDate(i)]]);
     dailyData[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["RatiosDeceased_" + calculatedDate(i)]]);
+    rmseData[state.properties["name"]].push([chartDate(i), "Active", state.properties["RMSE" + i.toString()]]);
+    rmseData[state.properties["name"]].push([chartDate(i), "Recovered", state.properties["RMSERecovered" + i.toString()]]);
+    rmseData[state.properties["name"]].push([chartDate(i), "Deceased", state.properties["RMSEDeceased" + i.toString()]]);
     }
   stateDropDown.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
   stateDropDown2.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
   stateDropDown3.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";
+  stateDropDown4.innerHTML += "<option value='"+ state.properties["name"].toString() +"'>" + state.properties["name"].toString() + "</option>";  
 }
 
 function getSelected()
@@ -744,6 +761,11 @@ var selectedSource = document.getElementById("myselect3").value;
 loadChart3(selectedSource);
 }
 
+function getSelected4()
+{
+var selectedSource = document.getElementById("myselect4").value;
+loadChart4(selectedSource);
+}
 
 let schema = [{
     "name": "Time",
@@ -794,7 +816,7 @@ let schema = [{
 
   var dataStore2 = new FusionCharts.DataStore();
   var dataSource2 = {
-     chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999,0069D9",
+     chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999,0069D9,F8BF00,30D7BC,B5D20A",
              exportEnabled: "1",
              style: {
                 "background": {
@@ -868,7 +890,41 @@ let schema = [{
      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
      dataSource: dataSource3
    }).render();
+
+   var dataStore4 = new FusionCharts.DataStore();
+   var dataSource4 = {
+      chart: {palettecolors: "E41A1C,4DAF4A,984EA3,FF7F00,A65628,F781BF,111111,999999,0069D9",
+              exportEnabled: "1",
+              
+    },
+      caption: {
+        text: currentState
+      },
+      // subcaption: {
+      //   text: currentState
+      // },
+      series: "Type",
+      yaxis: [
+        {
+          plot: "",
+          title: "",
+          // format: {
+          //   prefix: ""
+          // }
+        }
+      ]
+    };
   
+    dataSource4.data = dataStore4.createDataTable(rmseData[currentState], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "RMSE",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource4
+    }).render();   
+
 function loadChart(state){
   if(state){
       state = state;
@@ -926,6 +982,27 @@ function loadChart3(state){
       width: "100%",
       height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
       dataSource: dataSource3
+    }).render();
+  
+  }
+
+   
+function loadChart4(state){
+    if(state){
+        state = state;
+    }
+    else{
+        state = "Total";
+    }
+    dataSource4.caption.text = state;
+    dataSource4.data = dataStore4.createDataTable(rmseData[state], schema);
+    
+    new FusionCharts({
+      type: "timeseries",
+      renderAt: "RMSE",
+      width: "100%",
+      height: L.Browser.mobile?(window.innerHeight/2).toString(): (window.innerHeight - 140).toString() ,
+      dataSource: dataSource4
     }).render();
   
   }

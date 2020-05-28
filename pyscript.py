@@ -23,6 +23,9 @@ def modify_deceased(value):
 def modify_daily(value):
     return "DN" + str(value)
 
+def modify_rmse(value):
+    return 'RMSE' + str(value)
+
 def replace_hyphen(value):
     return str(value).replace('-','_')
 
@@ -170,6 +173,75 @@ nucleation.set_index("Day", inplace = True)
 predicted_state_wise.set_index("Day", inplace = True) 
 frames = [predicted_state_wise, daily_predicted, nucleation]
 
+# Read state_wise_daily.csv 
+state_wise_daily = pd.read_csv('state_wise_daily.csv')
+
+confirmed = state_wise_daily.copy()
+confirmed = confirmed[ pd.Series([x.startswith("Confirmed") for x in confirmed['Status'] ], index=list(confirmed.index)) ]
+confirmed = confirmed.iloc[9:]
+confirmed["index"]=[i for i in range(len(confirmed.index))]
+confirmed.set_index("index", inplace = True)
+confirmed["DD"] = confirmed["DD"] + confirmed["DN"]
+del confirmed["DN"]
+del confirmed['Date']
+del confirmed['Status']
+del confirmed['UN']
+confirmed.rename(columns={'TT' : 'Total'}, inplace=True)
+print(confirmed)
+
+recovered_df = state_wise_daily.copy()
+recovered_df = recovered_df[ pd.Series([x.startswith("Recovered") for x in recovered_df['Status'] ], index=list(recovered_df.index)) ]
+recovered_df = recovered_df.iloc[9:]
+recovered_df["index"]=[i for i in range(len(recovered_df.index))]
+recovered_df.set_index("index", inplace = True)
+recovered_df["DD"] = recovered_df["DD"] + recovered_df["DN"]
+del recovered_df["DN"]
+del recovered_df['Date']
+del recovered_df['Status']
+del recovered_df['UN']
+recovered_df.rename(columns={'TT' : 'Total'}, inplace=True)
+print(recovered_df)
+
+deceased_df = state_wise_daily.copy()
+deceased_df = deceased_df[ pd.Series([x.startswith("Deceased") for x in deceased_df['Status'] ], index=list(deceased_df.index)) ]
+deceased_df = deceased_df.iloc[9:]
+deceased_df["index"]=[i for i in range(len(deceased_df.index))]
+deceased_df.set_index("index", inplace = True)
+deceased_df["DD"] = deceased_df["DD"] + deceased_df["DN"]
+del deceased_df["DN"]
+del deceased_df['Date']
+del deceased_df['Status']
+del deceased_df['UN']
+deceased_df.rename(columns={'TT' : 'Total'}, inplace=True)
+print(deceased_df)
+
+active_df = confirmed - recovered_df - deceased_df
+print(active_df)
+active_rmse = daily_predicted.copy()
+active_rmse = active_rmse.iloc[:len(active_df.index)]
+active_rmse["index"]=[i for i in range(len(active_rmse.index))]
+active_rmse.set_index("index", inplace = True)
+
+
+for state in active_rmse.columns:
+    for index in active_rmse.index:
+       active_rmse.loc[index, state] = (active_rmse.loc[index, state] - active_df.loc[index, state])*(active_rmse.loc[index, state] - active_df.loc[index, state])
+
+active_rmse = cumulative(active_rmse)
+
+for state in active_rmse.columns:
+    for index in active_rmse.index:
+       active_rmse.loc[index, state] = active_rmse.loc[index, state]/(index+1)
+
+active_rmse['index'] = [i for i in range(len(active_rmse.index))]
+active_rmse['index'] = active_rmse['index'].apply(modify_rmse)
+active_rmse.set_index("index", inplace = True)
+
+active_rmse = active_rmse.transform('sqrt')
+
+
+frames.append(active_rmse)
+
 if covid_recovered_availability == 'y' or covid_recovered_availability == 'Y':
     # Read CovidRecovered.data
     recovered = pd.read_csv(run_id + "/" + "CovidRecovered.data", delimiter=" ", header=1)
@@ -180,6 +252,28 @@ if covid_recovered_availability == 'y' or covid_recovered_availability == 'Y':
     daily_recovered.set_index("Day", inplace = True) 
     recovered.set_index("Day", inplace = True) 
     recovered = cumulative(recovered)
+    recovered_rmse = daily_recovered.copy()
+    recovered_rmse = recovered_rmse.iloc[:len(recovered_df.index)]
+    recovered_rmse["index"]=[i for i in range(len(recovered_rmse.index))]
+    recovered_rmse.set_index("index", inplace = True)
+
+    for state in recovered_rmse.columns:
+        for index in recovered_rmse.index:
+            recovered_rmse.loc[index, state] = (recovered_rmse.loc[index, state] - recovered_df.loc[index, state])*(recovered_rmse.loc[index, state] - recovered_df.loc[index, state])
+
+    recovered_rmse = cumulative(recovered_rmse)
+
+    for state in recovered_rmse.columns:
+        for index in recovered_rmse.index:
+            recovered_rmse.loc[index, state] = recovered_rmse.loc[index, state]/(index+1)
+
+    recovered_rmse['index'] = [i for i in range(len(recovered_rmse.index))]
+    recovered_rmse['index'] = recovered_rmse['index'].apply(modify_recovered)
+    recovered_rmse['index'] = recovered_rmse['index'].apply(modify_rmse)
+    recovered_rmse.set_index("index", inplace = True)
+    recovered_rmse = recovered_rmse.transform('sqrt')
+
+    frames.append(recovered_rmse)
     frames.append(daily_recovered)
     frames.append(recovered)
 
@@ -193,6 +287,28 @@ if covid_deaths_availability == 'y' or covid_deaths_availability == 'Y':
     daily_deaths.set_index("Day", inplace = True) 
     deaths.set_index("Day", inplace = True) 
     deaths = cumulative(deaths)
+    deceased_rmse = daily_deaths.copy()
+    deceased_rmse = deceased_rmse.iloc[:len(deceased_df.index)]
+    deceased_rmse["index"]=[i for i in range(len(deceased_rmse.index))]
+    deceased_rmse.set_index("index", inplace = True)
+
+    for state in deceased_rmse.columns:
+        for index in deceased_rmse.index:
+            deceased_rmse.loc[index, state] = (deceased_rmse.loc[index, state] - deceased_df.loc[index, state])*(deceased_rmse.loc[index, state] - deceased_df.loc[index, state])
+
+    deceased_rmse = cumulative(deceased_rmse)
+
+    for state in deceased_rmse.columns:
+        for index in deceased_rmse.index:
+            deceased_rmse.loc[index, state] = deceased_rmse.loc[index, state]/(index+1)
+
+    deceased_rmse['index'] = [i for i in range(len(deceased_rmse.index))]
+    deceased_rmse['index'] = deceased_rmse['index'].apply(modify_deceased)
+    deceased_rmse['index'] = deceased_rmse['index'].apply(modify_rmse)
+    deceased_rmse.set_index("index", inplace = True)
+    deceased_rmse = deceased_rmse.transform('sqrt')
+
+    frames.append(deceased_rmse)
     frames.append(daily_deaths)
     frames.append(deaths)
 
@@ -217,9 +333,6 @@ for column in predicted_state_wise:
 # Sort columns based on column name
 predicted_state_wise.sort_index(axis=1, inplace= True)
 
-
-# Read state_wise_daily.csv 
-state_wise_daily = pd.read_csv('state_wise_daily.csv')
 
 # List of dates in actual data
 dates_actual = [date.replace('-', '_') for date in state_wise_daily["Date"].unique()]

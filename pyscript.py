@@ -420,8 +420,7 @@ ratio_3['index'] = ['Linear3'+x for x in dates_for_index]
 ratio_3.set_index('index',inplace=True)
 ratio_4['index'] = ['Linear4'+x for x in dates_for_index]
 ratio_4.set_index('index',inplace=True)
-print(ratio_3)
-print(ratio_4)
+
 
 logistic_3 = np.log(logistic_3/(1-logistic_3))
 logistic_4 = np.log(logistic_4/(1-logistic_4))

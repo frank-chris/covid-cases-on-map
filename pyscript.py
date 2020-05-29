@@ -8,6 +8,7 @@ import json
 import os
 import sys
 from sklearn.linear_model import LinearRegression
+import math
 
 def modify(value):
     return "Nucleation" + str(value)
@@ -400,6 +401,9 @@ ratio_4.replace([np.inf, -np.inf], np.nan, inplace=True)
 ratio_3.fillna(0, inplace=True)
 ratio_4.fillna(0, inplace=True)
 
+logistic_3 = ratio_3.copy()
+logistic_4 = ratio_4.copy()
+
 for state in ratio_3.columns:
     regressor = LinearRegression()  
     regressor.fit(ratio_3.index.values.reshape(-1,1), ratio_3[state].values.reshape(-1,1))
@@ -418,6 +422,30 @@ ratio_4['index'] = ['Linear4'+x for x in dates_for_index]
 ratio_4.set_index('index',inplace=True)
 print(ratio_3)
 print(ratio_4)
+
+logistic_3 = np.log(logistic_3/(1-logistic_3))
+logistic_4 = np.log(logistic_4/(1-logistic_4))
+logistic_3.replace([np.inf, -np.inf], np.nan, inplace=True)
+logistic_4.replace([np.inf, -np.inf], np.nan, inplace=True)
+logistic_3.fillna(0, inplace=True)
+logistic_4.fillna(0, inplace=True)
+
+for state in logistic_3.columns:
+    regressor = LinearRegression()  
+    regressor.fit(logistic_3.index.values.reshape(-1,1), logistic_3[state].values.reshape(-1,1))
+    for index in logistic_3.index:
+        logistic_3.loc[index, state] = 1/(1 + math.exp(-(regressor.coef_[0][0]*index + regressor.intercept_[0])))
+
+for state in logistic_4.columns:
+    regressor = LinearRegression()  
+    regressor.fit(logistic_4.index.values.reshape(-1,1), logistic_4[state].values.reshape(-1,1))
+    for index in logistic_4.index:
+        logistic_4.loc[index, state] = 1/(1 + math.exp(-(regressor.coef_[0][0]*index + regressor.intercept_[0])))
+
+logistic_3['index'] = ['Logistic3'+x for x in dates_for_index]
+logistic_3.set_index('index',inplace=True)
+logistic_4['index'] = ['Logistic4'+x for x in dates_for_index]
+logistic_4.set_index('index',inplace=True)
 
 # Set the column Daily_Status as the index of the DataFrame 
 state_wise_daily.set_index("Daily_Status", inplace = True) 
@@ -440,7 +468,7 @@ for column in state_wise_daily:
 doubling_rate = state_wise_daily.copy()
 doubling_rate = doubling_rate[ pd.Series([x.startswith("Confirmed") for x in doubling_rate.index ], index=list(doubling_rate.index)) ]
 
-state_wise_daily = pd.concat([state_wise_daily, non_cumulative, ratio_3, ratio_4])
+state_wise_daily = pd.concat([state_wise_daily, non_cumulative, ratio_3, ratio_4, logistic_3, logistic_4])
 
 date_status_list = list(state_wise_daily.index)
 

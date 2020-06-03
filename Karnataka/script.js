@@ -1,5 +1,5 @@
 
-var currentDistrict = "Bengaluru";
+var currentDistrict = "Bengaluru Rural";
 
 var stateDropDown = document.getElementById("myselect");
 var stateDropDown2 = document.getElementById("myselect2");

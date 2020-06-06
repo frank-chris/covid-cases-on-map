@@ -404,17 +404,44 @@ ratio_4.fillna(0, inplace=True)
 logistic_3 = ratio_3.copy()
 logistic_4 = ratio_4.copy()
 
+lin_coef_3 = {}
+lin_coef_4 = {}
+log_coef_3 = {}
+log_coef_4 = {}
+
 for state in ratio_3.columns:
+    lin_coef_3[statename(state)] = []
+    n = round(len(ratio_3.index)/10)
+    x = ratio_3.index.values
+    y = ratio_3[state].values
+    for i in range(1,n):
+        regressor = LinearRegression()  
+        regressor.fit(x[(i-1)*10:i*10].reshape(-1,1), y[(i-1)*10:i*10].reshape(-1,1))
+        lin_coef_3[statename(state)].append(['Day '+str((i-1)*10)+'-'+str(i*10)+': ', round(regressor.coef_[0][0], 7), round(regressor.intercept_[0], 7)])
+        for h in range((i-1)*10, i*10):
+            ratio_3.loc[h, state] = (regressor.coef_[0][0]*h) + regressor.intercept_[0]
     regressor = LinearRegression()  
-    regressor.fit(ratio_3.index.values.reshape(-1,1), ratio_3[state].values.reshape(-1,1))
-    for index in ratio_3.index:
-        ratio_3.loc[index, state] = (regressor.coef_[0][0]*index) + regressor.intercept_[0]
+    regressor.fit(x[(n-1)*10:].reshape(-1,1), y[(n-1)*10:].reshape(-1,1))
+    lin_coef_3[statename(state)].append(['Day '+str((n-1)*10)+'- end: ', round(regressor.coef_[0][0], 7), round(regressor.intercept_[0], 7)])
+    for h in range((n-1)*10, len(ratio_3.index)):
+        ratio_3.loc[h, state] = (regressor.coef_[0][0]*h) + regressor.intercept_[0]
 
 for state in ratio_4.columns:
+    lin_coef_4[statename(state)] = []
+    n = round(len(ratio_4.index)/10)
+    x = ratio_4.index.values
+    y = ratio_4[state].values
+    for i in range(1,n):
+        regressor = LinearRegression()  
+        regressor.fit(x[(i-1)*10:i*10].reshape(-1,1), y[(i-1)*10:i*10].reshape(-1,1))
+        lin_coef_4[statename(state)].append(['Day '+str((i-1)*10)+'-'+str(i*10)+': ', round(regressor.coef_[0][0], 7), round(regressor.intercept_[0], 7)])
+        for h in range((i-1)*10, i*10):
+            ratio_4.loc[h, state] = (regressor.coef_[0][0]*h) + regressor.intercept_[0]
     regressor = LinearRegression()  
-    regressor.fit(ratio_4.index.values.reshape(-1,1), ratio_4[state].values.reshape(-1,1))
-    for index in ratio_4.index:
-        ratio_4.loc[index, state] = (regressor.coef_[0][0]*index) + regressor.intercept_[0]
+    regressor.fit(x[(n-1)*10:].reshape(-1,1), y[(n-1)*10:].reshape(-1,1))
+    lin_coef_4[statename(state)].append(['Day '+str((n-1)*10)+'- end: ', round(regressor.coef_[0][0], 7), round(regressor.intercept_[0], 7)])
+    for h in range((n-1)*10, len(ratio_4.index)):
+        ratio_4.loc[h, state] = (regressor.coef_[0][0]*h) + regressor.intercept_[0]
 
 ratio_3['index'] = ['Linear3'+x for x in dates_for_index]
 ratio_3.set_index('index',inplace=True)
@@ -433,12 +460,14 @@ for state in logistic_3.columns:
     regressor.fit(logistic_3.index.values.reshape(-1,1), logistic_3[state].values.reshape(-1,1))
     for index in logistic_3.index:
         logistic_3.loc[index, state] = 1/(1 + math.exp(-(regressor.coef_[0][0]*index + regressor.intercept_[0])))
+    log_coef_3[statename(state)] = [regressor.coef_[0][0], regressor.intercept_[0]]
 
 for state in logistic_4.columns:
     regressor = LinearRegression()  
     regressor.fit(logistic_4.index.values.reshape(-1,1), logistic_4[state].values.reshape(-1,1))
     for index in logistic_4.index:
         logistic_4.loc[index, state] = 1/(1 + math.exp(-(regressor.coef_[0][0]*index + regressor.intercept_[0])))
+    log_coef_3[statename(state)] = [regressor.coef_[0][0], regressor.intercept_[0]]
 
 logistic_3['index'] = ['Logistic3'+x for x in dates_for_index]
 logistic_3.set_index('index',inplace=True)
@@ -540,7 +569,7 @@ states_data = str(loaded_json)
 
 # Save the data in a JavaScript file
 with open(run_id + "/data.js", 'w') as file:
-    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';")
+    file.write("var statesData = " + states_data + ";"+"var totalData = " + str(total_properties_list) + ";"+"var runID = '" + str(run_id) +"';"+"var recoveredAvailable = '" + str(covid_recovered_availability) +"';"+"var noOfDays = '" + str(no_of_days) +"';"+"var SD = '" + str(start_date) +"';"+"var lin_coef_3 = " + str(lin_coef_3) +";"+"var lin_coef_4 = " + str(lin_coef_4) +";"+"var log_coef_3 = " + str(log_coef_3) +";"+"var log_coef_4 = " + str(log_coef_4) +";")
 
 print("\nData written into " + run_id + "/data.js")
 

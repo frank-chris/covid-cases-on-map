@@ -17,7 +17,8 @@ def run_pyscript():
     d = '.'
     folders = [os.path.join(d, o) for o in os.listdir(d) if os.path.isdir(os.path.join(d,o))]
     folders = [x.replace('.\\', '') for x in folders]
-    
+    folders.remove('Karnataka')
+
     for folder in folders:
         if 'data.js' in os.listdir(folder+'/'):
             os.system('python pyscript.py '+folder+' 03/23/2020')
@@ -40,5 +41,5 @@ def git_push():
 
 run_pyscript()
 
-git_push()
+# git_push()
 

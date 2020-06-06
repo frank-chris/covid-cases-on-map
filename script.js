@@ -1015,4 +1015,13 @@ function loadChart4(state){
   
   }
   
-  
+var result = document.getElementById('results');
+var period;
+result.innerHTML = '<b>Ratio-3(Linear)</b><br>';
+for (period of lin_coef_3[currentState]){
+    result.innerHTML += period.toString()  + '<br>';
+}
+result.innerHTML += '<b>Ratio-4(Linear)</b><br>';
+for (period of lin_coef_4[currentState]){
+    result.innerHTML += period.toString()  + '<br>';
+}

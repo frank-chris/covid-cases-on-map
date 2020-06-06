@@ -962,7 +962,18 @@ function loadChart2(state){
     }
     dataSource2.caption.text = state;
     dataSource2.data = dataStore2.createDataTable(diagnosticsData[state], schema);
-    
+      
+    var result = document.getElementById('results');
+    var period;
+    result.innerHTML = '<b>Ratio-3(Linear)</b><br>';
+    for (period of lin_coef_3[state]){
+        result.innerHTML += period.toString()  + '<br>';
+    }
+    result.innerHTML += '<b>Ratio-4(Linear)</b><br>';
+    for (period of lin_coef_4[state]){
+        result.innerHTML += period.toString()  + '<br>';
+    }
+
     new FusionCharts({
       type: "timeseries",
       renderAt: "diagnostics",
